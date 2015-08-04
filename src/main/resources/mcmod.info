@@ -1,0 +1,15 @@
+[
+{
+  "modid": "npe_nparcade",
+  "name": NPArcade",
+  "description": "An arcade machine for Minecraft",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["NPException"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": []
+}
+]
