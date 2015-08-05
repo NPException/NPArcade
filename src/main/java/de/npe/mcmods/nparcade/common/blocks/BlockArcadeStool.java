@@ -23,6 +23,10 @@ public class BlockArcadeStool extends BlockAbstractModel implements ITileProvide
 		setBlockBounds(0.2f, 0f, 0.2f, 0.8f, 0.625f, 0.8f);
 
 		setCreativeTab(NPArcade.creativeTab);
+
+		// these 2 lines are here for proper break- and run- particles
+		textureReg = true;
+		setBlockTextureName(name + "_icon");
 	}
 
 	@Override
