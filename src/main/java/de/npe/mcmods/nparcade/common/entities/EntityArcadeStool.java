@@ -24,15 +24,13 @@ public class EntityArcadeStool extends Entity {
 
 		tileCoords = stoolTE.getCoordSet();
 
-		posX = stoolTE.xCoord + 0.5;
-		posY = stoolTE.yCoord;
-		posZ = stoolTE.zCoord + 0.5;
+		setPosition(stoolTE.xCoord + 0.5, stoolTE.yCoord, stoolTE.zCoord + 0.5);
 	}
 
 	@Override
 	protected void entityInit() {
+		setInvisible(true);
 		setSize(0.0F, 0.0F);
-		setPosition(posX, posY, posZ);
 	}
 
 	@Override
@@ -40,7 +38,7 @@ public class EntityArcadeStool extends Entity {
 		if (!worldObj.isRemote) {
 			validityCheckTicks--;
 			if (validityCheckTicks <= 0) {
-				validityCheckTicks = 20;
+				validityCheckTicks = 10;
 
 				// check if stool tile is there. Set dead if not.
 				if (tileCoords == null || !(tileCoords.getTileEntity(worldObj) instanceof TileArcadeStool)) {
