@@ -12,7 +12,7 @@ import net.minecraft.world.World;
  */
 public class EntityArcadeStool extends Entity {
 
-	private int validityCheckTicks;
+	private int validityCheckTicks = 10;
 	private CoordSet tileCoords;
 
 	public EntityArcadeStool(World world) {
@@ -41,7 +41,7 @@ public class EntityArcadeStool extends Entity {
 				validityCheckTicks = 10;
 
 				// check if stool tile is there. Set dead if not.
-				if (tileCoords == null || !(tileCoords.getTileEntity(worldObj) instanceof TileArcadeStool)) {
+				if (riddenByEntity == null || tileCoords == null || !(tileCoords.getTileEntity(worldObj) instanceof TileArcadeStool)) {
 					setDead();
 				}
 			}
