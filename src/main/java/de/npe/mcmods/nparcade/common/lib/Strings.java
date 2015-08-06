@@ -5,4 +5,6 @@ package de.npe.mcmods.nparcade.common.lib;
  */
 public class Strings {
 	public static final String BLOCK_STOOL = Reference.MOD_ID + "_stool";
+
+	public static final String ENTITY_STOOL = BLOCK_STOOL + "Entity";
 }

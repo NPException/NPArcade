@@ -7,7 +7,7 @@ import de.npe.mcmods.nparcade.client.render.RenderItemArcadeStool;
 import de.npe.mcmods.nparcade.client.render.RenderTileArcadeStool;
 import de.npe.mcmods.nparcade.common.CommonProxy;
 import de.npe.mcmods.nparcade.common.ModBlocks;
-import de.npe.mcmods.nparcade.common.tiles.TileArcadeStool;
+import de.npe.mcmods.nparcade.common.tileentities.TileArcadeStool;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.MinecraftForgeClient;
 

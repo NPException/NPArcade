@@ -3,7 +3,7 @@ package de.npe.mcmods.nparcade.client.render;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.mcmods.nparcade.client.render.models.ModelArcadeStool;
-import de.npe.mcmods.nparcade.common.tiles.TileArcadeStool;
+import de.npe.mcmods.nparcade.common.tileentities.TileArcadeStool;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
