@@ -4,8 +4,10 @@ import de.npe.mcmods.nparcade.common.entities.EntityArcadeStool;
 import de.npe.mcmods.nparcade.common.util.Util;
 import me.jezza.oc.common.interfaces.IBlockInteract;
 import me.jezza.oc.common.tile.TileAbstract;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 
 /**
@@ -14,7 +16,6 @@ import net.minecraft.world.World;
 public class TileArcadeStool extends TileAbstract implements IBlockInteract {
 
 	public float rotation;
-	private EntityArcadeStool stool;
 
 	public TileArcadeStool() {
 		rotation = (float) Math.round(Util.rand.nextFloat() * 360.0F);
@@ -31,6 +32,8 @@ public class TileArcadeStool extends TileAbstract implements IBlockInteract {
 			return false;
 		}
 		if (!worldObj.isRemote) {
+			AxisAlignedBB stoolBoundingBox = getBlockType().getCollisionBoundingBoxFromPool(worldObj,xCoord,yCoord,zCoord).expand(0.0,0.01,0.0);
+			Entity stool = world.findNearestEntityWithinAABB(EntityArcadeStool.class, stoolBoundingBox, player);
 			if (stool == null || stool.isDead) {
 				stool = new EntityArcadeStool(worldObj, this);
 				worldObj.spawnEntityInWorld(stool);
@@ -42,10 +45,6 @@ public class TileArcadeStool extends TileAbstract implements IBlockInteract {
 				} else {
 					stool.setDead();
 				}
-			} else if (stool.riddenByEntity == player) {
-				player.mountEntity(null);
-				player.setPositionAndUpdate(xCoord + 0.5, yCoord + 0.65, zCoord + 0.5);
-				stool.setDead();
 			}
 		}
 		return true;
