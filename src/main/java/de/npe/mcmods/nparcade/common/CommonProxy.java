@@ -5,6 +5,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.common.entities.EntityArcadeStool;
 import de.npe.mcmods.nparcade.common.lib.Strings;
+import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeStool;
 
 /**
@@ -38,6 +39,7 @@ public class CommonProxy {
 
 	protected void registerTileEntities() {
 		GameRegistry.registerTileEntity(TileArcadeStool.class, Strings.BLOCK_STOOL);
+		GameRegistry.registerTileEntity(TileArcadeCabinet.class, Strings.BLOCK_ARCADE_CABINET);
 	}
 
 	protected void registerEntities() {

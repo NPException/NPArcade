@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 
 /**
  * Created by NPException (2015)
+ * Created using Tabula 4.1.1
  */
 @SideOnly(Side.CLIENT)
 public class ModelArcadeStool extends ModelBase {

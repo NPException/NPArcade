@@ -6,6 +6,7 @@ package de.npe.mcmods.nparcade.common.lib;
 public class Strings {
 	public static final String BLOCK_STOOL = Reference.MOD_ID + "_stool";
 	public static final String BLOCK_ARCADE_BASE = Reference.MOD_ID + "_arcadeBase";
+	public static final String BLOCK_ARCADE_CABINET = Reference.MOD_ID + "_arcadeCabinet";
 
 	public static final String ENTITY_STOOL = BLOCK_STOOL + "Entity";
 }

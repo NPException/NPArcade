@@ -4,3 +4,4 @@ itemGroup.nparcade=NPArcade
 # Tile names
 tile.nparcade_stool.name=Arcade Stool
 tile.nparcade_arcadeBase.name=Arcade Base
+tile.nparcade_arcadeCabinet.name=Arcade Cabinet

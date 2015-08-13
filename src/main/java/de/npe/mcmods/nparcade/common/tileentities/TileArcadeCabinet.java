@@ -16,11 +16,11 @@ import net.minecraftforge.common.util.ForgeDirection;
 /**
  * Created by NPException (2015)
  */
-public class TileArcade extends TileAbstract implements IBlockInteract, IBlockNotifier {
+public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, IBlockNotifier {
 
 	public ForgeDirection facing;
 
-	public TileArcade() {
+	public TileArcadeCabinet() {
 		facing = ForgeDirection.SOUTH;
 	}
 
