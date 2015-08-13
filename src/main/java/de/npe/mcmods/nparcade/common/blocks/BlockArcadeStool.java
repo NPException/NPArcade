@@ -29,7 +29,7 @@ public class BlockArcadeStool extends BlockAbstractModel implements ITileProvide
 
 		// these 2 lines are here for proper break- and run- particles
 		textureReg = true;
-		setBlockTextureName(name + "_icon");
+		setBlockTextureName("nparcade_blockParticles");
 	}
 
 	@Override
