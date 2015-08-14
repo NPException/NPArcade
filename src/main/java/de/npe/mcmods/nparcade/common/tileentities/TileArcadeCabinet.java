@@ -1,5 +1,9 @@
 package de.npe.mcmods.nparcade.common.tileentities;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import de.npe.api.nparcade.IArcadeGame;
+import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.mcmods.nparcade.common.util.Util;
 import me.jezza.oc.common.interfaces.IBlockInteract;
 import me.jezza.oc.common.interfaces.IBlockNotifier;
@@ -16,7 +20,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 /**
  * Created by NPException (2015)
  */
-public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, IBlockNotifier {
+public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, IBlockNotifier, IArcadeMachine {
 
 	public ForgeDirection facing;
 
@@ -63,5 +67,34 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
 		facing = ForgeDirection.getOrientation(Util.getModNBTTag(tag, false).getByte("arcadeFacing"));
+	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//          ARCADE GAME STUFF                                                             //
+	////////////////////////////////////////////////////////////////////////////////////////////
+
+	@SideOnly(Side.CLIENT)
+	private IArcadeGame game;
+
+	///////////////
+	// RENDERING //
+	///////////////
+
+	@SideOnly(Side.CLIENT)
+	private int textureID = -1;
+
+	private boolean needsScreenRefresh() {
+		return game != null && (textureID == -1 || game.needsDraw());
+	}
+
+	/**
+	 * Refreshes the arcade cabinets screen if possible and necessary.
+	 * @return
+	 */
+	public int prepareScreenTexture() {
+		if (needsScreenRefresh()) {
+			// TODO: recreate texture and unbind old one
+		}
+		return textureID;
 	}
 }

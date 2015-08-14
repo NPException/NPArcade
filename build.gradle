@@ -28,6 +28,19 @@ version = "0.1"
 group= "de.npe.mcmods.nparcade"
 archivesBaseName = "NPArcade-1.7.10"
 
+sourceSets {
+    main {
+        java {
+			srcDir "./src/main/java"
+			srcDir "./src/api/java"
+			srcDir "E:/stuff/mcmodding/Projects/1.7/GameAnalyticsAPI/src/main/java"
+        }
+        resources {
+            srcDir "./src/main/resources"
+        }
+    }
+}
+
 minecraft {
     version = "1.7.10-10.13.4.1448-1.7.10"
     runDir = "run"

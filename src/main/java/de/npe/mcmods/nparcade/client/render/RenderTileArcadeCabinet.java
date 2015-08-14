@@ -35,6 +35,7 @@ public class RenderTileArcadeCabinet extends TileEntitySpecialRenderer {
 		glColor3f(1.0F, 1.0F, 1.0F);
 		bindTexture(ModelArcadeCabinet.texture);
 		ModelArcadeCabinet.instance.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+
 		glPopMatrix();
 	}
 
