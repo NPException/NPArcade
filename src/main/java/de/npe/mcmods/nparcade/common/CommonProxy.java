@@ -12,7 +12,7 @@ import de.npe.mcmods.nparcade.common.tileentities.TileArcadeStool;
  * Created by NPException (2015)
  */
 public class CommonProxy {
-	public void preInitServerSide() {
+	public final void preInitServerSide() {
 		// do nothing
 	}
 
@@ -20,7 +20,7 @@ public class CommonProxy {
 		// do nothing
 	}
 
-	public void initServerSide() {
+	public final void initServerSide() {
 		registerTileEntities();
 		registerEntities();
 	}
@@ -29,7 +29,7 @@ public class CommonProxy {
 		// do nothing
 	}
 
-	public void postInitServerSide() {
+	public final void postInitServerSide() {
 		// do nothing
 	}
 
@@ -37,12 +37,12 @@ public class CommonProxy {
 		// do nothing
 	}
 
-	protected void registerTileEntities() {
+	private void registerTileEntities() {
 		GameRegistry.registerTileEntity(TileArcadeStool.class, Strings.BLOCK_STOOL);
 		GameRegistry.registerTileEntity(TileArcadeCabinet.class, Strings.BLOCK_ARCADE_CABINET);
 	}
 
-	protected void registerEntities() {
+	private void registerEntities() {
 		EntityRegistry.registerModEntity(EntityArcadeStool.class, Strings.ENTITY_STOOL, 0, NPArcade.instance, 80, 20, false);
 	}
 }
