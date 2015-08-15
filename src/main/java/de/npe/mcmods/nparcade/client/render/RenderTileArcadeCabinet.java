@@ -33,8 +33,54 @@ public class RenderTileArcadeCabinet extends TileEntitySpecialRenderer {
 		}
 
 		glColor3f(1.0F, 1.0F, 1.0F);
+
 		bindTexture(ModelArcadeCabinet.texture);
 		ModelArcadeCabinet.instance.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+
+		renderScreen(tile, tick);
+
+		glPopMatrix();
+	}
+
+	private void renderScreen(TileArcadeCabinet tile, float tick) {
+		glPushMatrix();
+
+		int textureID = tile.prepareScreenTexture(tick);
+		if (textureID != -1) {
+			glDisable(GL_LIGHTING);
+
+			glScalef(0.0625F, 0.0625F, 0.0625F);
+			glTranslatef(-5F, -5.2F, 5.1F);
+			glRotatef(-0.5F * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
+
+			// draw screen
+			float tx = 0;
+			float ty = 0;
+
+			float w = 10;
+			float h = 13;
+
+
+			glBindTexture(GL_TEXTURE_2D, textureID);
+
+			glBegin(GL_TRIANGLES);
+
+			glTexCoord2f(1, 0); // top right
+			glVertex2f(tx + w, ty);
+			glTexCoord2f(0, 0); // top left
+			glVertex2f(tx, ty);
+			glTexCoord2f(0, 1); // bottom left
+			glVertex2f(tx, ty + h);
+
+			glTexCoord2f(0, 1); // bottom left
+			glVertex2f(tx, ty + h);
+			glTexCoord2f(1, 1); // bottom right
+			glVertex2f(tx + w, ty + h);
+			glTexCoord2f(1, 0); // top right
+			glVertex2f(tx + w, ty);
+
+			glEnd();
+		}
 
 		glPopMatrix();
 	}

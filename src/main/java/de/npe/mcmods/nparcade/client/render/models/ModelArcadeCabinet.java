@@ -41,7 +41,7 @@ public class ModelArcadeCabinet extends ModelBase {
 		this.screen = new ModelRenderer(this, 58, 40);
 		this.screen.setRotationPoint(0.0F, 8.0F, -2.0F);
 		this.screen.addBox(-6.0F, -16.0F, 0.0F, 12, 15, 0, 0.0F);
-		this.setRotateAngle(screen, -0.5009094953223726F, 0.0F, 0.0F);
+		this.setRotateAngle(screen, -0.5F, 0.0F, 0.0F);
 		this.wallLeft1 = new ModelRenderer(this, 49, 0);
 		this.wallLeft1.setRotationPoint(8.0F, 8.0F, 6.0F);
 		this.wallLeft1.addBox(-2.0F, -4.0F, -10.0F, 2, 3, 10, 0.0F);

@@ -1,7 +1,5 @@
 package de.npe.api.nparcade;
 
-import de.npe.api.nparcade.util.RenderUtil;
-
 import java.awt.image.BufferedImage;
 
 /**
@@ -23,8 +21,7 @@ public interface IArcadeGame {
 	/**
 	 * When this is called, the game is supposed to draw to a BufferedImage and return it.<br>
 	 * <br>
-	 * It is recommended to create one BufferedImage instance using
-	 * {@link de.npe.api.nparcade.util.RenderUtil#createBufferedImage(int, int, RenderUtil.TextureFormat)},
+	 * It is recommended to create one BufferedImage instance with type {@link BufferedImage#TYPE_INT_ARGB},
 	 * keep it in an instance variable, and always draw on that instance.
 	 *
 	 * @param partialTick the partial time that has passed since the last game tick.

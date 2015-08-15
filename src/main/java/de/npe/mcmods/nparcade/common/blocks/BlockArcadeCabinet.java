@@ -37,6 +37,7 @@ public class BlockArcadeCabinet extends BlockAbstractModel implements ITileProvi
 
 	@Override
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
+		// TODO: fix with facing
 		return side == ForgeDirection.UP;
 	}
 

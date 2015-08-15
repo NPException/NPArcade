@@ -4,11 +4,13 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
+import de.npe.api.nparcade.SampleGame;
 import de.npe.mcmods.nparcade.common.util.Util;
 import me.jezza.oc.common.interfaces.IBlockInteract;
 import me.jezza.oc.common.interfaces.IBlockNotifier;
 import me.jezza.oc.common.tile.TileAbstract;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -16,6 +18,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.awt.image.BufferedImage;
 
 /**
  * Created by NPException (2015)
@@ -76,25 +80,63 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	@SideOnly(Side.CLIENT)
 	private IArcadeGame game;
 
+	////////////
+	// UPDATE //
+	////////////
+
+	@Override
+	public void updateEntity() {
+		if (game == null) {
+			game = new SampleGame();
+		}
+	}
+
+
 	///////////////
 	// RENDERING //
 	///////////////
 
 	@SideOnly(Side.CLIENT)
-	private int textureID = -1;
+	private class RenderInfo {
+		private int textureID = -1;
+		private int[] screenData;
+		private int width;
+		private int height;
+	}
+
+	@SideOnly(Side.CLIENT)
+	private RenderInfo renderInfo = new RenderInfo();
 
 	private boolean needsScreenRefresh() {
-		return game != null && (textureID == -1 || game.needsDraw());
+		return game != null && (renderInfo.textureID == -1 || game.needsDraw());
 	}
 
 	/**
-	 * Refreshes the arcade cabinets screen if possible and necessary.
-	 * @return
+	 * prepares the arcade cabinet's screen texture for beeing rendered
 	 */
-	public int prepareScreenTexture() {
+	public int prepareScreenTexture(float tick) {
 		if (needsScreenRefresh()) {
-			// TODO: recreate texture and unbind old one
+
+			BufferedImage image = game.draw(tick);
+			int width = image.getWidth();
+			int height = image.getHeight();
+
+			// allocate new texture if game output size changed
+			if (renderInfo.textureID == -1 || renderInfo.screenData == null || renderInfo.width != width || renderInfo.height != height) {
+				renderInfo.screenData = new int[width * height];
+				if (renderInfo.textureID != -1) {
+					TextureUtil.deleteTexture(renderInfo.textureID);
+				}
+				renderInfo.textureID = TextureUtil.glGenTextures();
+				renderInfo.width = width;
+				renderInfo.height = height;
+				TextureUtil.allocateTexture(renderInfo.textureID, width, height);
+			}
+
+			image.getRGB(0, 0, width, height, renderInfo.screenData, 0, width);
+
+			TextureUtil.uploadTexture(renderInfo.textureID, renderInfo.screenData, width, height);
 		}
-		return textureID;
+		return renderInfo.textureID;
 	}
 }
