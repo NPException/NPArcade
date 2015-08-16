@@ -49,8 +49,8 @@ public class RenderTileArcadeCabinet extends TileEntitySpecialRenderer {
 		if (textureID != -1) {
 			glDisable(GL_LIGHTING);
 
-			glScalef(0.0625F, 0.0625F, 0.0625F);
-			glTranslatef(-5F, -5.2F, 5.1F);
+			glScalef(0.06F, 0.06F, 0.06F);
+			glTranslatef(-5F, -5.15F, 5.25F);
 			glRotatef(-0.5F * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
 
 			// draw screen
