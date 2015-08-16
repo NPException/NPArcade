@@ -97,16 +97,29 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	///////////////
 
 	@SideOnly(Side.CLIENT)
-	private class RenderInfo {
+	public static class RenderInfo {
 		private int textureID = -1;
 		private int[] screenData;
 		private int width;
 		private int height;
+
+		public int textureID() {
+			return textureID;
+		}
+
+		public int width() {
+			return width;
+		}
+
+		public int height() {
+			return height;
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	private RenderInfo renderInfo = new RenderInfo();
 
+	@SideOnly(Side.CLIENT)
 	private boolean needsScreenRefresh() {
 		return game != null && (renderInfo.textureID == -1 || game.needsDraw());
 	}
@@ -114,7 +127,8 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	/**
 	 * prepares the arcade cabinet's screen texture for beeing rendered
 	 */
-	public int prepareScreenTexture(float tick) {
+	@SideOnly(Side.CLIENT)
+	public RenderInfo prepareScreenTexture(float tick) {
 		if (needsScreenRefresh()) {
 
 			BufferedImage image = game.draw(tick);
@@ -137,6 +151,6 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 
 			TextureUtil.uploadTexture(renderInfo.textureID, renderInfo.screenData, width, height);
 		}
-		return renderInfo.textureID;
+		return renderInfo;
 	}
 }

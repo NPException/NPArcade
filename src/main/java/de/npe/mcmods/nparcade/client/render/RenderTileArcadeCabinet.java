@@ -45,39 +45,53 @@ public class RenderTileArcadeCabinet extends TileEntitySpecialRenderer {
 	private void renderScreen(TileArcadeCabinet tile, float tick) {
 		glPushMatrix();
 
-		int textureID = tile.prepareScreenTexture(tick);
-		if (textureID != -1) {
+		TileArcadeCabinet.RenderInfo renderInfo = tile.prepareScreenTexture(tick);
+		if (renderInfo.textureID() != -1) {
 			glDisable(GL_LIGHTING);
 
 			glScalef(0.06F, 0.06F, 0.06F);
 			glTranslatef(-5F, -5.15F, 5.25F);
 			glRotatef(-0.5F * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
 
-			// draw screen
-			float tx = 0;
-			float ty = 0;
+			// texture variables
+			float tx = 0F;
+			float ty = 0F;
 
-			float w = 10;
-			float h = 13;
+			float tw = 10F;
+			float th = 13F;
+			final float tRatio = tw/th;
 
+			// screen variables
+			final float sw = (float) renderInfo.width();
+			final float sh = (float) renderInfo.height();
+			final float sRatio = sw/sh;
 
-			glBindTexture(GL_TEXTURE_2D, textureID);
+			if (sRatio > tRatio) {
+				ty = th*0.5F - (th*0.5F)/sRatio*tRatio;
+				th = th/sRatio*tRatio;
+			}
+			if (sRatio < tRatio) {
+				tx = tw*0.5F - (tw*0.5F)/tRatio*sRatio;
+				tw = tw/tRatio*sRatio;
+			}
+
+			glBindTexture(GL_TEXTURE_2D, renderInfo.textureID());
 
 			glBegin(GL_TRIANGLES);
 
 			glTexCoord2f(1, 0); // top right
-			glVertex2f(tx + w, ty);
+			glVertex2f(tx + tw, ty);
 			glTexCoord2f(0, 0); // top left
 			glVertex2f(tx, ty);
 			glTexCoord2f(0, 1); // bottom left
-			glVertex2f(tx, ty + h);
+			glVertex2f(tx, ty + th);
 
 			glTexCoord2f(0, 1); // bottom left
-			glVertex2f(tx, ty + h);
+			glVertex2f(tx, ty + th);
 			glTexCoord2f(1, 1); // bottom right
-			glVertex2f(tx + w, ty + h);
+			glVertex2f(tx + tw, ty + th);
 			glTexCoord2f(1, 0); // top right
-			glVertex2f(tx + w, ty);
+			glVertex2f(tx + tw, ty);
 
 			glEnd();
 		}
