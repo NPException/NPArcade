@@ -3,9 +3,20 @@ package de.npe.api.nparcade;
 import java.awt.image.BufferedImage;
 
 /**
+ * This interface has to be implemented by every game that should work with NPArcade.<br>
+ * The implementing class has to provide a no-args constructor.
+ * <p/>
  * Created by NPException (2015)
  */
 public interface IArcadeGame {
+
+	/**
+	 * This method is called whenever the game is initialized and may be called more than once
+	 * on an instance of {@link IArcadeGame}.
+	 * This can happen when the game is first loaded or when it is resetted.
+	 * @param arcadeMachine the machine the game is initialized on.
+	 */
+	public void init(IArcadeMachine arcadeMachine);
 
 	/**
 	 * Returns the screen width this game requires.<br>

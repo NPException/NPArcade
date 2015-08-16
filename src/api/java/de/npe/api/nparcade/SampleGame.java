@@ -10,7 +10,13 @@ import java.awt.image.BufferedImage;
  */
 public class SampleGame implements IArcadeGame {
 
+	private IArcadeMachine arcadeMachine;
 	private long nextDraw = 0L;
+
+	@Override
+	public void init(IArcadeMachine arcadeMachine) {
+		this.arcadeMachine = arcadeMachine;
+	}
 
 	@Override
 	public int screenWidth() {
