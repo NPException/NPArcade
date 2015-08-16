@@ -100,19 +100,18 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	public static class RenderInfo {
 		private int textureID = -1;
 		private int[] screenData;
-		private int width;
-		private int height;
+		private BufferedImage image;
 
 		public int textureID() {
 			return textureID;
 		}
 
 		public int width() {
-			return width;
+			return image.getWidth();
 		}
 
 		public int height() {
-			return height;
+			return image.getHeight();
 		}
 	}
 
@@ -131,24 +130,30 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	public RenderInfo prepareScreenTexture(float tick) {
 		if (needsScreenRefresh()) {
 
-			BufferedImage image = game.draw(tick);
-			int width = image.getWidth();
-			int height = image.getHeight();
+			int width = game.screenWidth();
+			int height = game.screenHeight();
 
-			// allocate new texture if game output size changed
-			if (renderInfo.textureID == -1 || renderInfo.screenData == null || renderInfo.width != width || renderInfo.height != height) {
+			// allocate new texture if game output size changed or scren is not yet initialized
+			if (renderInfo.textureID == -1 ||
+					renderInfo.screenData == null ||
+					renderInfo.image == null  ||
+					renderInfo.width() != width || renderInfo.height() != height) {
+
 				renderInfo.screenData = new int[width * height];
 				if (renderInfo.textureID != -1) {
 					TextureUtil.deleteTexture(renderInfo.textureID);
 				}
 				renderInfo.textureID = TextureUtil.glGenTextures();
-				renderInfo.width = width;
-				renderInfo.height = height;
 				TextureUtil.allocateTexture(renderInfo.textureID, width, height);
+
+				renderInfo.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 			}
 
-			image.getRGB(0, 0, width, height, renderInfo.screenData, 0, width);
-
+			// draw game
+			game.draw(renderInfo.image, tick);
+			// get pixel data
+			renderInfo.image.getRGB(0, 0, width, height, renderInfo.screenData, 0, width);
+			// upload pixels to texture
 			TextureUtil.uploadTexture(renderInfo.textureID, renderInfo.screenData, width, height);
 		}
 		return renderInfo;
