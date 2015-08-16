@@ -37,8 +37,10 @@ public class BlockArcadeCabinet extends BlockAbstractModel implements ITileProvi
 
 	@Override
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-		// TODO: fix with facing
-		return side == ForgeDirection.UP;
+		if (side == ForgeDirection.DOWN)
+			return true;
+		TileEntity te = world.getTileEntity(x, y, z);
+		return (te instanceof TileArcadeCabinet) ? side == ((TileArcadeCabinet) te).facing.getOpposite() : false;
 	}
 
 	@Override
