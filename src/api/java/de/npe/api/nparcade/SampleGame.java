@@ -1,8 +1,8 @@
 package de.npe.api.nparcade;
 
+import de.npe.api.nparcade.util.Size;
 import de.npe.mcmods.nparcade.common.util.Util;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -11,21 +11,28 @@ import java.awt.image.BufferedImage;
 public class SampleGame implements IArcadeGame {
 
 	private IArcadeMachine arcadeMachine;
+	private Size screenSize;
 	private long nextDraw = 0L;
 
 	@Override
-	public void init(IArcadeMachine arcadeMachine) {
+	public void load(IArcadeMachine arcadeMachine) {
 		this.arcadeMachine = arcadeMachine;
+		screenSize = new Size(20, 26);
 	}
 
 	@Override
-	public int screenWidth() {
-		return 50;
+	public void unload() {
+		// nothing to do
 	}
 
 	@Override
-	public int screenHeight() {
-		return 65;
+	public void update() {
+		// nothing to do (yet)
+	}
+
+	@Override
+	public Size screenSize() {
+		return screenSize;
 	}
 
 	@Override
@@ -41,9 +48,8 @@ public class SampleGame implements IArcadeGame {
 
 	@Override
 	public void draw(BufferedImage screen, float partialTick) {
-		Graphics2D g = (Graphics2D) screen.getGraphics();
-		for (int y = 0; y < screenHeight(); y++) {
-			for (int x = 0; x < screenWidth(); x++) {
+		for (int y = 0; y < screenSize.height; y++) {
+			for (int x = 0; x < screenSize.width; x++) {
 				int brightness = Util.rand.nextInt(256);
 				int rgb = 255<<24 | brightness<<16 | brightness<<8 | brightness;
 				screen.setRGB(x,y,rgb);

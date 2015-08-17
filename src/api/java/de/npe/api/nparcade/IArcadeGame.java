@@ -1,5 +1,7 @@
 package de.npe.api.nparcade;
 
+import de.npe.api.nparcade.util.Size;
+
 import java.awt.image.BufferedImage;
 
 /**
@@ -11,28 +13,36 @@ import java.awt.image.BufferedImage;
 public interface IArcadeGame {
 
 	/**
-	 * This method is called whenever the game is initialized and may be called more than once
-	 * on an instance of {@link IArcadeGame}.
-	 * This can happen when the game is first loaded or when it is resetted.
-	 * @param arcadeMachine the machine the game is initialized on.
+	 * This method is called whenever the game is loaded by an arcade machine.<br>
+	 * It's suggested to keep <i>arcadeMachine</i> as an instance variable so you can
+	 * use it's methods during calls to {@link #unload()} and {@link #update()}
+	 *
+	 * @param arcadeMachine the machine the game will be ran on.
 	 */
-	public void init(IArcadeMachine arcadeMachine);
+	void load(IArcadeMachine arcadeMachine);
 
 	/**
-	 * Returns the screen width this game requires.<br>
-	 * This must return a positive value. The return value may change at any time.
+	 * This method is called when the game is unloaded by an arcade machine.
+	 * That usually happens when the arcade machine is powering down or being broken.<br>
+	 * It should be used to release all resources used by the game, and persist any data if necessary.
+	 */
+	void unload();
+
+	/**
+	 * This method is called to update the game's state.<br>
+	 * How often this method is called per second can be checked by
+	 * calling {@link IArcadeMachine#ticksPerSecond()} on the arcadeMachine
+	 * you get during the call of the {@link #load(IArcadeMachine)} method.
+	 */
+	void update();
+
+	/**
+	 * Returns the screen size that the next call to {@link #draw(BufferedImage, float)} requires.<br>
+	 * This must NOT return null. Each subsequent call to this method is allowed to return a different value.
 	 * This method is called before each call to {@link #draw(BufferedImage, float)},
 	 * to ensure that the game has enough space to draw on.
 	 */
-	public int screenWidth();
-
-	/**
-	 * Returns the screen height this game requires.<br>
-	 * This must return a positive value. The return value may change at any time.
-	 * This method is called before each call to {@link #draw(BufferedImage, float)},
-	 * to ensure that the game has enough space to draw on.
-	 */
-	public int screenHeight();
+	Size screenSize();
 
 	/**
 	 * This method is called on each render tick of the arcade machine to check
@@ -43,7 +53,7 @@ public interface IArcadeGame {
 	 *
 	 * @return <i>true</i> if the {@link #draw(BufferedImage, float)} method should be called, <i>false</i> if not.
 	 */
-	public boolean needsDraw();
+	boolean needsDraw();
 
 	/**
 	 * When this is called, the game is supposed to draw to the supplied BufferedImage.
@@ -51,7 +61,6 @@ public interface IArcadeGame {
 	 *
 	 * @param partialTick the partial time that has passed since the last game tick.
 	 *                    Usually between 0 and 1, but can grow larger than 1 if the game tick is lagging behind.
-	 * @return the BufferedImage that this game rendered to.
 	 */
-	public void draw(BufferedImage screen, float partialTick);
+	void draw(BufferedImage screen, float partialTick);
 }
