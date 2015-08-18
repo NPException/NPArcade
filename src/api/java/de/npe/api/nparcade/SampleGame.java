@@ -3,6 +3,7 @@ package de.npe.api.nparcade;
 import de.npe.api.nparcade.util.Size;
 import de.npe.mcmods.nparcade.common.util.Util;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -13,6 +14,21 @@ public class SampleGame implements IArcadeGame {
 	private IArcadeMachine arcadeMachine;
 	private Size screenSize;
 	private long nextDraw = 0L;
+
+	@Override
+	public String id() {
+		return "nparcade_sampleGame";
+	}
+
+	@Override
+	public String name() {
+		return "No Signal Simulator";
+	}
+
+	@Override
+	public Image icon() {
+		return null;
+	}
 
 	@Override
 	public void load(IArcadeMachine arcadeMachine) {
