@@ -1,10 +1,8 @@
 package de.npe.api.nparcade.util;
 
-import java.security.InvalidParameterException;
-
 /**
  * Created by NPException (2015)
- *
+ * <p/>
  * Small wrapper class used to define the size of an area.
  */
 public final class Size {
@@ -13,10 +11,10 @@ public final class Size {
 
 	public Size(int width, int height) {
 		if (width <= 0) {
-			throw new InvalidParameterException("Width must be larger than 0, but is " + width);
+			throw new IllegalArgumentException("Width must be larger than 0, but is " + width);
 		}
 		if (height <= 0) {
-			throw new InvalidParameterException("Height must be larger than 0, but is " + height);
+			throw new IllegalArgumentException("Height must be larger than 0, but is " + height);
 		}
 		this.width = width;
 		this.height = height;

@@ -2,7 +2,7 @@ package de.npe.mcmods.nparcade.client.render;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import de.npe.mcmods.nparcade.client.game.ArcadeMachine;
+import de.npe.mcmods.nparcade.arcade.ArcadeMachine;
 import de.npe.mcmods.nparcade.client.render.models.ModelArcadeCabinet;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -68,7 +68,7 @@ public class RenderTileArcadeCabinet extends TileEntitySpecialRenderer {
 		glTranslatef(screenShiftX, screenShiftY, 0F);
 		glScalef(0.006F, 0.006F, 0.006F);
 
-		arcade.doRender(tick);
+		arcade.doRenderScreen(tick);
 
 		// reset brightness
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastBrightnessX, lastBrightnessY);

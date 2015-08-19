@@ -4,12 +4,12 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
+import de.npe.mcmods.nparcade.arcade.GameRegistry;
 import de.npe.mcmods.nparcade.common.CommonProxy;
 import de.npe.mcmods.nparcade.common.ModBlocks;
 import de.npe.mcmods.nparcade.common.ModItems;
 import de.npe.mcmods.nparcade.common.lib.Reference;
 import me.jezza.oc.client.CreativeTabSimple;
-import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, dependencies = "required-after:Forge@[10.13.4.1448,);required-after:OmnisCore@[0.0.6,);")
@@ -27,7 +27,9 @@ public class NPArcade {
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		log = LogManager.getLogger(Reference.MOD_NAME.replaceAll(" ", ""));
+		log = event.getModLog();
+
+		GameRegistry.init();
 
 		proxy.preInitServerSide();
 		proxy.preInitClientSide();

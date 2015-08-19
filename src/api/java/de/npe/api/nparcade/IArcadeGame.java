@@ -2,14 +2,13 @@ package de.npe.api.nparcade;
 
 import de.npe.api.nparcade.util.Size;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
  * <p>This interface has to be implemented by every game that should work with NPArcade.</p>
- * <p>The implementing class has to provide a no-args constructor. Instances of the game may
- * get created without the purpose of actually "playing" them (to call {@link #icon()} during registration f.e.).
- * It is therefor highly recommended to not do anything in the constructor (or not have a constructor at all),
+ * <p>An implementing class must have a public no-args constructor available.
+ * (For example by not declaring an explicit constructor at all.)</p>
+ * <p>It is highly recommended to not do anything in the constructor,
  * and do all preparations and setup operations when {@link #load(IArcadeMachine)} is called on the instance.</p>
  * <p>For a detailed specification of how an arcade machine interacts with the game, and how {@link IArcadeGame}'s
  * methods have to be used, visit the
@@ -18,39 +17,6 @@ import java.awt.image.BufferedImage;
  * Created by NPException (2015)
  */
 public interface IArcadeGame {
-
-	//////////////////////
-	// GAME INFORMATION //
-	//////////////////////
-
-	/**
-	 * This method must return the game's ID. This should be unique for every arcade game,
-	 * so make sure to give it an ID that is unlikely to conflict with other games.<br>
-	 * As an example you could use something like this: <b>myNickname_fancySnakeGame</b><br>
-	 * <br>
-	 * The value is only used internally, so you don't have to worry if the ID "looks good".<br>
-	 * <br>
-	 * <i>Must NOT return null!</i>
-	 */
-	String id();
-
-	/**
-	 * The human readable name of the game.<br>
-	 * <br>
-	 * <i>Must NOT return null!</i>
-	 */
-	String name();
-
-	/**
-	 * An icon image for the game.
-	 * This might be used to display it next to the game's name,
-	 * or on some cartridge.<br>
-	 * It is recommended for the icon to have a maximum width and height of 32 pixels.
-	 * The icon might get scaled down for rendering if it is larger than that.<br>
-	 * <br>
-	 * This may return <i>null</i> if the game does not have an icon.
-	 */
-	Image icon();
 
 	////////////////////////////////
 	// GAME STATE RELATED METHODS //

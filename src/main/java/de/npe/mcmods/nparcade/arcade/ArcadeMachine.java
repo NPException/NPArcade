@@ -1,15 +1,13 @@
-package de.npe.mcmods.nparcade.client.game;
+package de.npe.mcmods.nparcade.arcade;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
-import de.npe.api.nparcade.SampleGame;
 import de.npe.api.nparcade.util.Size;
 import net.minecraft.client.renderer.texture.TextureUtil;
 
 import java.awt.image.BufferedImage;
-import java.security.InvalidParameterException;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -20,6 +18,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class ArcadeMachine implements IArcadeMachine {
 	private Size suggestedScreenSize;
 
+	private String gameID;
 	private IArcadeGame game;
 	private int textureID = -1;
 	private int[] screenData;
@@ -48,6 +47,10 @@ public class ArcadeMachine implements IArcadeMachine {
 	// external methods to be used by TileEntities //
 	/////////////////////////////////////////////////
 
+	public boolean hasGame() {
+		return game != null;
+	}
+
 	public void update() {
 		if (game != null) {
 			game.update();
@@ -55,31 +58,38 @@ public class ArcadeMachine implements IArcadeMachine {
 	}
 
 	/**
-	 * loads the default game selection program into the arcade machine.
-	 */
-	public void load() {
-		load(new SampleGame());
-	}
-
-	/**
 	 * Loads a specific game into the arcade machine.
+	 * If another game is already loaded, it will be unloaded properly
+	 * before the new game is loaded.
 	 */
-	public void load(IArcadeGame game) {
-		if (game == null) {
-			throw new InvalidParameterException("game must not be null!");
+	public void load(String gameID, boolean forceReload) {
+		if (gameID == null) {
+			unload();
+			// TODO: load error screen
+			return;
 		}
+
+		// dont reload the game  if it is already running
+		if (!forceReload && game != null && this.gameID != null && this.gameID.equals(gameID)) {
+			return;
+		}
+
 		// unload previous game
 		unload();
 		// load new game
-		this.game = game;
-		this.game.load(this);
+		GameRegistry.GameInfo gi = GameRegistry.gameForID(gameID);
+		game = gi != null ? gi.createGameInstance() : null; // TODO: load placeholder screen or error screen if GameInfo is null
+
+		game.load(this);
 	}
 
 	public void unload() {
 		if (game != null) {
 			game.unload();
 			game = null;
+			gameID = null;
 		}
+		deleteTexture();
 	}
 
 	/////////////////////
@@ -89,12 +99,12 @@ public class ArcadeMachine implements IArcadeMachine {
 	/**
 	 * Renders the arcade machines screen via OpenGL using it's suggested screen size.
 	 */
-	public void doRender(float tick) {
-		prepareRender(tick);
-
-		if (textureID == -1) {
+	public void doRenderScreen(float tick) {
+		if (game == null) {
 			return;
 		}
+
+		prepareRender(tick);
 
 		// texture variables
 		float tx = 0F;
@@ -148,13 +158,15 @@ public class ArcadeMachine implements IArcadeMachine {
 		if (textureID != -1) {
 			TextureUtil.deleteTexture(textureID);
 		}
+		screenData = null;
+		image = null;
 	}
 
 	/**
 	 * Checks if the game is present and wants to update it's graphics.
 	 */
 	private boolean needsScreenRefresh() {
-		return game != null && (textureID == -1 || game.needsDraw());
+		return textureID == -1 || game.needsDraw();
 	}
 
 	/**
@@ -178,8 +190,8 @@ public class ArcadeMachine implements IArcadeMachine {
 					image == null ||
 					image.getWidth() != width || image.getHeight() != height) {
 
-				screenData = new int[width * height];
 				deleteTexture();
+				screenData = new int[width * height];
 				textureID = TextureUtil.glGenTextures();
 				TextureUtil.allocateTexture(textureID, width, height);
 
