@@ -5,7 +5,6 @@ import de.npe.mcmods.nparcade.common.tileentities.TileArcadeStool;
 import me.jezza.oc.common.blocks.BlockAbstractModel;
 import me.jezza.oc.common.interfaces.ITileProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -30,11 +29,6 @@ public class BlockArcadeStool extends BlockAbstractModel implements ITileProvide
 		// these 2 lines are here for proper break- and run- particles
 		textureReg = true;
 		setBlockTextureName("nparcade_blockParticles");
-	}
-
-	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitVecX, float hitVecY, float hitVecZ) {
-		return super.onBlockActivated(world, x, y, z, player, side, hitVecX, hitVecY, hitVecZ);
 	}
 
 	@Override

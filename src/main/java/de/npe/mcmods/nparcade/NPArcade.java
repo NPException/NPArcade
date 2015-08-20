@@ -4,7 +4,7 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.*;
-import de.npe.mcmods.nparcade.arcade.GameRegistry;
+import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.common.CommonProxy;
 import de.npe.mcmods.nparcade.common.ModBlocks;
 import de.npe.mcmods.nparcade.common.ModItems;
@@ -29,7 +29,7 @@ public class NPArcade {
 	public void preInit(FMLPreInitializationEvent event) {
 		log = event.getModLog();
 
-		GameRegistry.init();
+		ArcadeGameRegistry.init();
 
 		proxy.preInitServerSide();
 		proxy.preInitClientSide();
@@ -52,17 +52,5 @@ public class NPArcade {
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInitServerSide();
 		proxy.postInitClientSide();
-	}
-
-	@EventHandler
-	public void onServerAboutToStart(FMLServerAboutToStartEvent event) {
-	}
-
-	@EventHandler
-	public void onServerStarted(FMLServerStartingEvent event) {
-	}
-
-	@EventHandler
-	public void onServerStopping(FMLServerStoppingEvent event) {
 	}
 }

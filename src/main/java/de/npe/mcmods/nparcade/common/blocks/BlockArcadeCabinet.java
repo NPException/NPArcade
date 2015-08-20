@@ -5,7 +5,6 @@ import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 import me.jezza.oc.common.blocks.BlockAbstractModel;
 import me.jezza.oc.common.interfaces.ITileProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -31,16 +30,11 @@ public class BlockArcadeCabinet extends BlockAbstractModel implements ITileProvi
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitVecX, float hitVecY, float hitVecZ) {
-		return super.onBlockActivated(world, x, y, z, player, side, hitVecX, hitVecY, hitVecZ);
-	}
-
-	@Override
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
 		if (side == ForgeDirection.DOWN)
 			return true;
 		TileEntity te = world.getTileEntity(x, y, z);
-		return (te instanceof TileArcadeCabinet) ? side == ((TileArcadeCabinet) te).facing.getOpposite() : false;
+		return (te instanceof TileArcadeCabinet) ? side == ((TileArcadeCabinet) te).facing().getOpposite() : false;
 	}
 
 	@Override

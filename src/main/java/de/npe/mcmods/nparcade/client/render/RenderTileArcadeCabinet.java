@@ -22,7 +22,7 @@ public class RenderTileArcadeCabinet extends TileEntitySpecialRenderer {
 		glTranslatef((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
 		glRotatef(180F, 1F, 0F, 0F);
 
-		switch (tile.facing) {
+		switch (tile.facing()) {
 			case NORTH:
 				glRotatef(180F, 0F, 1F, 0F);
 				break;

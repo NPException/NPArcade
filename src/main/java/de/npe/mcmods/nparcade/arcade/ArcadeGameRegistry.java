@@ -19,16 +19,16 @@ import java.util.Set;
  * <p/>
  * Created by NPException (2015)
  */
-public class GameRegistry {
-	private GameRegistry() {
+public class ArcadeGameRegistry {
+	private ArcadeGameRegistry() {
 	}
 
 	private static boolean isInitialized;
-	private static final Map<String, GameInfo> games = new HashMap<>();
+	private static final Map<String, GameInfo> games = new HashMap<>(512);
 	private static final Set<String> gamesKeySetView = Collections.unmodifiableSet(games.keySet());
 
 	/**
-	 * Initializes the GameRegistry
+	 * Initializes the ArcadeGameRegistry
 	 */
 	public static synchronized void init() {
 		if (isInitialized)
@@ -67,28 +67,28 @@ public class GameRegistry {
 		try {
 			constructor = gameClass.getConstructor();
 		} catch (Exception ex) {
-			throw new IllegalArgumentException("Could not grab no-args constructor!" + gameToString, ex);
+			throw new IllegalArgumentException("Could not grab public no-args constructor!" + gameToString, ex);
 		}
 
 		if (games.containsKey(id)) {
 			throw new IllegalArgumentException("Game with ID already registered: " + id + gameToString);
 		}
 
-		GameInfo info = (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) ? new GameInfo(id, name, icon, constructor) : null;
+		boolean isClient = (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT);
+		GameInfo info = isClient ? new GameInfo(id, name, icon, constructor) : new GameInfo(id, name, null, null);
 		games.put(id, info);
 	}
 
 	/**
 	 * Returns the GameInfo object for the game with the given ID
 	 */
-	@SideOnly(Side.CLIENT)
 	public static GameInfo gameForID(String id) {
 		return games.get(id);
 	}
 
 	/**
 	 * Returns an unmodifiable view to all available game IDs.<br>
-	 * The returned set is backed by the game IDs that are stored in the GameRegistry.
+	 * The returned set is backed by the game IDs that are stored in the ArcadeGameRegistry.
 	 */
 	public static Set<String> gameIDs() {
 		return gamesKeySetView;
@@ -120,10 +120,12 @@ public class GameRegistry {
 			return name;
 		}
 
+		@SideOnly(Side.CLIENT)
 		public Image icon() {
 			return icon;
 		}
 
+		@SideOnly(Side.CLIENT)
 		public IArcadeGame createGameInstance() {
 			try {
 				return constructor.newInstance();

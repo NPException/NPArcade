@@ -5,3 +5,8 @@ itemGroup.nparcade=NPArcade
 tile.nparcade_stool.name=Arcade Stool
 tile.nparcade_arcadeBase.name=Arcade Base
 tile.nparcade_arcadeCabinet.name=Arcade Cabinet
+
+item.nparcade_gameCartridge.name=Arcade Cartridge
+
+tooltip.item.cartridge.game=$7Game
+tooltip.item.cartridge.game.none=$8$oNone

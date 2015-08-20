@@ -6,6 +6,7 @@ import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Size;
 import net.minecraft.client.renderer.texture.TextureUtil;
+import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry.GameInfo;
 
 import java.awt.image.BufferedImage;
 
@@ -77,7 +78,7 @@ public class ArcadeMachine implements IArcadeMachine {
 		// unload previous game
 		unload();
 		// load new game
-		GameRegistry.GameInfo gi = GameRegistry.gameForID(gameID);
+		GameInfo gi = ArcadeGameRegistry.gameForID(gameID);
 		game = gi != null ? gi.createGameInstance() : null; // TODO: load placeholder screen or error screen if GameInfo is null
 
 		game.load(this);
