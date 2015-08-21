@@ -18,8 +18,11 @@ public class RenderItemArcadeCabinet extends AbstractItemRenderer {
 
 		if (type == ItemRenderType.INVENTORY) {
 			glTranslatef(0.0F, -0.2165F, 0.0F);
-		} else if (type == ItemRenderType.ENTITY) {
-			glTranslatef(-0.5F, -0.0F, -0.5F);
+		}
+
+		if (type == ItemRenderType.ENTITY) {
+			glRotatef(180F, 0F, 1F, 0F);
+			glTranslatef(-0.5F, -0.625F, -0.5F);
 		}
 
 		glTranslatef(0.5f, 0.625f, 0.5f);

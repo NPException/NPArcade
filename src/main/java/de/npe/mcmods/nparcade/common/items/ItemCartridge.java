@@ -17,6 +17,7 @@ public class ItemCartridge extends ItemAbstract {
 
 	public ItemCartridge(String name) {
 		super(name);
+		setTextureless();
 	}
 
 	@Override
