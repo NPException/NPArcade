@@ -3,10 +3,7 @@ package de.npe.mcmods.nparcade.client.render;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.mcmods.nparcade.client.render.models.ModelArcadeCabinet;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -14,18 +11,7 @@ import static org.lwjgl.opengl.GL11.*;
  * Created by NPException (2015)
  */
 @SideOnly(Side.CLIENT)
-public class RenderItemArcadeCabinet implements IItemRenderer {
-
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return true;
-	}
-
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item, ItemRendererHelper helper) {
-		return true;
-	}
-
+public class RenderItemArcadeCabinet extends AbstractItemRenderer {
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		glPushMatrix();
@@ -50,9 +36,5 @@ public class RenderItemArcadeCabinet implements IItemRenderer {
 		bindTexture(ModelArcadeCabinet.texture);
 		ModelArcadeCabinet.instance.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 		glPopMatrix();
-	}
-
-	public static void bindTexture(ResourceLocation texture) {
-		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 	}
 }

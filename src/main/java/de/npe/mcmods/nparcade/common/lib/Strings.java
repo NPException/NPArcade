@@ -12,8 +12,8 @@ public class Strings {
 
 	public static final String ENTITY_STOOL = BLOCK_STOOL + "Entity";
 
-	public static final String NBT_FACING = "facing";
-	public static final String NBT_GAME = "game";
+	public static final String NBT_FACING = Reference.MOD_ID + "_facing";
+	public static final String NBT_GAME = Reference.MOD_ID + "_game";
 
 	public static final String LANG_TOOLTIP_CARTRIDGE_GAME = "tooltip.item.cartridge.game";
 	public static final String LANG_TOOLTIP_CARTRIDGE_GAME_NONE = "tooltip.item.cartridge.game.none";

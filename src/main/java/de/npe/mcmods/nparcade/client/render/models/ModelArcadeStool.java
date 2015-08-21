@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 @SideOnly(Side.CLIENT)
 public class ModelArcadeStool extends ModelBase {
 	public static final ModelArcadeStool instance = new ModelArcadeStool();
-	public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_IDENTIFIER + "textures/blocks/nparcade_modelStool.png");
+	public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_IDENTIFIER + "textures/models/nparcade_modelStool.png");
 
 	public ModelRenderer seat;
 	public ModelRenderer seatBottom;

@@ -3,7 +3,6 @@ package de.npe.mcmods.nparcade.common;
 import de.npe.mcmods.nparcade.arcade.SampleGame;
 import de.npe.mcmods.nparcade.common.items.ItemCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
-import de.npe.mcmods.nparcade.common.util.Util;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -38,7 +37,7 @@ public class ModItems {
 
 		ItemStack cartridgeStack = new ItemStack(cartridge);
 		cartridgeStack.setTagCompound(new NBTTagCompound());
-		Util.getModNBTTag(cartridgeStack.getTagCompound(), true).setString(Strings.NBT_GAME, SampleGame.ID);
+		cartridgeStack.getTagCompound().setString(Strings.NBT_GAME, SampleGame.ID);
 
 		crafting.addShapelessRecipe(cartridgeStack, new ItemStack(Items.comparator, 1, OreDictionary.WILDCARD_VALUE));
 	}

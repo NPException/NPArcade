@@ -5,7 +5,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.mcmods.nparcade.arcade.ArcadeMachine;
 import de.npe.mcmods.nparcade.client.render.models.ModelArcadeCabinet;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
@@ -59,9 +58,7 @@ public class RenderTileArcadeCabinet extends TileEntitySpecialRenderer {
 
 		// set max brightness
 		glDisable(GL_LIGHTING);
-		float lastBrightnessX = OpenGlHelper.lastBrightnessX;
-		float lastBrightnessY = OpenGlHelper.lastBrightnessY;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+		Helper.pushMaxBrightness();
 
 		glTranslatef(0F, 0F, screenShiftZ);
 		glRotatef(-0.5F * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
@@ -71,7 +68,7 @@ public class RenderTileArcadeCabinet extends TileEntitySpecialRenderer {
 		arcade.doRenderScreen(tick);
 
 		// reset brightness
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lastBrightnessX, lastBrightnessY);
+		Helper.popMaxBrightness();
 
 		glPopMatrix();
 	}

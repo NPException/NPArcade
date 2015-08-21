@@ -1,8 +1,8 @@
 package de.npe.mcmods.nparcade.common.items;
 
 import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
+import de.npe.mcmods.nparcade.arcade.ArcadeGameWrapper;
 import de.npe.mcmods.nparcade.common.lib.Strings;
-import de.npe.mcmods.nparcade.common.util.Util;
 import me.jezza.oc.common.interfaces.IItemTooltip;
 import me.jezza.oc.common.items.ItemAbstract;
 import me.jezza.oc.common.utils.Localise;
@@ -26,12 +26,12 @@ public class ItemCartridge extends ItemAbstract {
 
 		// TODO: only add info if item is not an empty game
 		boolean hasGame = false;
-		NBTTagCompound modTag = stack.hasTagCompound() ? Util.getModNBTTag(stack.getTagCompound(), false) : null;
-		if (modTag != null) {
-			String gameID = modTag.hasKey(Strings.NBT_GAME) ? modTag.getString(Strings.NBT_GAME) : null;
-			ArcadeGameRegistry.GameInfo info = ArcadeGameRegistry.gameForID(gameID);
-			if (info != null) {
-				text.append("§6§o").append(info.name());
+		NBTTagCompound tag = stack.getTagCompound();
+		if (tag != null) {
+			String gameID = tag.hasKey(Strings.NBT_GAME) ? tag.getString(Strings.NBT_GAME) : null;
+			ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
+			if (wrapper != null) {
+				text.append("§6§o").append(wrapper.gameName());
 				hasGame = true;
 			}
 		}
@@ -42,7 +42,7 @@ public class ItemCartridge extends ItemAbstract {
 	}
 
 	@Override
-	public String getItemStackDisplayName(ItemStack p_77653_1_) {
-		return super.getItemStackDisplayName(p_77653_1_); // TODO: use game name
+	public String getItemStackDisplayName(ItemStack stack) {
+		return super.getItemStackDisplayName(stack); // TODO: use game gameName
 	}
 }

@@ -5,8 +5,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Size;
+import de.npe.mcmods.nparcade.client.render.Helper;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry.GameInfo;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.image.BufferedImage;
 
@@ -78,8 +79,8 @@ public class ArcadeMachine implements IArcadeMachine {
 		// unload previous game
 		unload();
 		// load new game
-		GameInfo gi = ArcadeGameRegistry.gameForID(gameID);
-		game = gi != null ? gi.createGameInstance() : null; // TODO: load placeholder screen or error screen if GameInfo is null
+		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
+		game = wrapper != null ? wrapper.createGameInstance() : null; // TODO: load placeholder screen or error screen if ArcadeGameWrapper is null
 
 		game.load(this);
 	}
@@ -107,49 +108,10 @@ public class ArcadeMachine implements IArcadeMachine {
 
 		prepareRender(tick);
 
-		// texture variables
-		float tx = 0F;
-		float ty = 0F;
-
-		float tw = suggestedScreenSize.width;
-		float th = suggestedScreenSize.height;
-		final float tRatio = tw / th;
-
-		// screen variables
-		final float sw = (float) image.getWidth();
-		final float sh = (float) image.getHeight();
-		final float sRatio = sw / sh;
-
-		// these checks center the game's output on screen
-		// if the game's aspect ratio does not match the arcade
-		// machine's aspect ratio.
-		if (sRatio > tRatio) {
-			ty = th * 0.5F - (th * 0.5F) / sRatio * tRatio;
-			th = th / sRatio * tRatio;
-		} else if (sRatio < tRatio) {
-			tx = tw * 0.5F - (tw * 0.5F) / tRatio * sRatio;
-			tw = tw / tRatio * sRatio;
-		}
-
 		glBindTexture(GL_TEXTURE_2D, textureID);
 
-		glBegin(GL_TRIANGLES);
-
-		glTexCoord2f(1, 0); // top right
-		glVertex2f(tx + tw, ty);
-		glTexCoord2f(0, 0); // top left
-		glVertex2f(tx, ty);
-		glTexCoord2f(0, 1); // bottom left
-		glVertex2f(tx, ty + th);
-
-		glTexCoord2f(0, 1); // bottom left
-		glVertex2f(tx, ty + th);
-		glTexCoord2f(1, 1); // bottom right
-		glVertex2f(tx + tw, ty + th);
-		glTexCoord2f(1, 0); // top right
-		glVertex2f(tx + tw, ty);
-
-		glEnd();
+		Helper.renderRectInBounds(suggestedScreenSize.width, suggestedScreenSize.height,
+				image.getWidth(), image.getHeight(), 0,0, 1,1, Helper.Alignment.M);
 	}
 
 	/**
@@ -157,7 +119,7 @@ public class ArcadeMachine implements IArcadeMachine {
 	 */
 	public void deleteTexture() {
 		if (textureID != -1) {
-			TextureUtil.deleteTexture(textureID);
+			GL11.glDeleteTextures(textureID);
 		}
 		screenData = null;
 		image = null;
@@ -193,7 +155,7 @@ public class ArcadeMachine implements IArcadeMachine {
 
 				deleteTexture();
 				screenData = new int[width * height];
-				textureID = TextureUtil.glGenTextures();
+				textureID = GL11.glGenTextures();
 				TextureUtil.allocateTexture(textureID, width, height);
 
 				image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);

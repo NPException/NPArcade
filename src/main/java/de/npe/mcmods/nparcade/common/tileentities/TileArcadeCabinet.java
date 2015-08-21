@@ -74,9 +74,9 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 					}
 					gameID = null;
 				} else {
-					NBTTagCompound modTag = heldItem.hasTagCompound() ? Util.getModNBTTag(heldItem.getTagCompound(), false) : null;
-					if (modTag != null && modTag.hasKey(Strings.NBT_GAME)) {
-						gameID = modTag.getString(Strings.NBT_GAME);
+					NBTTagCompound tag = heldItem.getTagCompound();
+					if (tag != null && tag.hasKey(Strings.NBT_GAME)) {
+						gameID = tag.getString(Strings.NBT_GAME);
 					} else {
 						// TODO use one gameID for a old school TV test screen
 						gameID = null;
@@ -105,25 +105,23 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	@Override
 	public void writeToNBT(NBTTagCompound tag) {
 		super.writeToNBT(tag);
-		NBTTagCompound modTag = Util.getModNBTTag(tag, true);
 
-		modTag.setByte(Strings.NBT_FACING, (byte) facing.ordinal());
+		tag.setByte(Strings.NBT_FACING, (byte) facing.ordinal());
 
 		if (gameID != null) {
-			modTag.setString(Strings.NBT_GAME, gameID);
+			tag.setString(Strings.NBT_GAME, gameID);
 		} else {
-			modTag.removeTag(Strings.NBT_GAME);
+			tag.removeTag(Strings.NBT_GAME);
 		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound tag) {
 		super.readFromNBT(tag);
-		NBTTagCompound modTag = Util.getModNBTTag(tag, false);
 
-		facing = ForgeDirection.getOrientation(modTag.getByte(Strings.NBT_FACING));
+		facing = ForgeDirection.getOrientation(tag.getByte(Strings.NBT_FACING));
 
-		gameID = modTag.hasKey(Strings.NBT_GAME) ? modTag.getString(Strings.NBT_GAME) : null;
+		gameID = tag.hasKey(Strings.NBT_GAME) ? tag.getString(Strings.NBT_GAME) : null;
 
 		if (worldObj != null && worldObj.isRemote) {
 			if (gameID != null) {

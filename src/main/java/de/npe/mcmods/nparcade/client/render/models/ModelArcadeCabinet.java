@@ -15,7 +15,7 @@ import net.minecraft.util.ResourceLocation;
 @SideOnly(Side.CLIENT)
 public class ModelArcadeCabinet extends ModelBase {
 	public static final ModelArcadeCabinet instance = new ModelArcadeCabinet();
-	public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_IDENTIFIER + "textures/blocks/nparcade_modelArcadeCabinet.png");
+	public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_IDENTIFIER + "textures/models/nparcade_modelArcadeCabinet.png");
 
 	public ModelRenderer base;
 	public ModelRenderer stick;
