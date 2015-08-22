@@ -15,6 +15,8 @@ public class Strings {
 	public static final String NBT_FACING = Reference.MOD_ID + "_facing";
 	public static final String NBT_GAME = Reference.MOD_ID + "_game";
 
-	public static final String LANG_TOOLTIP_CARTRIDGE_GAME = "tooltip.item.cartridge.game";
-	public static final String LANG_TOOLTIP_CARTRIDGE_GAME_NONE = "tooltip.item.cartridge.game.none";
+	public static final String LANG_TOOLTIP_CARTRIDGE_UNKNOWN = "tooltip.item.cartridge.unknown";
+	public static final String LANG_TOOLTIP_CARTRIDGE_UNKNOWN_EXPLANATION = "tooltip.item.cartridge.unknown.explanation";
+	public static final String LANG_TOOLTIP_CARTRIDGE_CONTENT = "tooltip.item.cartridge.content";
+	public static final String LANG_TOOLTIP_CARTRIDGE_CONTENT_NONE = "tooltip.item.cartridge.content.none";
 }

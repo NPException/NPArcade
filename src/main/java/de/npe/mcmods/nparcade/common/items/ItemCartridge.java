@@ -23,27 +23,37 @@ public class ItemCartridge extends ItemAbstract {
 	@Override
 	protected void addInformation(ItemStack stack, EntityPlayer player, IItemTooltip tooltip) {
 		StringBuilder text = new StringBuilder();
-		text.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_GAME) + ": ");
+		text.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT) + ": ");
 
-		// TODO: only add info if item is not an empty game
-		boolean hasGame = false;
 		NBTTagCompound tag = stack.getTagCompound();
-		if (tag != null) {
-			String gameID = tag.hasKey(Strings.NBT_GAME) ? tag.getString(Strings.NBT_GAME) : null;
+		if (tag != null && tag.hasKey(Strings.NBT_GAME)) {
+			String gameID = tag.getString(Strings.NBT_GAME);
 			ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
-			if (wrapper != null) {
-				text.append("§6§o").append(wrapper.gameName());
-				hasGame = true;
+
+			text.append("§3").append(gameID);
+			tooltip.addToInfoList(text.toString());
+			if (wrapper == null) {
+				tooltip.defaultInfoList();
+				tooltip.addAllToShiftList(Localise.wrapToSize(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN_EXPLANATION), 60));
 			}
+			return;
 		}
-		if (!hasGame) {
-			text.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_GAME_NONE));
-		}
+		text.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT_NONE));
 		tooltip.addToInfoList(text.toString());
 	}
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		return super.getItemStackDisplayName(stack); // TODO: use game gameName
+		NBTTagCompound tag = stack.getTagCompound();
+		if (tag != null) {
+			String gameID = tag.hasKey(Strings.NBT_GAME) ? tag.getString(Strings.NBT_GAME) : null;
+			ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
+			if (wrapper != null) {
+				return wrapper.gameName();
+			} else {
+				return Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN);
+			}
+		}
+		return super.getItemStackDisplayName(stack);
 	}
 }

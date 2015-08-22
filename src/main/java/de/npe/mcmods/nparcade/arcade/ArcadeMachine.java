@@ -80,9 +80,12 @@ public class ArcadeMachine implements IArcadeMachine {
 		unload();
 		// load new game
 		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
-		game = wrapper != null ? wrapper.createGameInstance() : null; // TODO: load placeholder screen or error screen if ArcadeGameWrapper is null
+		game = wrapper != null ? wrapper.createGameInstance() : null;
 
-		game.load(this);
+		// TODO: load placeholder screen or error screen if ArcadeGameWrapper is null
+		if (game != null) {
+			game.load(this);
+		}
 	}
 
 	public void unload() {
@@ -111,7 +114,7 @@ public class ArcadeMachine implements IArcadeMachine {
 		glBindTexture(GL_TEXTURE_2D, textureID);
 
 		Helper.renderRectInBounds(suggestedScreenSize.width, suggestedScreenSize.height,
-				image.getWidth(), image.getHeight(), 0,0, 1,1, Helper.Alignment.M);
+				image.getWidth(), image.getHeight(), 0, 0, 1, 1, Helper.Alignment.M);
 	}
 
 	/**

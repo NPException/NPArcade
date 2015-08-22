@@ -40,5 +40,11 @@ public class ModItems {
 		cartridgeStack.getTagCompound().setString(Strings.NBT_GAME, SampleGame.ID);
 
 		crafting.addShapelessRecipe(cartridgeStack, new ItemStack(Items.comparator, 1, OreDictionary.WILDCARD_VALUE));
+
+		cartridgeStack = new ItemStack(cartridge);
+		cartridgeStack.setTagCompound(new NBTTagCompound());
+		cartridgeStack.getTagCompound().setString(Strings.NBT_GAME, "this is broken");
+
+		crafting.addShapelessRecipe(cartridgeStack, new ItemStack(Items.glass_bottle, 1, 0));
 	}
 }
