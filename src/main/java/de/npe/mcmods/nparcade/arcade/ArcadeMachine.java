@@ -78,14 +78,13 @@ public class ArcadeMachine implements IArcadeMachine {
 
 		// unload previous game
 		unload();
-		// load new game
-		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
-		game = wrapper != null ? wrapper.createGameInstance() : null;
 
-		// TODO: load placeholder screen or error screen if ArcadeGameWrapper is null
-		if (game != null) {
-			game.load(this);
-		}
+		// load new game
+		this.gameID = gameID;
+		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(this.gameID);
+
+		game = wrapper.createGameInstance();
+		game.load(this);
 	}
 
 	public void unload() {

@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
  */
 public class ModelCartridge extends ModelBase {
 	public static final ModelCartridge instance = new ModelCartridge();
-	public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_IDENTIFIER + "textures/models/nparcade_modelCartridge.png");
+	public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_IDENTIFIER + "textures/models/nparcade_modelCartridge_new.png");
 
 	public ModelRenderer base;
 	public ModelRenderer left;

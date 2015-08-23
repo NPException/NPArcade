@@ -73,7 +73,8 @@ public interface IArcadeGame {
 
 	/**
 	 * When this is called, the game is supposed to draw to the supplied BufferedImage.
-	 * The BufferedImage is of type {@link BufferedImage#TYPE_INT_ARGB}.
+	 * The BufferedImage is of type {@link BufferedImage#TYPE_INT_ARGB} and guaranteed to have the size
+	 * that was returned by the last call to {@link #screenSize()}.
 	 *
 	 * @param partialTick the partial time that has passed since the last game tick.
 	 *                    Usually between 0 and 1, but can grow larger than 1 if the game tick is lagging behind.

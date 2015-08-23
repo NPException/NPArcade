@@ -33,28 +33,30 @@ public class RenderItemCartridge extends AbstractItemRenderer {
 		glTranslatef(0.5f, 0.625f, 0.5f);
 		glRotatef(180f, 1f, 0f, 0f);
 		if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
-			glRotatef(71F, 0F,1F,0F);
+			glRotatef(71F, 0F, 1F, 0F);
 			glTranslatef(-0.1F, -0.8F, -0.7F);
 		}
-		glColor3f(1.0F, 1.0F, 1.0F);
+
+		NBTTagCompound tag = stack.getTagCompound();
+		ArcadeGameWrapper wrapper = (tag == null || !tag.hasKey(Strings.NBT_GAME)) ? null : ArcadeGameRegistry.gameForID(tag.getString(Strings.NBT_GAME));
+
+		if (wrapper != null && wrapper.hasColor()) {
+			glColor3f(wrapper.colorRed(), wrapper.colorGreen(), wrapper.colorBlue());
+		} else {
+			glColor3f(0.5098F, 0.5098F, 0.4706F);
+		}
+
 		bindTexture(ModelCartridge.texture);
 		ModelCartridge.instance.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 
-		renderSticker(stack);
+		if (wrapper != null) {
+			renderSticker(wrapper);
+		}
 
 		glPopMatrix();
 	}
 
-	private void renderSticker(ItemStack stack) {
-		NBTTagCompound tag = stack.getTagCompound();
-		if (tag == null || !tag.hasKey(Strings.NBT_GAME)) {
-			return;
-		}
-		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(tag.getString(Strings.NBT_GAME));
-		if (wrapper == null) {
-			// TODO: bindTexture(ModelCartridge.unknownGameStickerTexture);
-		} else {
-			// TODO: translate and scale, bind game texture, Helper.renderRectInBounds(...)
-		}
+	private void renderSticker(ArcadeGameWrapper wrapper) {
+		// TODO: translate and scale, bind sticker texture, Helper.renderRectInBounds(...)
 	}
 }

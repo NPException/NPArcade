@@ -23,7 +23,7 @@ public class ItemCartridge extends ItemAbstract {
 	@Override
 	protected void addInformation(ItemStack stack, EntityPlayer player, IItemTooltip tooltip) {
 		StringBuilder text = new StringBuilder();
-		text.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT) + ": ");
+		text.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT)).append(": ");
 
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null && tag.hasKey(Strings.NBT_GAME)) {
@@ -32,7 +32,7 @@ public class ItemCartridge extends ItemAbstract {
 
 			text.append("§3").append(gameID);
 			tooltip.addToInfoList(text.toString());
-			if (wrapper == null) {
+			if (wrapper.gameID() == null) {
 				tooltip.defaultInfoList();
 				tooltip.addAllToShiftList(Localise.wrapToSize(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN_EXPLANATION), 60));
 			}
@@ -48,7 +48,7 @@ public class ItemCartridge extends ItemAbstract {
 		if (tag != null) {
 			String gameID = tag.hasKey(Strings.NBT_GAME) ? tag.getString(Strings.NBT_GAME) : null;
 			ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
-			if (wrapper != null) {
+			if (wrapper.gameID() != null) {
 				return wrapper.gameName();
 			} else {
 				return Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN);

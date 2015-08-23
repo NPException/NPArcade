@@ -13,15 +13,13 @@ import java.awt.image.BufferedImage;
 public class SampleGame implements IArcadeGame {
 
 	public static final String ID = "nparcade_sampleGame";
-	public static final String NAME = "No Signal Simulator";
+	public static final String NAME = "Dat Sample Game";
 
-	private IArcadeMachine arcadeMachine;
 	private Size screenSize;
 	private long nextDraw = 0L;
 
 	@Override
 	public void load(IArcadeMachine arcadeMachine) {
-		this.arcadeMachine = arcadeMachine;
 		screenSize = new Size(20, 26);
 	}
 

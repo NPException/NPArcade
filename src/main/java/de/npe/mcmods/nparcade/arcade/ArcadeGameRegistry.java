@@ -6,7 +6,6 @@ import de.npe.api.nparcade.IArcadeGame;
 import de.npe.mcmods.nparcade.NPArcade;
 
 import java.awt.*;
-import java.lang.reflect.Constructor;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +18,9 @@ import java.util.Set;
  * Created by NPException (2015)
  */
 public class ArcadeGameRegistry {
+	// TODO: "torn off" sticker/icon
+	public static final ArcadeGameWrapper UNKNOWN_GAME_WRAPPER = new ArcadeGameWrapper(null, null, null, 0xFF7F00, UnknownGame.class);
+
 	private ArcadeGameRegistry() {
 	}
 
@@ -37,7 +39,7 @@ public class ArcadeGameRegistry {
 		// TODO: load games from jars
 
 		try {
-			register(SampleGame.class, SampleGame.ID, SampleGame.NAME, null);
+			register(SampleGame.class, SampleGame.ID, SampleGame.NAME, null, "4251AF");
 		} catch (Exception ex) {
 			NPArcade.log.warn("Could not register arcade game", ex);
 		}
@@ -53,7 +55,7 @@ public class ArcadeGameRegistry {
 	 * @throws IllegalArgumentException if one of the parameters does not meet the requirements,
 	 *                                  or a game with the same ID was already registered.
 	 */
-	public static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String name, Image icon) throws IllegalArgumentException {
+	public static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String name, Image icon, String colorString) throws IllegalArgumentException {
 		String gameToString = " Game -> ID:" + id + ", Name:" + name + ", Class:" + gameClass.getCanonicalName();
 		if (id == null) {
 			throw new IllegalArgumentException("ID must not be null!" + gameToString);
@@ -62,9 +64,17 @@ public class ArcadeGameRegistry {
 			throw new IllegalArgumentException("Name must not be null!" + gameToString);
 		}
 
-		Constructor<? extends IArcadeGame> constructor;
+		int color = -1;
+		if (colorString != null) {
+			try {
+				color = Integer.parseInt(colorString, 16);
+			} catch (Exception ex) {
+				throw new IllegalArgumentException("Color string given is not a valid hex value!" + gameToString, ex);
+			}
+		}
+
 		try {
-			constructor = gameClass.getConstructor();
+			gameClass.getConstructor();
 		} catch (Exception ex) {
 			throw new IllegalArgumentException("Could not grab public no-args constructor!" + gameToString, ex);
 		}
@@ -74,15 +84,19 @@ public class ArcadeGameRegistry {
 		}
 
 		boolean isClient = (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT);
-		ArcadeGameWrapper wrapper = isClient ? new ArcadeGameWrapper(id, name, icon, constructor) : new ArcadeGameWrapper(id, name, null, null);
+		ArcadeGameWrapper wrapper = isClient ? new ArcadeGameWrapper(id, name, icon, color, gameClass) : new ArcadeGameWrapper(id, name, null, -1, null);
 		games.put(id, wrapper);
 	}
 
 	/**
-	 * Returns the GameInfo object for the game with the given ID
+	 * Returns the ArcadeGameWrapper object for the game with the given ID, or an empty
+	 * wrapper (with gameID being <b>null</b>) if no game with the given ID was found.<br>
+	 * <br>
+	 * This method will therefor never return null.
 	 */
 	public static ArcadeGameWrapper gameForID(String id) {
-		return games.get(id);
+		ArcadeGameWrapper wrapper = games.get(id);
+		return wrapper != null ? wrapper : UNKNOWN_GAME_WRAPPER;
 	}
 
 	/**
