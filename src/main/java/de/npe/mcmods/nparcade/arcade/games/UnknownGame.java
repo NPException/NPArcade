@@ -1,4 +1,4 @@
-package de.npe.mcmods.nparcade.arcade;
+package de.npe.mcmods.nparcade.arcade.games;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -13,7 +13,6 @@ import java.awt.image.BufferedImage;
  * Created by NPException (2015)
  */
 public class UnknownGame implements IArcadeGame {
-
 	private int[][] pixels;
 	private int pixelsToDraw = 0;
 

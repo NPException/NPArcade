@@ -61,26 +61,31 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	@Override
 	public boolean onActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitVecX, float hitVecY, float hitVecZ) {
 		ItemStack heldItem = player.getCurrentEquippedItem();
-		if ((heldItem == null && player.isSneaking()) // can remove game with empty hand sneaking
-				|| (heldItem != null && heldItem.getItem() == ModItems.cartridge)) { // can set game if no game is present
-			if (!worldObj.isRemote) {
-				if (heldItem == null) {
-					// create and spawn
-					if (gameID != null) {
+
+		if (heldItem == null) {
+			// can remove game with empty hand and sneaking
+			if (player.isSneaking() && !worldObj.isRemote) {
+				// create and spawn
+				if (gameID != null) {
 //						ItemStack oldCartridge = new ItemStack(ModItems.cartridge);
 //						oldCartridge.setTagCompound(new NBTTagCompound());
 //						Util.getModNBTTag(oldCartridge.getTagCompound(), true).setString(Strings.NBT_GAME, gameID);
-						// TODO spawn item in world
-					}
-					gameID = null;
+					// TODO spawn item in world
+				}
+				gameID = null;
+				markForUpdate();
+			}
+			return true;
+
+		} else if (heldItem.getItem() == ModItems.cartridge) {
+			// change game with different cartridge
+			if (!worldObj.isRemote) {
+				NBTTagCompound tag = heldItem.getTagCompound();
+				if (tag != null && tag.hasKey(Strings.NBT_GAME)) {
+					gameID = tag.getString(Strings.NBT_GAME);
 				} else {
-					NBTTagCompound tag = heldItem.getTagCompound();
-					if (tag != null && tag.hasKey(Strings.NBT_GAME)) {
-						gameID = tag.getString(Strings.NBT_GAME);
-					} else {
-						// TODO use one gameID for a old school TV test screen
-						gameID = null;
-					}
+					// TODO use one gameID for a old school TV test screen
+					gameID = null;
 				}
 				markForUpdate();
 			}

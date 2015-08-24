@@ -4,8 +4,9 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.mcmods.nparcade.NPArcade;
+import de.npe.mcmods.nparcade.arcade.games.SampleGame;
 
-import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,8 +19,8 @@ import java.util.Set;
  * Created by NPException (2015)
  */
 public class ArcadeGameRegistry {
-	// TODO: "torn off" sticker/icon
-	public static final ArcadeGameWrapper UNKNOWN_GAME_WRAPPER = new ArcadeGameWrapper(null, null, null, 0xFF7F00, UnknownGame.class);
+	public static final ArcadeGameWrapper UNKNOWN_GAME_WRAPPER = SystemGamesLoader.initUnknownGameWrapper();
+	public static final ArcadeGameWrapper EMPTY_GAME_WRAPPER = SystemGamesLoader.initEmptyGameWrapper();
 
 	private ArcadeGameRegistry() {
 	}
@@ -51,11 +52,11 @@ public class ArcadeGameRegistry {
 	 * @param gameClass the Class of the game. (Must have a public no-args constructor)
 	 * @param id        the ID of the game. (Must NOT be null)
 	 * @param name      the human readable gameName of the game. (Must NOT be null)
-	 * @param icon      an gameIcon for the game. (Can be null)
+	 * @param label     a label for the game cartridge. (Can be null)
 	 * @throws IllegalArgumentException if one of the parameters does not meet the requirements,
 	 *                                  or a game with the same ID was already registered.
 	 */
-	public static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String name, Image icon, String colorString) throws IllegalArgumentException {
+	public static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String name, BufferedImage label, String colorString) throws IllegalArgumentException {
 		String gameToString = " Game -> ID:" + id + ", Name:" + name + ", Class:" + gameClass.getCanonicalName();
 		if (id == null) {
 			throw new IllegalArgumentException("ID must not be null!" + gameToString);
@@ -84,7 +85,7 @@ public class ArcadeGameRegistry {
 		}
 
 		boolean isClient = (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT);
-		ArcadeGameWrapper wrapper = isClient ? new ArcadeGameWrapper(id, name, icon, color, gameClass) : new ArcadeGameWrapper(id, name, null, -1, null);
+		ArcadeGameWrapper wrapper = isClient ? new ArcadeGameWrapper(id, name, label, color, gameClass) : new ArcadeGameWrapper(id, name, null, -1, null);
 		games.put(id, wrapper);
 	}
 

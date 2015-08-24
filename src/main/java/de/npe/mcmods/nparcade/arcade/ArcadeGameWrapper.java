@@ -3,8 +3,11 @@ package de.npe.mcmods.nparcade.arcade;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.api.nparcade.IArcadeGame;
+import de.npe.api.nparcade.util.Size;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import org.lwjgl.opengl.GL11;
 
-import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.lang.reflect.Constructor;
 
 /**
@@ -15,18 +18,27 @@ public final class ArcadeGameWrapper {
 	private final String id;
 	private final String name;
 
-	private final Image icon;
 	private boolean hasColor;
 	private float colorRed = 1F;
 	private float colorGreen = 1F;
 	private float colorBlue = 1F;
 
+	private final BufferedImage label;
+	private final Size labelSize;
+	private int textureID = -1;
+
 	private final Constructor<? extends IArcadeGame> constructor;
 
-	ArcadeGameWrapper(String id, String name, Image icon, int color, Class<? extends IArcadeGame> gameClass) {
+	ArcadeGameWrapper(String id, String name, BufferedImage label, int color, Class<? extends IArcadeGame> gameClass) {
 		this.id = id;
 		this.name = name;
-		this.icon = icon;
+
+		// this.label = (label == null) ? null : label.getRGB(0,0, label.getWidth(), label.getHeight(), null, 0, label.getHeight());
+		this.label = (label == null) ? null : new BufferedImage(label.getWidth(), label.getHeight(), BufferedImage.TYPE_INT_ARGB);
+		labelSize = (label == null) ? null : new Size(label.getWidth(), label.getHeight());
+		if (label != null) {
+			this.label.getGraphics().drawImage(label,0,0,null);
+		}
 
 		try {
 			constructor = gameClass != null ? gameClass.getConstructor() : null;
@@ -58,8 +70,28 @@ public final class ArcadeGameWrapper {
 	/////////////////////////
 
 	@SideOnly(Side.CLIENT)
-	public Image gameIcon() {
-		return icon;
+	public boolean hasLabel() {
+		return label != null;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public Size labelSize() {
+		return labelSize;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int prepareLabelTexture() {
+		// allocate new texture if not yet initialized
+		if (textureID == -1) {
+			textureID = GL11.glGenTextures();
+			TextureUtil.allocateTexture(textureID, labelSize.width, labelSize.height);
+
+			// upload pixels to texture
+			int[] pixels = new int[labelSize.width*labelSize.height];
+			label.getRGB(0,0, labelSize.width, labelSize.height, pixels, 0, labelSize.width);
+			TextureUtil.uploadTexture(textureID, pixels, labelSize.width, labelSize.height);
+		}
+		return textureID;
 	}
 
 	@SideOnly(Side.CLIENT)

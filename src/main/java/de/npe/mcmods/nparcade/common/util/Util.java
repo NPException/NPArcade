@@ -1,19 +1,35 @@
 package de.npe.mcmods.nparcade.common.util;
 
+import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.common.lib.Reference;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.common.util.ForgeDirection;
 
+import java.io.InputStream;
 import java.util.Random;
 
 /**
  * Created by NPException (2015)
  */
 public class Util {
+	private static String resourcePrefix = "/assets/" + Reference.MOD_ID + "/";
 
 	public static final Random rand = new Random();
+
+	public static InputStream getResourceStream(String resource) {
+		try {
+			InputStream in = Util.class.getResourceAsStream(resourcePrefix + resource);
+			if (in == null) {
+				NPArcade.log.warn("Resource not found: " + resource);
+			}
+			return in;
+		} catch (Exception ex) {
+			NPArcade.log.error("Could not load resource: " + resource, ex);
+			return null;
+		}
+	}
 
 	/**
 	 * Tries to get a tag compound "{mod_id}" from the given compound.

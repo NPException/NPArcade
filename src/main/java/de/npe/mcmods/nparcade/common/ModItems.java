@@ -1,6 +1,6 @@
 package de.npe.mcmods.nparcade.common;
 
-import de.npe.mcmods.nparcade.arcade.SampleGame;
+import de.npe.mcmods.nparcade.arcade.games.SampleGame;
 import de.npe.mcmods.nparcade.common.items.ItemCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import net.minecraft.init.Blocks;

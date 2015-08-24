@@ -2,6 +2,7 @@ package de.npe.mcmods.nparcade.client.render;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import de.npe.api.nparcade.util.Size;
 import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.arcade.ArcadeGameWrapper;
 import de.npe.mcmods.nparcade.client.render.models.ModelCartridge;
@@ -46,17 +47,30 @@ public class RenderItemCartridge extends AbstractItemRenderer {
 			glColor3f(0.5098F, 0.5098F, 0.4706F);
 		}
 
+		glPushMatrix();
 		bindTexture(ModelCartridge.texture);
 		ModelCartridge.instance.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+		glPopMatrix();
 
-		if (wrapper != null) {
+		if (wrapper != null && wrapper.hasLabel()) {
+			glPushMatrix();
 			renderSticker(wrapper);
+			glPopMatrix();
 		}
 
 		glPopMatrix();
 	}
 
 	private void renderSticker(ArcadeGameWrapper wrapper) {
-		// TODO: translate and scale, bind sticker texture, Helper.renderRectInBounds(...)
+		glScalef(0.0625F, 0.0625F, 0.0625F);
+		glTranslatef(-1.3F, 0.2F, -0.76F);
+		glScalef(0.9F, 0.9F, 0.9F);
+
+		glEnable (GL_BLEND);
+		glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glColor3f(1.0F, 1.0F, 1.0F);
+		Size size = wrapper.labelSize();
+		glBindTexture(GL_TEXTURE_2D, wrapper.prepareLabelTexture());
+		Helper.renderRectInBounds(4, 5, size.width, size.height, 0, 0, 1, 1, Helper.Alignment.U);
 	}
 }
