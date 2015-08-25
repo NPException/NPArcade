@@ -14,21 +14,24 @@ import java.util.Random;
  * Created by NPException (2015)
  */
 public class Util {
-	private static String resourcePrefix = "/assets/" + Reference.MOD_ID + "/";
 
 	public static final Random rand = new Random();
 
-	public static InputStream getResourceStream(String resource) {
+	public static InputStream getResourceStreamAbsolutePath(Class clazz, String resourcePath) {
 		try {
-			InputStream in = Util.class.getResourceAsStream(resourcePrefix + resource);
+			InputStream in = clazz.getResourceAsStream(resourcePath);
 			if (in == null) {
-				NPArcade.log.warn("Resource not found: " + resource);
+				NPArcade.log.warn("Resource not found: " + resourcePath);
 			}
 			return in;
 		} catch (Exception ex) {
-			NPArcade.log.error("Could not load resource: " + resource, ex);
+			NPArcade.log.error("Could not load resource: " + resourcePath, ex);
 			return null;
 		}
+	}
+
+	public static InputStream getResourceStream(String resource) {
+		return getResourceStreamAbsolutePath(Util.class, "/assets/" + Reference.MOD_ID + "/" + resource);
 	}
 
 	/**

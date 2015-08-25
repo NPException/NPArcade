@@ -2,6 +2,7 @@ package de.npe.mcmods.nparcade.common.tileentities;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.arcade.ArcadeMachine;
 import de.npe.mcmods.nparcade.common.ModItems;
 import de.npe.mcmods.nparcade.common.lib.Strings;
@@ -41,6 +42,7 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	@Override
 	public void onBlockRemoval(World world, int x, int y, int z) {
 		// do nothing
+		// TODO: proper cartridge drop, keep in mind ArcadeGameRegistry.isDummyGame(gameID)
 	}
 
 	@Override
@@ -66,7 +68,7 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 			// can remove game with empty hand and sneaking
 			if (player.isSneaking() && !worldObj.isRemote) {
 				// create and spawn
-				if (gameID != null) {
+				if (gameID != null && !ArcadeGameRegistry.isDummyGame(gameID)) {
 //						ItemStack oldCartridge = new ItemStack(ModItems.cartridge);
 //						oldCartridge.setTagCompound(new NBTTagCompound());
 //						Util.getModNBTTag(oldCartridge.getTagCompound(), true).setString(Strings.NBT_GAME, gameID);
@@ -84,8 +86,7 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 				if (tag != null && tag.hasKey(Strings.NBT_GAME)) {
 					gameID = tag.getString(Strings.NBT_GAME);
 				} else {
-					// TODO use one gameID for a old school TV test screen
-					gameID = null;
+					gameID = ArcadeGameRegistry.EMPTY_GAME_WRAPPER.gameID();
 				}
 				markForUpdate();
 			}

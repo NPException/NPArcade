@@ -22,6 +22,10 @@ public class ArcadeGameRegistry {
 	public static final ArcadeGameWrapper UNKNOWN_GAME_WRAPPER = SystemGamesLoader.initUnknownGameWrapper();
 	public static final ArcadeGameWrapper EMPTY_GAME_WRAPPER = SystemGamesLoader.initEmptyGameWrapper();
 
+	public static boolean isDummyGame(String gameID) {
+		return EMPTY_GAME_WRAPPER.gameID().equals(gameID);
+	}
+
 	private ArcadeGameRegistry() {
 	}
 
@@ -96,6 +100,9 @@ public class ArcadeGameRegistry {
 	 * This method will therefor never return null.
 	 */
 	public static ArcadeGameWrapper gameForID(String id) {
+		if (EMPTY_GAME_WRAPPER.gameID().equals(id)) {
+			return EMPTY_GAME_WRAPPER;
+		}
 		ArcadeGameWrapper wrapper = games.get(id);
 		return wrapper != null ? wrapper : UNKNOWN_GAME_WRAPPER;
 	}
