@@ -70,6 +70,7 @@ public final class Helper {
 
 		glBegin(GL_TRIANGLES);
 
+		glNormal3f(0,0,-1);
 		glTexCoord2f(u2, v1); // top right
 		glVertex2f(x + boundsWidth, y);
 		glTexCoord2f(u1, v1); // top left
