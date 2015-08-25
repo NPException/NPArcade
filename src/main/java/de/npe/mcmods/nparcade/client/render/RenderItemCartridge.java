@@ -44,7 +44,7 @@ public class RenderItemCartridge extends AbstractItemRenderer {
 		if (wrapper != null && wrapper.hasColor()) {
 			glColor3f(wrapper.colorRed(), wrapper.colorGreen(), wrapper.colorBlue());
 		} else {
-			glColor3f(0.5098F, 0.5098F, 0.4706F);
+			glColor3f(0.51F, 0.51F, 0.47F);
 		}
 
 		glPushMatrix();

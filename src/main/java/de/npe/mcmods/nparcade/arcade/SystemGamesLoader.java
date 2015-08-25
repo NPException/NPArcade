@@ -23,7 +23,7 @@ public class SystemGamesLoader {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return new ArcadeGameWrapper("nparcade_unknown", "???", label, 0xFF7F00, UnknownGame.class);
+		return new ArcadeGameWrapper("nparcade_unknown", "???", label, 0x686851, UnknownGame.class);
 	}
 
 	/**
