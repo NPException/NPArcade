@@ -12,12 +12,19 @@ import java.io.InputStream;
 /**
  * Created by NPException (2015)
  */
-public class SystemGamesLoader {
+public class DummyGames {
+	public static final ArcadeGameWrapper UNKNOWN_GAME_WRAPPER = initUnknownGameWrapper();
+	public static final ArcadeGameWrapper EMPTY_GAME_WRAPPER = initEmptyGameWrapper();
+
+	public static boolean isDummyGame(String gameID) {
+		return EMPTY_GAME_WRAPPER.gameID().equals(gameID) || UNKNOWN_GAME_WRAPPER.gameID().equals(gameID);
+	}
+
 	/**
 	 * Initializes the {@link ArcadeGameWrapper} that will be used for all cartridges
 	 * that have an unknown gameID.
 	 */
-	public static ArcadeGameWrapper initUnknownGameWrapper() {
+	private static ArcadeGameWrapper initUnknownGameWrapper() {
 		BufferedImage label = null;
 		try {
 			InputStream in = Util.getResourceStream(Strings.TEXTURE_UNKNOWN_GAME_LABEL);
@@ -25,14 +32,14 @@ public class SystemGamesLoader {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return new ArcadeGameWrapper("__nparcade_unknown", "???", label, 0x686851, UnknownGame.class);
+		return new ArcadeGameWrapper("__nparcade_unknown", "???", label, 0x686851, UnknownGame.class, null);
 	}
 
 	/**
 	 * Initializes the {@link ArcadeGameWrapper} that will be used for empty cartridges.
 	 */
-	public static ArcadeGameWrapper initEmptyGameWrapper() {
+	private static ArcadeGameWrapper initEmptyGameWrapper() {
 		EmptyGame.init();
-		return new ArcadeGameWrapper("__nparcade_empty", "___", null, -1, EmptyGame.class);
+		return new ArcadeGameWrapper("__nparcade_empty", "___", null, -1, EmptyGame.class, null);
 	}
 }

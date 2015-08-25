@@ -4,7 +4,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.util.Size;
+import de.npe.mcmods.nparcade.arcade.api.IItemGameCartridge;
+import de.npe.mcmods.nparcade.common.ModItems;
 import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.item.Item;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.image.BufferedImage;
@@ -28,8 +31,9 @@ public final class ArcadeGameWrapper {
 	private int textureID = -1;
 
 	private final Constructor<? extends IArcadeGame> constructor;
+	private final IItemGameCartridge customCartridge;
 
-	ArcadeGameWrapper(String id, String name, BufferedImage label, int color, Class<? extends IArcadeGame> gameClass) {
+	ArcadeGameWrapper(String id, String name, BufferedImage label, int color, Class<? extends IArcadeGame> gameClass, IItemGameCartridge customCartridge) {
 		this.id = id;
 		this.name = name;
 
@@ -37,7 +41,7 @@ public final class ArcadeGameWrapper {
 		this.label = (label == null) ? null : new BufferedImage(label.getWidth(), label.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		labelSize = (label == null) ? null : new Size(label.getWidth(), label.getHeight());
 		if (label != null) {
-			this.label.getGraphics().drawImage(label,0,0,null);
+			this.label.getGraphics().drawImage(label, 0, 0, null);
 		}
 
 		try {
@@ -45,6 +49,14 @@ public final class ArcadeGameWrapper {
 		} catch (Exception ex) {
 			throw new IllegalArgumentException("Class " + gameClass.getCanonicalName() + " is missing public no-args constructor!", ex);
 		}
+
+		if (customCartridge != null && !(customCartridge instanceof Item)) {
+			throw new IllegalArgumentException(
+					"customCartridge is not an instance of " + Item.class.getCanonicalName()
+							+ ". Class of customCartridge: " + customCartridge.getClass());
+		}
+
+		this.customCartridge = customCartridge;
 
 		if (color != -1) {
 			hasColor = true;
@@ -63,6 +75,10 @@ public final class ArcadeGameWrapper {
 
 	public String gameName() {
 		return name;
+	}
+
+	public IItemGameCartridge cartridgeItem() {
+		return customCartridge != null ? customCartridge : ModItems.cartridge;
 	}
 
 	/////////////////////////
@@ -87,8 +103,8 @@ public final class ArcadeGameWrapper {
 			TextureUtil.allocateTexture(textureID, labelSize.width, labelSize.height);
 
 			// upload pixels to texture
-			int[] pixels = new int[labelSize.width*labelSize.height];
-			label.getRGB(0,0, labelSize.width, labelSize.height, pixels, 0, labelSize.width);
+			int[] pixels = new int[labelSize.width * labelSize.height];
+			label.getRGB(0, 0, labelSize.width, labelSize.height, pixels, 0, labelSize.width);
 			TextureUtil.uploadTexture(textureID, pixels, labelSize.width, labelSize.height);
 		}
 		return textureID;

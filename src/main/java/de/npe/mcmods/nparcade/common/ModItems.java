@@ -5,7 +5,6 @@ import de.npe.mcmods.nparcade.common.items.ItemCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,7 +13,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class ModItems {
 
-	public static Item cartridge;
+	public static ItemCartridge cartridge;
 
 	public static void init() {
 		cartridge = new ItemCartridge(Strings.ITEM_CARTRIDGE);
@@ -43,7 +42,7 @@ public class ModItems {
 
 		cartridgeStack = new ItemStack(cartridge);
 		cartridgeStack.setTagCompound(new NBTTagCompound());
-		cartridgeStack.getTagCompound().setString(Strings.NBT_GAME, "this is broken");
+		cartridgeStack.getTagCompound().setString(Strings.NBT_GAME, "fancy3dGame");
 
 		crafting.addShapelessRecipe(cartridgeStack, new ItemStack(Items.glass_bottle, 1, 0));
 	}

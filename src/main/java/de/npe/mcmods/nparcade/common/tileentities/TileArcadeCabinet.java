@@ -2,9 +2,8 @@ package de.npe.mcmods.nparcade.common.tileentities;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.arcade.ArcadeMachine;
-import de.npe.mcmods.nparcade.common.ModItems;
+import de.npe.mcmods.nparcade.arcade.api.IItemGameCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import de.npe.mcmods.nparcade.common.util.Util;
 import me.jezza.oc.common.interfaces.IBlockInteract;
@@ -35,10 +34,6 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 		return facing;
 	}
 
-	public String gameID() {
-		return gameID;
-	}
-
 	@Override
 	public void onBlockRemoval(World world, int x, int y, int z) {
 		// do nothing
@@ -62,16 +57,15 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 
 	@Override
 	public boolean onActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitVecX, float hitVecY, float hitVecZ) {
-		ItemStack heldItem = player.getCurrentEquippedItem();
+		ItemStack heldStack = player.getCurrentEquippedItem();
 
-		if (heldItem == null) {
+		if (heldStack == null) {
 			// can remove game with empty hand and sneaking
 			if (player.isSneaking() && !worldObj.isRemote) {
 				// create and spawn
-				if (gameID != null && !ArcadeGameRegistry.isDummyGame(gameID)) {
+				if (gameID != null) {
 //						ItemStack oldCartridge = new ItemStack(ModItems.cartridge);
 //						oldCartridge.setTagCompound(new NBTTagCompound());
-//						Util.getModNBTTag(oldCartridge.getTagCompound(), true).setString(Strings.NBT_GAME, gameID);
 					// TODO spawn item in world
 				}
 				gameID = null;
@@ -79,18 +73,17 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 			}
 			return true;
 
-		} else if (heldItem.getItem() == ModItems.cartridge) {
+		} else if (heldStack.getItem() instanceof IItemGameCartridge) {
 			// change game with different cartridge
-			if (!worldObj.isRemote) {
-				NBTTagCompound tag = heldItem.getTagCompound();
-				if (tag != null && tag.hasKey(Strings.NBT_GAME)) {
-					gameID = tag.getString(Strings.NBT_GAME);
-				} else {
-					gameID = ArcadeGameRegistry.EMPTY_GAME_WRAPPER.gameID();
+			IItemGameCartridge cartridge = (IItemGameCartridge) heldStack.getItem();
+			String cartridgeGameID = cartridge.getGameID(heldStack);
+			if (cartridgeGameID != null) {
+				if (!worldObj.isRemote) {
+					gameID = cartridgeGameID;
+					markForUpdate();
 				}
-				markForUpdate();
+				return true;
 			}
-			return true;
 		}
 
 		return false;

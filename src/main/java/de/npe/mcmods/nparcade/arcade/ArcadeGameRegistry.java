@@ -4,7 +4,9 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.mcmods.nparcade.NPArcade;
+import de.npe.mcmods.nparcade.arcade.api.IItemGameCartridge;
 import de.npe.mcmods.nparcade.arcade.games.SampleGame;
+import net.minecraft.item.Item;
 
 import java.awt.image.BufferedImage;
 import java.util.Collections;
@@ -19,12 +21,6 @@ import java.util.Set;
  * Created by NPException (2015)
  */
 public class ArcadeGameRegistry {
-	public static final ArcadeGameWrapper UNKNOWN_GAME_WRAPPER = SystemGamesLoader.initUnknownGameWrapper();
-	public static final ArcadeGameWrapper EMPTY_GAME_WRAPPER = SystemGamesLoader.initEmptyGameWrapper();
-
-	public static boolean isDummyGame(String gameID) {
-		return EMPTY_GAME_WRAPPER.gameID().equals(gameID);
-	}
 
 	private ArcadeGameRegistry() {
 	}
@@ -53,20 +49,44 @@ public class ArcadeGameRegistry {
 	/**
 	 * Registers a new game.
 	 *
-	 * @param gameClass the Class of the game. (Must have a public no-args constructor)
-	 * @param id        the ID of the game. (Must NOT be null)
-	 * @param name      the human readable gameName of the game. (Must NOT be null)
-	 * @param label     a label for the game cartridge. (Can be null)
+	 * @param gameClass       the Class of the game. (Must have a public no-args constructor)
+	 * @param id              the ID of the game. (Must NOT be null)
+	 * @param name            the human readable gameName of the game. (Must NOT be null)
+	 * @param customCartridge a custom cartridge that the game should use. If null, the default cartridge will be used.
+	 *                        If set, this must be an instance of {@link Item}.
 	 * @throws IllegalArgumentException if one of the parameters does not meet the requirements,
 	 *                                  or a game with the same ID was already registered.
 	 */
-	public static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String name, BufferedImage label, String colorString) throws IllegalArgumentException {
-		String gameToString = " Game -> ID:" + id + ", Name:" + name + ", Class:" + gameClass.getCanonicalName();
+	public static void register(Class<? extends IArcadeGame> gameClass, String id, String name, IItemGameCartridge customCartridge) throws IllegalArgumentException {
+		register(gameClass, id, name, null, null, customCartridge);
+	}
+
+	/**
+	 * Registers a new game.
+	 *
+	 * @param gameClass   the Class of the game. (Must have a public no-args constructor)
+	 * @param id          the ID of the game. (Must NOT be null)
+	 * @param name        the human readable gameName of the game. (Must NOT be null)
+	 * @param label       a label for the game cartridge. (Can be null)
+	 * @param colorString the custom color of the cartridge as a 3 byte hexadecimal String. (Can be null)
+	 * @throws IllegalArgumentException if one of the parameters does not meet the requirements,
+	 *                                  or a game with the same ID was already registered.
+	 */
+	public static void register(Class<? extends IArcadeGame> gameClass, String id, String name, BufferedImage label, String colorString) throws IllegalArgumentException {
+		register(gameClass, id, name, label, colorString, null);
+	}
+
+	private static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String name, BufferedImage label, String colorString, IItemGameCartridge customCartridge) throws IllegalArgumentException {
+		String gameToString = " Game -> ID:" + id + ", Name:" + name + ", Class:" + gameClass.getCanonicalName() + ", Label:" + (label != null) + ", Color:" + colorString + ", Custom_Cartridge:" + customCartridge;
 		if (id == null) {
 			throw new IllegalArgumentException("ID must not be null!" + gameToString);
 		}
 		if (name == null) {
 			throw new IllegalArgumentException("Name must not be null!" + gameToString);
+		}
+
+		if (customCartridge != null && !(customCartridge instanceof Item)) {
+			throw new IllegalArgumentException("Custom cartridge must be an instance of Item!" + gameToString);
 		}
 
 		int color = -1;
@@ -89,7 +109,7 @@ public class ArcadeGameRegistry {
 		}
 
 		boolean isClient = (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT);
-		ArcadeGameWrapper wrapper = isClient ? new ArcadeGameWrapper(id, name, label, color, gameClass) : new ArcadeGameWrapper(id, name, null, -1, null);
+		ArcadeGameWrapper wrapper = isClient ? new ArcadeGameWrapper(id, name, label, color, gameClass, customCartridge) : new ArcadeGameWrapper(id, name, null, -1, null, customCartridge);
 		games.put(id, wrapper);
 	}
 
@@ -100,11 +120,11 @@ public class ArcadeGameRegistry {
 	 * This method will therefor never return null.
 	 */
 	public static ArcadeGameWrapper gameForID(String id) {
-		if (EMPTY_GAME_WRAPPER.gameID().equals(id)) {
-			return EMPTY_GAME_WRAPPER;
+		if (DummyGames.EMPTY_GAME_WRAPPER.gameID().equals(id)) {
+			return DummyGames.EMPTY_GAME_WRAPPER;
 		}
 		ArcadeGameWrapper wrapper = games.get(id);
-		return wrapper != null ? wrapper : UNKNOWN_GAME_WRAPPER;
+		return wrapper != null ? wrapper : DummyGames.UNKNOWN_GAME_WRAPPER;
 	}
 
 	/**
