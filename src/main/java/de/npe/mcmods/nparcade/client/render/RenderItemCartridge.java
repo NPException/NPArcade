@@ -71,8 +71,8 @@ public class RenderItemCartridge extends AbstractItemRenderer {
 	 */
 	private void renderSticker(ArcadeGameWrapper wrapper, String gameID) {
 		glScalef(0.0625F, 0.0625F, 0.0625F);
+		// -1.5F & 0.0F -> both + 0.2 to offset from border of the label recess
 		glTranslatef(-1.3F, 0.2F, -0.76F);
-		glScalef(0.9F, 0.9F, 0.9F);
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -90,6 +90,7 @@ public class RenderItemCartridge extends AbstractItemRenderer {
 		}
 
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		Helper.renderRectInBounds(4, 5, size.width, size.height, 0, 0, 1, 1, Helper.Alignment.U);
+		// 4F & 5F -> both - 0.4 to scale down and offset from border of the label recess
+		Helper.renderRectInBounds(3.6F, 4.6F, size.width, size.height, 0, 0, 1, 1, Helper.Alignment.U);
 	}
 }
