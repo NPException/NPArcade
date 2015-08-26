@@ -78,11 +78,11 @@ public class EmptyGame implements IArcadeGame {
 	public void draw(BufferedImage screen, float partialTick) {
 		needsDraw = false;
 		if (screens == null) {
-			Graphics g = screen.getGraphics();
+			Graphics2D g = screen.createGraphics();
 			g.setColor(Color.BLACK);
 			g.drawRect(0,0,screenSize.width, screenSize.height);
 		} else {
-			screen.getGraphics().drawImage(screens[screenToDraw],0,0,null);
+			screen.createGraphics().drawImage(screens[screenToDraw],0,0,null);
 		}
 	}
 }
