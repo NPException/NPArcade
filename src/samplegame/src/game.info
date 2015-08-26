@@ -1,0 +1,9 @@
+[
+  {
+    "id":"myNickname.myExampleGameID",
+    "title":"My Awesome Example Game!",
+    "class":"com.example.arcadegame.ExampleGame",
+    "label":"/com/example/arcadegame/assets/example_label.png",
+    "cartridge_color":"00A01F"
+  }
+]

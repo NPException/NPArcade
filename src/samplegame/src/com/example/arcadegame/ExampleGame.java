@@ -1,4 +1,4 @@
-package de.npe.mcmods.nparcade.arcade.games;
+package com.example.arcadegame;
 
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
@@ -10,11 +10,7 @@ import java.awt.image.BufferedImage;
 /**
  * Created by NPException (2015)
  */
-public class SampleGame implements IArcadeGame {
-
-	public static final String ID = "nparcade_sampleGame";
-	public static final String NAME = "Dat Sample Game";
-
+public class ExampleGame implements IArcadeGame {
 	private Size screenSize;
 	private boolean needsDraw;
 
@@ -58,7 +54,7 @@ public class SampleGame implements IArcadeGame {
 	@Override
 	public void draw(BufferedImage screen, float partialTick) {
 		needsDraw = false;
-		Graphics2D g = (Graphics2D) screen.getGraphics();
+		Graphics2D g = screen.createGraphics();
 		g.setBackground(Color.DARK_GRAY);
 		g.clearRect(0, 0, screen.getWidth(), screen.getHeight());
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
