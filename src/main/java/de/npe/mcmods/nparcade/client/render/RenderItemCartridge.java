@@ -85,8 +85,7 @@ public class RenderItemCartridge extends AbstractItemRenderer {
 			size = wrapper.labelSize();
 			textureID = wrapper.prepareLabelTexture();
 		} else {
-			int s = 30;
-			size = new Size(s, s);
+			size = identiconSize;
 			textureID = IdentIconUtil.prepareIdentIconTexture(gameID, size.width);
 		}
 
