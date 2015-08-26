@@ -19,6 +19,14 @@ public class Strings {
 	public static final String TEXTURE_EMPTY_GAME_SCREEN = "textures/misc/nparcade_empty_game_screen1.png";
 	public static final String TEXTURE_EMPTY_GAME_SCREEN_GLITCH = "textures/misc/nparcade_empty_game_screen2.png";
 
+	public static final String JSON_GAME_INFO_ID = "id";
+	public static final String JSON_GAME_INFO_TITLE = "title";
+	public static final String JSON_GAME_INFO_CLASS = "class";
+	public static final String JSON_GAME_INFO_LABEL = "label";
+
+	public static final String PATH_FOLDER_NPARCADE_GAMES = "nparcade_games";
+
+	public static final String JSON_GAME_INFO_CARTRIDGE_COLOR = "cartridge_color";
 	public static final String LANG_TOOLTIP_CARTRIDGE_UNKNOWN = "tooltip.item.cartridge.unknown";
 	public static final String LANG_TOOLTIP_CARTRIDGE_UNKNOWN_EXPLANATION = "tooltip.item.cartridge.unknown.explanation";
 	public static final String LANG_TOOLTIP_CARTRIDGE_CONTENT = "tooltip.item.cartridge.content";

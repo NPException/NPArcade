@@ -50,7 +50,7 @@ public class ItemCartridge extends ItemAbstract implements IItemGameCartridge {
 		String gameID = getGameID(stack);
 		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
 		if (!DummyGames.isDummyGame(wrapper.gameID())) {
-			return wrapper.gameName();
+			return wrapper.gameTitle();
 		} else if (wrapper == DummyGames.UNKNOWN_GAME_WRAPPER) {
 			return Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN);
 		}

@@ -19,7 +19,7 @@ import java.lang.reflect.Constructor;
  */
 public final class ArcadeGameWrapper {
 	private final String id;
-	private final String name;
+	private final String title;
 
 	private boolean hasColor;
 	private float colorRed = 1F;
@@ -33,15 +33,15 @@ public final class ArcadeGameWrapper {
 	private final Constructor<? extends IArcadeGame> constructor;
 	private final IItemGameCartridge customCartridge;
 
-	ArcadeGameWrapper(String id, String name, BufferedImage label, int color, Class<? extends IArcadeGame> gameClass, IItemGameCartridge customCartridge) {
+	ArcadeGameWrapper(String id, String title, BufferedImage label, int color, Class<? extends IArcadeGame> gameClass, IItemGameCartridge customCartridge) {
 		this.id = id;
-		this.name = name;
+		this.title = title;
 
 		// this.label = (label == null) ? null : label.getRGB(0,0, label.getWidth(), label.getHeight(), null, 0, label.getHeight());
 		this.label = (label == null) ? null : new BufferedImage(label.getWidth(), label.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		labelSize = (label == null) ? null : new Size(label.getWidth(), label.getHeight());
 		if (label != null) {
-			this.label.getGraphics().drawImage(label, 0, 0, null);
+			this.label.createGraphics().drawImage(label, 0, 0, null);
 		}
 
 		try {
@@ -73,8 +73,8 @@ public final class ArcadeGameWrapper {
 		return id;
 	}
 
-	public String gameName() {
-		return name;
+	public String gameTitle() {
+		return title;
 	}
 
 	public IItemGameCartridge cartridgeItem() {
