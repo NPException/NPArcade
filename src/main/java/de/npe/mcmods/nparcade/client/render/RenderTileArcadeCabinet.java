@@ -57,7 +57,6 @@ public class RenderTileArcadeCabinet extends TileEntitySpecialRenderer {
 		glPushMatrix();
 
 		// set max brightness
-		glDisable(GL_LIGHTING);
 		Helper.pushMaxBrightness();
 
 		glTranslatef(0F, 0F, screenShiftZ);
