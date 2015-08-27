@@ -15,6 +15,7 @@ import static de.npe.mcmods.nparcade.common.lib.Strings.*;
 class GameInfo {
 	public final String id;
 	public final String title;
+	public final String description;
 	public final Class<? extends IArcadeGame> gameClass;
 	public final BufferedImage label;
 	public final String cartridgeColor;
@@ -38,6 +39,9 @@ class GameInfo {
 		title = data.get(JSON_GAME_INFO_TITLE);
 		if (title == null)
 			throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_TITLE + "' is missing!");
+
+		String tmpDescription = data.get(JSON_GAME_INFO_DESCRIPTION);
+		description = tmpDescription == null || tmpDescription.trim().isEmpty() ? null : tmpDescription.trim();
 
 		// VALIDATE GAME CLASS
 		String className = data.get(JSON_GAME_INFO_CLASS);

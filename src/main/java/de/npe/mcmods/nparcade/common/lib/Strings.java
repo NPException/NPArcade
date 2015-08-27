@@ -22,6 +22,7 @@ public class Strings {
 	public static final String JSON_GAME_INFO_FILE = "game.info";
 	public static final String JSON_GAME_INFO_ID = "id";
 	public static final String JSON_GAME_INFO_TITLE = "title";
+	public static final String JSON_GAME_INFO_DESCRIPTION = "description";
 	public static final String JSON_GAME_INFO_CLASS = "class";
 	public static final String JSON_GAME_INFO_LABEL = "label";
 
@@ -32,4 +33,5 @@ public class Strings {
 	public static final String LANG_TOOLTIP_CARTRIDGE_UNKNOWN_EXPLANATION = "tooltip.item.cartridge.unknown.explanation";
 	public static final String LANG_TOOLTIP_CARTRIDGE_CONTENT = "tooltip.item.cartridge.content";
 	public static final String LANG_TOOLTIP_CARTRIDGE_CONTENT_NONE = "tooltip.item.cartridge.content.none";
+	public static final String LANG_TOOLTIP_CARTRIDGE_DESCRIPTION = "tooltip.item.cartridge.description";
 }

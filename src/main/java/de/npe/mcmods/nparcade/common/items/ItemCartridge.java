@@ -1,5 +1,7 @@
 package de.npe.mcmods.nparcade.common.items;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.arcade.ArcadeGameWrapper;
 import de.npe.mcmods.nparcade.arcade.DummyGames;
@@ -23,26 +25,35 @@ public class ItemCartridge extends ItemAbstract implements IItemGameCartridge {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	protected void addInformation(ItemStack stack, EntityPlayer player, IItemTooltip tooltip) {
-		StringBuilder text = new StringBuilder();
-		text.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT)).append(": ");
+		tooltip.defaultInfoList();
+
+		StringBuilder idInfo = new StringBuilder();
+		idInfo.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT)).append(": ");
 
 		String gameID = getGameID(stack);
 		if (DummyGames.EMPTY_GAME_WRAPPER.gameID().equals(gameID)) {
-			text.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT_NONE));
-			tooltip.addToInfoList(text.toString());
+			idInfo.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT_NONE));
+			tooltip.addToShiftList(idInfo.toString());
 			return;
 		}
 
 		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
-
-		text.append("§3").append(gameID);
-		tooltip.addToInfoList(text.toString());
-
 		if (wrapper == DummyGames.UNKNOWN_GAME_WRAPPER) {
-			tooltip.defaultInfoList();
-			tooltip.addAllToShiftList(Localise.wrapToSize(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN_EXPLANATION), 60));
+			tooltip.addAllToShiftList(Localise.wrapToSize(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN_EXPLANATION), 42));
+			tooltip.addToShiftList("");
+		} else if (wrapper.gameDescription() != null) {
+			// add description
+			tooltip.addToShiftList(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_DESCRIPTION) + ":");
+			for(String line : Localise.wrapToSize(wrapper.gameDescription(),40)) {
+				tooltip.addToShiftList("  §6" + line);
+			}
+			tooltip.addToShiftList("");
 		}
+
+		idInfo.append("§3").append(gameID);
+		tooltip.addToShiftList(idInfo.toString());
 	}
 
 	@Override

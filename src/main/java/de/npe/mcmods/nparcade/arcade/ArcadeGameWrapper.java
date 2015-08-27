@@ -20,6 +20,7 @@ import java.lang.reflect.Constructor;
 public final class ArcadeGameWrapper {
 	private final String id;
 	private final String title;
+	private final String description;
 
 	private boolean hasColor;
 	private float colorRed = 1F;
@@ -33,9 +34,10 @@ public final class ArcadeGameWrapper {
 	private final Constructor<? extends IArcadeGame> constructor;
 	private final IItemGameCartridge customCartridge;
 
-	ArcadeGameWrapper(String id, String title, BufferedImage label, int color, Class<? extends IArcadeGame> gameClass, IItemGameCartridge customCartridge) {
+	ArcadeGameWrapper(String id, String title, String description, BufferedImage label, int color, Class<? extends IArcadeGame> gameClass, IItemGameCartridge customCartridge) {
 		this.id = id;
 		this.title = title;
+		this.description = description;
 
 		// this.label = (label == null) ? null : label.getRGB(0,0, label.getWidth(), label.getHeight(), null, 0, label.getHeight());
 		this.label = (label == null) ? null : new BufferedImage(label.getWidth(), label.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -84,6 +86,11 @@ public final class ArcadeGameWrapper {
 	/////////////////////////
 	// CLIENT ONLY METHODS //
 	/////////////////////////
+
+	@SideOnly(Side.CLIENT)
+	public String gameDescription() {
+		return description;
+	}
 
 	@SideOnly(Side.CLIENT)
 	public boolean hasLabel() {

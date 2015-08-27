@@ -32,7 +32,7 @@ public class DummyGames {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return new ArcadeGameWrapper("__nparcade_unknown", "???", label, 0x686851, UnknownGame.class, null);
+		return new ArcadeGameWrapper("__nparcade_unknown", "???", null, label, 0x686851, UnknownGame.class, null);
 	}
 
 	/**
@@ -40,6 +40,6 @@ public class DummyGames {
 	 */
 	private static ArcadeGameWrapper initEmptyGameWrapper() {
 		EmptyGame.init();
-		return new ArcadeGameWrapper("__nparcade_empty", "___", null, -1, EmptyGame.class, null);
+		return new ArcadeGameWrapper("__nparcade_empty", "___", null, null, -1, EmptyGame.class, null);
 	}
 }

@@ -112,7 +112,7 @@ public class ArcadeGameRegistry {
 			for (Map<String, String> gameInfoData : gameInfoDatas) {
 				try {
 					GameInfo info = new GameInfo(gameInfoData, urlCl);
-					register(info.gameClass, info.id, info.title, info.label, info.cartridgeColor);
+					register(info.gameClass, info.id, info.title, info.description, info.label, info.cartridgeColor);
 				} catch (Exception ex) {
 					NPArcade.log.warn("Could not load arcade game -> " + ex.getMessage());
 				}
@@ -132,7 +132,7 @@ public class ArcadeGameRegistry {
 	 *                                  or a game with the same ID was already registered.
 	 */
 	public static void register(Class<? extends IArcadeGame> gameClass, String id, String title, IItemGameCartridge customCartridge) throws IllegalArgumentException {
-		register(gameClass, id, title, null, null, customCartridge);
+		register(gameClass, id, title, null, null, null, customCartridge);
 	}
 
 	/**
@@ -146,11 +146,11 @@ public class ArcadeGameRegistry {
 	 * @throws IllegalArgumentException if one of the parameters does not meet the requirements,
 	 *                                  or a game with the same ID was already registered.
 	 */
-	public static void register(Class<? extends IArcadeGame> gameClass, String id, String title, BufferedImage label, String colorString) throws IllegalArgumentException {
-		register(gameClass, id, title, label, colorString, null);
+	public static void register(Class<? extends IArcadeGame> gameClass, String id, String title, String description, BufferedImage label, String colorString) throws IllegalArgumentException {
+		register(gameClass, id, title, description, label, colorString, null);
 	}
 
-	private static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String title, BufferedImage label, String colorString, IItemGameCartridge customCartridge) throws IllegalArgumentException {
+	private static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String title, String description, BufferedImage label, String colorString, IItemGameCartridge customCartridge) throws IllegalArgumentException {
 		String gameToString = " Game -> ID:" + id + ", Title:" + title + ", Class:" + gameClass.getCanonicalName() + ", Label:" + (label != null) + ", Color:" + colorString + ", Custom_Cartridge:" + customCartridge;
 		if (id == null) {
 			throw new IllegalArgumentException("ID must not be null!" + gameToString);
@@ -183,7 +183,7 @@ public class ArcadeGameRegistry {
 		}
 
 		boolean isClient = (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT);
-		ArcadeGameWrapper wrapper = isClient ? new ArcadeGameWrapper(id, title, label, color, gameClass, customCartridge) : new ArcadeGameWrapper(id, title, null, -1, null, customCartridge);
+		ArcadeGameWrapper wrapper = isClient ? new ArcadeGameWrapper(id, title, description, label, color, gameClass, customCartridge) : new ArcadeGameWrapper(id, title, null, null, -1, null, customCartridge);
 		games.put(id, wrapper);
 		NPArcade.log.info("Registered game with ID: " + id + ", title: " + title);
 	}
