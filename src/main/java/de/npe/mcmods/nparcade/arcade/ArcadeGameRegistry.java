@@ -1,5 +1,7 @@
 package de.npe.mcmods.nparcade.arcade;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import de.npe.api.nparcade.IArcadeGame;
@@ -11,8 +13,14 @@ import net.minecraft.item.Item;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 /**
  * This class is used to register arcade games, so that there is an easy way to access
@@ -50,7 +58,7 @@ public class ArcadeGameRegistry {
 		}
 	}
 
-	private static void loadGamesFromJarFiles() {
+	private static void loadGamesFromJarFiles() throws MalformedURLException {
 		Deque<File> candidates = new LinkedList<>();
 		Deque<File> directories = new LinkedList<>();
 		directories.add(new File("mods"));
@@ -73,19 +81,43 @@ public class ArcadeGameRegistry {
 			}
 		}
 
-		for(Iterator<File> itr = candidates.iterator(); itr.hasNext();) {
-			File candidate = itr.next();
-			try {
-				// TODO check for game.info in jar
+		Map<File, List<Map<String, String>>> gameFilesData = new HashMap<>(candidates.size());
+
+		Gson gson = new Gson();
+		Type gameInfoType = new TypeToken<List<Map<String, String>>>() {
+		}.getType();
+
+		for (File candidate : candidates) {
+			try (ZipFile zip = new ZipFile(candidate)) {
+				ZipEntry gameInfoFile = zip.getEntry(Strings.JSON_GAME_INFO_FILE);
+				if (gameInfoFile == null) {
+					continue;
+				}
+
+				List<Map<String, String>> gameInfos = gson.fromJson(new InputStreamReader(zip.getInputStream(gameInfoFile)), gameInfoType);
+				gameFilesData.put(candidate, gameInfos);
 			} catch (Exception ex) {
 				NPArcade.log.warn("Something went wrong while analyzing a game candidate file", ex);
-				itr.remove();
 			}
 		}
 
-		URL[] urls = new URL[candidates.size()];
+		URL[] urls = new URL[gameFilesData.size()];
+		int i = 0;
+		for (File file : gameFilesData.keySet()) {
+			urls[i++] = file.toURI().toURL();
+		}
+		URLClassLoader urlCl = new URLClassLoader(urls, ArcadeGameRegistry.class.getClassLoader());
 
-		// TODO: load games from jars
+		for (List<Map<String, String>> gameInfoDatas : gameFilesData.values()) {
+			for (Map<String, String> gameInfoData : gameInfoDatas) {
+				try {
+					GameInfo info = new GameInfo(gameInfoData, urlCl);
+					register(info.gameClass, info.id, info.title, info.label, info.cartridgeColor);
+				} catch (Exception ex) {
+					NPArcade.log.warn("Could not load arcade game -> " + ex.getMessage());
+				}
+			}
+		}
 	}
 
 	/**
@@ -153,6 +185,7 @@ public class ArcadeGameRegistry {
 		boolean isClient = (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT);
 		ArcadeGameWrapper wrapper = isClient ? new ArcadeGameWrapper(id, title, label, color, gameClass, customCartridge) : new ArcadeGameWrapper(id, title, null, -1, null, customCartridge);
 		games.put(id, wrapper);
+		NPArcade.log.info("Registered game with ID: " + id + ", title: " + title);
 	}
 
 	/**

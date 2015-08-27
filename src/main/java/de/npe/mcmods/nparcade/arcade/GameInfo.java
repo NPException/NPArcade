@@ -47,9 +47,9 @@ class GameInfo {
 		try {
 			gameClass = (Class<? extends IArcadeGame>) classLoader.loadClass(className);
 		} catch (ClassNotFoundException cnfe) {
-			throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' -> Class not found: " + className, cnfe);
+			throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' -> Class not found: " + className);
 		} catch (Exception ex) {
-			throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' -> Class could not be loaded: " + className, ex);
+			throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' -> Class could not be loaded: " + className);
 		}
 
 		boolean isArcadeGame = false;
@@ -61,7 +61,7 @@ class GameInfo {
 
 		// VALIDATE GAME LABEL
 		String labelResourcePath = data.get(JSON_GAME_INFO_LABEL);
-		if (labelResourcePath == null || !labelResourcePath.trim().isEmpty()) {
+		if (labelResourcePath == null || labelResourcePath.trim().isEmpty()) {
 			label = null;
 		} else {
 			try {
@@ -81,7 +81,7 @@ class GameInfo {
 			try {
 				Integer.parseInt(cartridgeColor, 16);
 			} catch (Exception ex) {
-				throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_CARTRIDGE_COLOR + "' is not a valid hex value!", ex);
+				throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_CARTRIDGE_COLOR + "' -> '" + cartridgeColor + "' is not a valid hex value!");
 			}
 		}
 	}
