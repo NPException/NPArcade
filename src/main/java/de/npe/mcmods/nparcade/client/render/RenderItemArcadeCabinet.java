@@ -27,9 +27,7 @@ public class RenderItemArcadeCabinet extends AbstractItemRenderer {
 
 		glTranslatef(0.5f, 0.625f, 0.5f);
 
-		if (type == ItemRenderType.INVENTORY) {
-			glRotatef(90F, 0F, 1F, 0F);
-		} else if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
+		if (type == ItemRenderType.EQUIPPED_FIRST_PERSON) {
 			glTranslatef(0F, 0.5F, 0F);
 			glRotatef(270F, 0F, 1F, 0F);
 		}
