@@ -5,19 +5,20 @@ import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.arcade.ArcadeGameWrapper;
 import de.npe.mcmods.nparcade.arcade.DummyGames;
-import de.npe.mcmods.nparcade.arcade.api.IItemGameCartridge;
+import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import me.jezza.oc.common.interfaces.IItemTooltip;
 import me.jezza.oc.common.items.ItemAbstract;
 import me.jezza.oc.common.utils.Localise;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
  * Created by NPException (2015)
  */
-public class ItemCartridge extends ItemAbstract implements IItemGameCartridge {
+public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 
 	public ItemCartridge(String name) {
 		super(name);
@@ -66,6 +67,11 @@ public class ItemCartridge extends ItemAbstract implements IItemGameCartridge {
 			return Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN);
 		}
 		return super.getItemStackDisplayName(stack);
+	}
+
+	@Override
+	public Item getCartridgeItem() {
+		return this;
 	}
 
 	@Override

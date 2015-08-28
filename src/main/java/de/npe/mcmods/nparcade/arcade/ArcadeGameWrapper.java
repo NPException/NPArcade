@@ -4,7 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.util.Size;
-import de.npe.mcmods.nparcade.arcade.api.IItemGameCartridge;
+import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
 import de.npe.mcmods.nparcade.common.ModItems;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.item.Item;
@@ -32,9 +32,9 @@ public final class ArcadeGameWrapper {
 	private int textureID = -1;
 
 	private final Constructor<? extends IArcadeGame> constructor;
-	private final IItemGameCartridge customCartridge;
+	private final IGameCartridge customCartridge;
 
-	ArcadeGameWrapper(String id, String title, String description, BufferedImage label, int color, Class<? extends IArcadeGame> gameClass, IItemGameCartridge customCartridge) {
+	ArcadeGameWrapper(String id, String title, String description, BufferedImage label, int color, Class<? extends IArcadeGame> gameClass, IGameCartridge customCartridge) {
 		this.id = id;
 		this.title = title;
 		this.description = description;
@@ -79,7 +79,7 @@ public final class ArcadeGameWrapper {
 		return title;
 	}
 
-	public IItemGameCartridge cartridgeItem() {
+	public IGameCartridge cartridgeItem() {
 		return customCartridge != null ? customCartridge : ModItems.cartridge;
 	}
 

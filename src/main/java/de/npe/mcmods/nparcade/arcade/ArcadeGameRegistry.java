@@ -6,9 +6,11 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.mcmods.nparcade.NPArcade;
-import de.npe.mcmods.nparcade.arcade.api.IItemGameCartridge;
+import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
+import de.npe.mcmods.nparcade.common.ModItems;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -34,8 +36,11 @@ public class ArcadeGameRegistry {
 	}
 
 	private static boolean isInitialized;
+
 	private static final Map<String, ArcadeGameWrapper> games = new HashMap<>(512);
 	private static final Set<String> gamesKeySetView = Collections.unmodifiableSet(games.keySet());
+
+	private static final Map<Item, IGameCartridge> customCartridges = new HashMap<>(64);
 
 	/**
 	 * Initializes the ArcadeGameRegistry
@@ -131,7 +136,7 @@ public class ArcadeGameRegistry {
 	 * @throws IllegalArgumentException if one of the parameters does not meet the requirements,
 	 *                                  or a game with the same ID was already registered.
 	 */
-	public static void register(Class<? extends IArcadeGame> gameClass, String id, String title, IItemGameCartridge customCartridge) throws IllegalArgumentException {
+	public static void register(Class<? extends IArcadeGame> gameClass, String id, String title, IGameCartridge customCartridge) throws IllegalArgumentException {
 		register(gameClass, id, title, null, null, null, customCartridge);
 	}
 
@@ -150,7 +155,7 @@ public class ArcadeGameRegistry {
 		register(gameClass, id, title, description, label, colorString, null);
 	}
 
-	private static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String title, String description, BufferedImage label, String colorString, IItemGameCartridge customCartridge) throws IllegalArgumentException {
+	private static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String title, String description, BufferedImage label, String colorString, IGameCartridge customCartridge) throws IllegalArgumentException {
 		String gameToString = " Game -> ID:" + id + ", Title:" + title + ", Class:" + gameClass.getCanonicalName() + ", Label:" + (label != null) + ", Color:" + colorString + ", Custom_Cartridge:" + customCartridge;
 		if (id == null) {
 			throw new IllegalArgumentException("ID must not be null!" + gameToString);
@@ -159,8 +164,13 @@ public class ArcadeGameRegistry {
 			throw new IllegalArgumentException("Title must not be null!" + gameToString);
 		}
 
-		if (customCartridge != null && !(customCartridge instanceof Item)) {
-			throw new IllegalArgumentException("Custom cartridge must be an instance of Item!" + gameToString);
+		IGameCartridge wrapperCartridge = null;
+		if (customCartridge != null) {
+			Item cartridgeItem = customCartridge.getCartridgeItem();
+			if (cartridgeItem == null) {
+				throw new IllegalArgumentException("Custom cartridge must not return null for getCartridgeItem()!" + gameToString);
+			}
+			wrapperCartridge = new WrapperCartridge(cartridgeItem, customCartridge);
 		}
 
 		int color = -1;
@@ -183,8 +193,11 @@ public class ArcadeGameRegistry {
 		}
 
 		boolean isClient = (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT);
-		ArcadeGameWrapper wrapper = isClient ? new ArcadeGameWrapper(id, title, description, label, color, gameClass, customCartridge) : new ArcadeGameWrapper(id, title, null, null, -1, null, customCartridge);
+		ArcadeGameWrapper wrapper = isClient ? new ArcadeGameWrapper(id, title, description, label, color, gameClass, wrapperCartridge) : new ArcadeGameWrapper(id, title, null, null, -1, null, wrapperCartridge);
 		games.put(id, wrapper);
+		if (wrapperCartridge != null) {
+			customCartridges.put(wrapperCartridge.getCartridgeItem(), wrapperCartridge);
+		}
 		NPArcade.log.info("Registered game with ID: " + id + ", title: " + title);
 	}
 
@@ -208,5 +221,46 @@ public class ArcadeGameRegistry {
 	 */
 	public static Set<String> gameIDs() {
 		return gamesKeySetView;
+	}
+
+	/**
+	 * Returns the registered {@link IGameCartridge} for the given Item.
+	 * May return null if no cartridge was registerd for the given item.
+	 * @return
+	 */
+	public static IGameCartridge cartridgeForItem(Item item) {
+		if (item == ModItems.cartridge)
+			return ModItems.cartridge;
+
+		IGameCartridge cartridge = customCartridges.get(item);
+		return cartridge;
+	}
+
+	/**
+	 * A wrapper class to prevent calling {@link IGameCartridge#getCartridgeItem()} more than once.
+	 */
+	private static class WrapperCartridge implements IGameCartridge {
+		private final Item cartridgeItem;
+		private final IGameCartridge delegate;
+
+		WrapperCartridge(Item cartridgeItem, IGameCartridge delegate) {
+			this.cartridgeItem = cartridgeItem;
+			this.delegate = delegate;
+		}
+
+		@Override
+		public Item getCartridgeItem() {
+			return cartridgeItem;
+		}
+
+		@Override
+		public String getGameID(ItemStack stack) {
+			return delegate.getGameID(stack);
+		}
+
+		@Override
+		public void setGameID(ItemStack stack, String gameID) {
+			delegate.setGameID(stack, gameID);
+		}
 	}
 }
