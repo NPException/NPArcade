@@ -3,8 +3,11 @@ package de.npe.mcmods.nparcade.common.util;
 import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.common.lib.Reference;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.io.InputStream;
@@ -60,5 +63,15 @@ public class Util {
 			default:
 				return ForgeDirection.UNKNOWN;
 		}
+	}
+
+	/**
+	 * Spawns an itemStack in the world.
+	 */
+	public static void spawnItemStack(ItemStack itemStack, World world, double x, double y, double z, int delayBeforePickup) {
+		EntityItem entityItem = new EntityItem(world, x, y, z, itemStack);
+		entityItem.delayBeforeCanPickup = delayBeforePickup;
+
+		world.spawnEntityInWorld(entityItem);
 	}
 }

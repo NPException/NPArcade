@@ -2,8 +2,11 @@ package de.npe.mcmods.nparcade.common.tileentities;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.arcade.ArcadeMachine;
-import de.npe.mcmods.nparcade.arcade.api.IItemGameCartridge;
+import de.npe.mcmods.nparcade.arcade.DummyGames;
+import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
+import de.npe.mcmods.nparcade.common.ModBlocks;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import de.npe.mcmods.nparcade.common.util.Util;
 import me.jezza.oc.common.interfaces.IBlockInteract;
@@ -17,6 +20,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by NPException (2015)
@@ -34,10 +41,42 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 		return facing;
 	}
 
+	private boolean clientSide() {
+		return worldObj != null && worldObj.isRemote;
+	}
+
+	private EntityPlayer removingPlayer;
+
+	public void startRemoveByPlayer(EntityPlayer player) {
+		if (removingPlayer != null) {
+			throw new IllegalStateException("startRemoveByPlayer was already invoked!");
+		}
+		removingPlayer = player;
+	}
+
+	public void endRemoveByPlayer() {
+		if (removingPlayer == null) {
+			throw new IllegalStateException("endRemoveByPlayer was already invoked!");
+		}
+		removingPlayer = null;
+	}
+
 	@Override
 	public void onBlockRemoval(World world, int x, int y, int z) {
-		// do nothing
-		// TODO: proper cartridge drop, keep in mind ArcadeGameRegistry.isDummyGame(gameID)
+		if (clientSide()) {
+			unloadGame();
+			return;
+		}
+
+		if (removingPlayer == null || !removingPlayer.capabilities.isCreativeMode) {
+			Util.spawnItemStack(new ItemStack(ModBlocks.arcadeCabinet), worldObj, xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, 0);
+		}
+		ItemStack cartridge = generateCurrentGameCartridge();
+		if (cartridge != null) {
+			Util.spawnItemStack(cartridge, worldObj, xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, 0);
+		}
+
+		gameID = null;
 	}
 
 	@Override
@@ -61,28 +100,32 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 
 		if (heldStack == null) {
 			// can remove game with empty hand and sneaking
-			if (player.isSneaking() && !worldObj.isRemote) {
+			if (player.isSneaking() && !clientSide()) {
 				// create and spawn
 				if (gameID != null) {
-//						ItemStack oldCartridge = new ItemStack(ModItems.cartridge);
-//						oldCartridge.setTagCompound(new NBTTagCompound());
-					// TODO spawn item in world
+					Util.spawnItemStack(generateCurrentGameCartridge(), world, player.posX, player.posY + 0.5, player.posZ, 0);
 				}
 				gameID = null;
 				markForUpdate();
 			}
 			return true;
 
-		} else if (heldStack.getItem() instanceof IItemGameCartridge) {
-			// change game with different cartridge
-			IItemGameCartridge cartridge = (IItemGameCartridge) heldStack.getItem();
-			String cartridgeGameID = cartridge.getGameID(heldStack);
-			if (cartridgeGameID != null) {
-				if (!worldObj.isRemote) {
-					gameID = cartridgeGameID;
-					markForUpdate();
+		} else {
+			IGameCartridge cartridge = ArcadeGameRegistry.cartridgeForItem(heldStack.getItem());
+			if (cartridge != null) {
+				// change game with different cartridge
+				String cartridgeGameID = cartridge.getGameID(heldStack);
+				if (cartridgeGameID != null) {
+					if (!clientSide()) {
+						player.destroyCurrentEquippedItem();
+						if (gameID != null) {
+							Util.spawnItemStack(generateCurrentGameCartridge(), world, player.posX, player.posY + 0.5, player.posZ, 0);
+						}
+						gameID = cartridgeGameID;
+						markForUpdate();
+					}
+					return true;
 				}
-				return true;
 			}
 		}
 
@@ -92,13 +135,36 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	@Override
 	public void invalidate() {
 		super.invalidate();
+		if (clientSide()) {
+			unloadGame();
+		}
 	}
 
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote) {
+		if (clientSide()) {
 			updateClientSide();
 		}
+	}
+
+	private ItemStack generateCurrentGameCartridge() {
+		if (gameID == null)
+			return null;
+
+		IGameCartridge cartridge = ArcadeGameRegistry.gameForID(gameID).cartridgeItem();
+		ItemStack cartridgeItem = new ItemStack(cartridge.getCartridgeItem());
+		if (!DummyGames.EMPTY_GAME_WRAPPER.gameID().equals(gameID)) {
+			cartridge.setGameID(cartridgeItem, gameID);
+		}
+		return cartridgeItem;
+	}
+
+	public List<ItemStack> generateItemStacksOnRemoval() {
+		ItemStack cartridgeItem = generateCurrentGameCartridge();
+
+		ItemStack cabinetItem = new ItemStack(ModBlocks.arcadeCabinet);
+
+		return cartridgeItem == null ? Collections.singletonList(cabinetItem) : Arrays.asList(cabinetItem, cartridgeItem);
 	}
 
 	@Override
