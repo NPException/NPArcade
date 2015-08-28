@@ -147,6 +147,13 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 		}
 	}
 
+	@Override
+	public void onChunkUnload() {
+		if (clientSide()) {
+			unloadGame();
+		}
+	}
+
 	private ItemStack generateCurrentGameCartridge() {
 		if (gameID == null)
 			return null;
