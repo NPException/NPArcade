@@ -7,7 +7,6 @@ import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Size;
 import de.npe.mcmods.nparcade.client.render.Helper;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.image.BufferedImage;
 
@@ -121,7 +120,7 @@ public class ArcadeMachine implements IArcadeMachine {
 	 */
 	public void deleteTexture() {
 		if (textureID != -1) {
-			GL11.glDeleteTextures(textureID);
+			TextureUtil.deleteTexture(textureID);
 		}
 		screenData = null;
 		image = null;
@@ -157,7 +156,7 @@ public class ArcadeMachine implements IArcadeMachine {
 
 				deleteTexture();
 				screenData = new int[width * height];
-				textureID = GL11.glGenTextures();
+				textureID = TextureUtil.glGenTextures();
 				TextureUtil.allocateTexture(textureID, width, height);
 
 				image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
