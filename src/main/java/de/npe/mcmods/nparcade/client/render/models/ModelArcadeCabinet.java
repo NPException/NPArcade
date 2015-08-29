@@ -2,11 +2,19 @@ package de.npe.mcmods.nparcade.client.render.models;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import de.npe.mcmods.nparcade.arcade.ArcadeMachine;
+import de.npe.mcmods.nparcade.client.render.Helper;
 import de.npe.mcmods.nparcade.common.lib.Reference;
+import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.client.MinecraftForgeClient;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Arcade - NPException
@@ -124,6 +132,56 @@ public class ModelArcadeCabinet extends ModelBase {
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		this.base.render(f5);
+	}
+
+	public void renderCabinet(TileArcadeCabinet tile, float tick, float scale) {
+		glColor3f(1.0F, 1.0F, 1.0F);
+
+		this.base.render(scale);
+		renderScreen(tile, tick);
+
+		// render cartridge if available
+		ItemStack cartridgeItem = tile.generateCurrentGameCartridge();
+		if (cartridgeItem != null) {
+			IItemRenderer renderer = MinecraftForgeClient.getItemRenderer(cartridgeItem, IItemRenderer.ItemRenderType.ENTITY);
+			if (renderer != null) {
+				glPushMatrix();
+				glTranslatef(0.4375F, 0.39F, -0.37F);
+				glRotatef(180F, 0F, 0F, 1F);
+				glScalef(0.5F,0.5F,0.5F);
+				renderer.renderItem(IItemRenderer.ItemRenderType.ENTITY, cartridgeItem);
+				glPopMatrix();
+			}
+		}
+	}
+
+	private static float _16th = 1F / 16F;
+	private static float screenShiftX = -(_16th * 5F) + 0.2025F * _16th;
+	private static float screenShiftY = -(_16th * 6F) + 0.4025F * _16th;
+	private static float screenShiftZ = _16th * 2.36F;
+
+	private void renderScreen(TileArcadeCabinet tile, float tick) {
+		ArcadeMachine arcade = tile.arcadeMachine();
+		if (arcade == null) {
+			return;
+		}
+
+		glPushMatrix();
+
+		// set max brightness
+		Helper.pushMaxBrightness();
+
+		glTranslatef(0F, 0F, screenShiftZ);
+		glRotatef(-0.5F * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
+		glTranslatef(screenShiftX, screenShiftY, 0F);
+		glScalef(0.006F, 0.006F, 0.006F);
+
+		arcade.doRenderScreen(tick);
+
+		// reset brightness
+		Helper.popMaxBrightness();
+
+		glPopMatrix();
 	}
 
 	/**

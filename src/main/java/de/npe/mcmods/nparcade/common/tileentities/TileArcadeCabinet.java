@@ -155,11 +155,11 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 		gameID = null;
 	}
 
-	private ItemStack generateCurrentGameCartridge() {
+	public ItemStack generateCurrentGameCartridge() {
 		if (gameID == null)
 			return null;
 
-		IGameCartridge cartridge = ArcadeGameRegistry.gameForID(gameID).cartridgeItem();
+		IGameCartridge cartridge = ArcadeGameRegistry.gameForID(gameID).cartridge();
 		ItemStack cartridgeItem = new ItemStack(cartridge.getCartridgeItem());
 		if (!DummyGames.EMPTY_GAME_WRAPPER.gameID().equals(gameID)) {
 			cartridge.setGameID(cartridgeItem, gameID);

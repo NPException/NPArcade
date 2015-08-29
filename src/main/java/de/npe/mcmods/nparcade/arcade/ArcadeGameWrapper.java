@@ -79,7 +79,7 @@ public final class ArcadeGameWrapper {
 		return title;
 	}
 
-	public IGameCartridge cartridgeItem() {
+	public IGameCartridge cartridge() {
 		return customCartridge != null ? customCartridge : ModItems.cartridge;
 	}
 
