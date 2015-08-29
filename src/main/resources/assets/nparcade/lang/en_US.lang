@@ -12,4 +12,3 @@ tooltip.item.cartridge.unknown=$c$oBroken Cartridge
 tooltip.item.cartridge.unknown.explanation=This game cannot be played. This can happen if you remove arcade games from your PC, or don't have all games that the server has (if you're in multiplayer).
 tooltip.item.cartridge.content=$7Game ID
 tooltip.item.cartridge.content.none=$8None
-tooltip.item.cartridge.description=$7Description

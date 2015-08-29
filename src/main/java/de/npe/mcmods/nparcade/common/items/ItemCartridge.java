@@ -46,7 +46,6 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 			tooltip.addToShiftList("");
 		} else if (wrapper.gameDescription() != null) {
 			// add description
-			tooltip.addToShiftList(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_DESCRIPTION) + ":");
 			for(String line : Localise.wrapToSize(wrapper.gameDescription(),40)) {
 				tooltip.addToShiftList("  §6" + line);
 			}
