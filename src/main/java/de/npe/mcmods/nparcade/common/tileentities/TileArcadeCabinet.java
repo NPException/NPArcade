@@ -117,7 +117,7 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 				String cartridgeGameID = cartridge.getGameID(heldStack);
 				if (cartridgeGameID != null) {
 					if (!clientSide()) {
-						player.destroyCurrentEquippedItem();
+						heldStack.stackSize--;
 						if (gameID != null) {
 							Util.spawnItemStack(generateCurrentGameCartridge(), world, player.posX, player.posY + 0.5, player.posZ, 0);
 						}
