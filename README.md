@@ -1,4 +1,5 @@
-# NPArcade
+<image src="http://i.imgur.com/ASsud9B.png" title="NP Arcade" />
+
 An arcade machine for minecraft.
 
 This mod is currently under heavy development, and not yet done.
