@@ -4,11 +4,15 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
+import de.npe.api.nparcade.util.IArcadeSound;
 import de.npe.api.nparcade.util.Size;
+import de.npe.mcmods.nparcade.arcade.sound.ArcadeSoundManager;
 import de.npe.mcmods.nparcade.client.render.Helper;
+import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 import net.minecraft.client.renderer.texture.TextureUtil;
 
 import java.awt.image.BufferedImage;
+import java.net.URL;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -17,7 +21,10 @@ import static org.lwjgl.opengl.GL11.*;
  */
 @SideOnly(Side.CLIENT)
 public class ArcadeMachine implements IArcadeMachine {
+
 	private Size suggestedScreenSize;
+	private ArcadeSoundManager soundManager;
+	private TileArcadeCabinet tile;
 
 	private String gameID;
 	private IArcadeGame game;
@@ -25,8 +32,10 @@ public class ArcadeMachine implements IArcadeMachine {
 	private int[] screenData;
 	private BufferedImage image;
 
-	public ArcadeMachine(int suggestedScreenWidth, int suggestedScreenHeight) {
+	public ArcadeMachine(int suggestedScreenWidth, int suggestedScreenHeight, TileArcadeCabinet tile) {
 		suggestedScreenSize = new Size(suggestedScreenWidth, suggestedScreenHeight);
+		soundManager = new ArcadeSoundManager();
+		this.tile = tile;
 	}
 
 	////////////////////////////
@@ -42,6 +51,12 @@ public class ArcadeMachine implements IArcadeMachine {
 	@Override
 	public Size suggestedScreenSize() {
 		return suggestedScreenSize;
+	}
+
+	@Override
+	public IArcadeSound registerSound(String soundName, URL soundURL, boolean streaming) {
+		// TODO
+		return null;
 	}
 
 	/////////////////////////////////////////////////
@@ -93,6 +108,8 @@ public class ArcadeMachine implements IArcadeMachine {
 			gameID = null;
 		}
 		deleteTexture();
+
+		soundManager.unloadAllSounds();
 	}
 
 	/////////////////////

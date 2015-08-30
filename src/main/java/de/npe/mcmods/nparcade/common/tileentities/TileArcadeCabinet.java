@@ -215,7 +215,7 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	@SideOnly(Side.CLIENT)
 	public ArcadeMachine arcadeMachine() {
 		if (arcadeMachine == null) {
-			arcadeMachine = new ArcadeMachine(100, 130);
+			arcadeMachine = new ArcadeMachine(100, 130, this);
 		}
 		return arcadeMachine;
 	}
