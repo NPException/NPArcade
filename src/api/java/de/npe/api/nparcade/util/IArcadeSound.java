@@ -6,19 +6,31 @@ package de.npe.api.nparcade.util;
 public interface IArcadeSound {
 
 	/**
-	 * Starts playing a new instance of the sound from the beginning,
-	 * and returns an ID for that instance. Will return null if the
-	 * sound could not be played.
+	 * Starts playing the sound from the beginning if possible.
+	 *
+	 * @param volume the volume this sound should be played with. Value range: [0.0 - 1.0]
+	 * @param pitch  the pitch this sound should be played with. Value range: [0.5 - 2.0]
+	 * @param loop   whether this sound should loop endlessly or not.
 	 */
-	String play();
+	void play(float volume, float pitch, boolean loop);
 
 	/**
-	 * Checks whether the instance of the sound with the given ID is currently playing.
+	 * Checks if the sound is currently playing.
 	 */
-	boolean isPlaying(String id);
+	boolean isPlaying();
 
 	/**
-	 * Stops playing the instance of the sound with the given ID.
+	 * Stops playing the sound.
 	 */
-	void stop(String id);
+	void stop();
+
+	/**
+	 * Pauses playing the sound.
+	 */
+	void pause();
+
+	/**
+	 * Resumes playing the sound.
+	 */
+	void resume();
 }

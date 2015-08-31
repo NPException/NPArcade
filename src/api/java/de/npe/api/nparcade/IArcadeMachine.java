@@ -27,8 +27,8 @@ public interface IArcadeMachine {
 	 * Registers a sound for the current game and returns an IArcadeSound instance
 	 * for the game to work with.
 	 *
-	 * @param soundName The name of the sound. Every subsequent call of this method with
-	 *                  the same name will return the same {@link IArcadeSound} instance that
+	 * @param soundName The name you want to give the sound. Every subsequent call of this method with
+	 *                  the same name may return the same {@link IArcadeSound} instance that
 	 *                  was returned by the first call with that name, regardless of the other
 	 *                  parameters.
 	 * @param soundURL  a URL to the sound data. A game will usually get this by using
