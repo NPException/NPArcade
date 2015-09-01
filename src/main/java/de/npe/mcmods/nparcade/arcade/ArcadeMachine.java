@@ -55,17 +55,12 @@ public class ArcadeMachine implements IArcadeMachine {
 
 	@Override
 	public IArcadeSound registerSound(String soundName, URL soundURL, boolean streaming) {
-		// TODO
-		return null;
+		return soundManager.createPositionalSound(soundName, soundURL, streaming, tile.xCoord + 0.5F, tile.yCoord + 0.5F, tile.zCoord + 0.5F);
 	}
 
 	/////////////////////////////////////////////////
 	// external methods to be used by TileEntities //
 	/////////////////////////////////////////////////
-
-	public boolean hasGame() {
-		return game != null;
-	}
 
 	public void update() {
 		if (game != null) {
