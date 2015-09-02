@@ -54,8 +54,9 @@ public class ArcadeMachine implements IArcadeMachine {
 	}
 
 	@Override
-	public IArcadeSound registerSound(String soundName, URL soundURL, boolean streaming) {
-		return soundManager.createPositionalSound(soundName, soundURL, streaming, tile.xCoord + 0.5F, tile.yCoord + 0.5F, tile.zCoord + 0.5F);
+	public IArcadeSound registerSound(String soundFilePath, boolean streaming) {
+		URL soundURL = ArcadeGameRegistry.gameForID(gameID).gameClass().getResource(soundFilePath);
+		return soundManager.createPositionalSound(soundFilePath, soundURL, streaming, tile.xCoord + 0.5F, tile.yCoord + 0.5F, tile.zCoord + 0.5F);
 	}
 
 	/////////////////////////////////////////////////
@@ -125,6 +126,8 @@ public class ArcadeMachine implements IArcadeMachine {
 
 		Helper.renderRectInBounds(suggestedScreenSize.width, suggestedScreenSize.height,
 				image.getWidth(), image.getHeight(), 0, 0, 1, 1, Helper.Alignment.M);
+
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	/**

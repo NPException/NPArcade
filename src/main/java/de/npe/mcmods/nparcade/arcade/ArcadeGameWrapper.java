@@ -31,6 +31,7 @@ public final class ArcadeGameWrapper {
 	private final Size labelSize;
 	private int textureID = -1;
 
+	private final Class<? extends IArcadeGame> gameClass;
 	private final Constructor<? extends IArcadeGame> constructor;
 	private final IGameCartridge customCartridge;
 
@@ -46,6 +47,7 @@ public final class ArcadeGameWrapper {
 			this.label.createGraphics().drawImage(label, 0, 0, null);
 		}
 
+		this.gameClass = gameClass;
 		try {
 			constructor = gameClass != null ? gameClass.getConstructor() : null;
 		} catch (Exception ex) {
@@ -81,6 +83,10 @@ public final class ArcadeGameWrapper {
 
 	public IGameCartridge cartridge() {
 		return customCartridge != null ? customCartridge : ModItems.cartridge;
+	}
+
+	public Class<? extends IArcadeGame> gameClass() {
+		return gameClass;
 	}
 
 	/////////////////////////

@@ -31,7 +31,7 @@ public class PositionalArcadeSound implements IArcadeSound {
 
 	@Override
 	public boolean isPlaying() {
-		return !invalid ? sndResource.isPlaying(id) : false;
+		return !invalid && sndResource.isPlaying(id);
 	}
 
 	@Override

@@ -24,12 +24,12 @@ public class ArcadeSound {
 	private static Field sndSystemField;
 	private static SoundSystem sndSystem;
 
-	private final String soundName;
+	private final String soundFilePath;
 	private final URL soundURL;
 	private final boolean streaming;
 
-	ArcadeSound(String soundName, URL soundURL, boolean streaming) {
-		this.soundName = soundName;
+	ArcadeSound(String soundFilePath, URL soundURL, boolean streaming) {
+		this.soundFilePath = soundFilePath;
 		this.soundURL = soundURL;
 		this.streaming = streaming;
 	}
@@ -50,9 +50,9 @@ public class ArcadeSound {
 
 		if (normalizedVolume > 0.0F) {
 			if (streaming) {
-				system.newStreamingSource(false, id, soundURL, soundName, loop, x, y, z, ISound.AttenuationType.LINEAR.getTypeInt(), initVolume);
+				system.newStreamingSource(false, id, soundURL, soundFilePath, loop, x, y, z, ISound.AttenuationType.LINEAR.getTypeInt(), initVolume);
 			} else {
-				system.newSource(false, id, soundURL, soundName, loop, x, y, z, ISound.AttenuationType.LINEAR.getTypeInt(), initVolume);
+				system.newSource(false, id, soundURL, soundFilePath, loop, x, y, z, ISound.AttenuationType.LINEAR.getTypeInt(), initVolume);
 			}
 
 			float normalizedPitch = MathHelper.clamp_float(pitch, 0.5F, 2.0F);
@@ -120,6 +120,7 @@ public class ArcadeSound {
 		if (sndManagerField == null) {
 			for (Field field : SoundHandler.class.getDeclaredFields()) {
 				if (SoundManager.class.isAssignableFrom(field.getType())) {
+					field.setAccessible(true);
 					sndManagerField = field;
 					break;
 				}
@@ -135,6 +136,7 @@ public class ArcadeSound {
 		if (sndSystemField == null) {
 			for (Field field : SoundManager.class.getDeclaredFields()) {
 				if (SoundSystem.class.isAssignableFrom(field.getType())) {
+					field.setAccessible(true);
 					sndSystemField = field;
 					break;
 				}

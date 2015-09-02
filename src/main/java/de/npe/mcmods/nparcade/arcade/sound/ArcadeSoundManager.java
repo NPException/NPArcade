@@ -19,11 +19,11 @@ public class ArcadeSoundManager {
 
 	private List<PositionalArcadeSound> localSounds = new LinkedList<>();
 
-	public PositionalArcadeSound createPositionalSound(String soundName, URL soundURL, boolean streaming, float x, float y, float z) {
-		ArcadeSound sndSource = globalSoundResources.get(soundName);
+	public PositionalArcadeSound createPositionalSound(String soundFilePath, URL soundURL, boolean streaming, float x, float y, float z) {
+		ArcadeSound sndSource = globalSoundResources.get(soundFilePath);
 		if (sndSource == null) {
-			sndSource = new ArcadeSound(soundName, soundURL, streaming);
-			globalSoundResources.put(soundName, sndSource);
+			sndSource = new ArcadeSound(soundFilePath, soundURL, streaming);
+			globalSoundResources.put(soundFilePath, sndSource);
 		}
 		PositionalArcadeSound pSound = new PositionalArcadeSound(sndSource, x, y, z);
 		localSounds.add(pSound);
