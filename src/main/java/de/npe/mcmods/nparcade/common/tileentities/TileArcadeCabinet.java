@@ -133,6 +133,12 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	}
 
 	@Override
+	public void markForUpdate() {
+		markDirty();
+		super.markForUpdate();
+	}
+
+	@Override
 	public void invalidate() {
 		super.invalidate();
 		if (clientSide()) {
@@ -152,7 +158,6 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 		if (clientSide()) {
 			unloadGame();
 		}
-		gameID = null;
 	}
 
 	public ItemStack generateCurrentGameCartridge() {
