@@ -16,8 +16,12 @@ public class DummyGames {
 	public static final ArcadeGameWrapper UNKNOWN_GAME_WRAPPER = initUnknownGameWrapper();
 	public static final ArcadeGameWrapper EMPTY_GAME_WRAPPER = initEmptyGameWrapper();
 
-	public static boolean isDummyGame(String gameID) {
-		return EMPTY_GAME_WRAPPER.gameID().equals(gameID) || UNKNOWN_GAME_WRAPPER.gameID().equals(gameID);
+	public static boolean isEmptyGame(String gameID) {
+		return EMPTY_GAME_WRAPPER.gameID().equals(gameID);
+	}
+
+	public static boolean isUnknownGame(String gameID) {
+		return UNKNOWN_GAME_WRAPPER.gameID().equals(gameID);
 	}
 
 	/**

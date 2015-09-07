@@ -7,6 +7,7 @@ import de.npe.mcmods.nparcade.arcade.ArcadeGameWrapper;
 import de.npe.mcmods.nparcade.arcade.DummyGames;
 import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
+import de.npe.mcmods.nparcade.common.util.Util;
 import me.jezza.oc.common.interfaces.IItemTooltip;
 import me.jezza.oc.common.items.ItemAbstract;
 import me.jezza.oc.common.utils.Localise;
@@ -14,6 +15,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
+
+import java.util.Set;
 
 /**
  * Created by NPException (2015)
@@ -26,6 +30,27 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 	}
 
 	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+		if (world.isRemote) {
+			player.swingItem();
+			return stack;
+		}
+
+		if (Util.rand.nextFloat() <= 0.05F && DummyGames.isEmptyGame(getGameID(stack))) {
+			Set<String> gameIDs = ArcadeGameRegistry.gameIDs();
+			String[] gameIDArray = ArcadeGameRegistry.gameIDs().toArray(new String[gameIDs.size()]);
+			String chosenID = gameIDArray[Util.rand.nextInt(gameIDArray.length)];
+
+			ItemStack newStack = new ItemStack(this);
+			setGameID(newStack, chosenID);
+			if (player.inventory.addItemStackToInventory(newStack)) {
+				stack.stackSize--;
+			}
+		}
+		return stack;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	protected void addInformation(ItemStack stack, EntityPlayer player, IItemTooltip tooltip) {
 		tooltip.defaultInfoList();
@@ -34,7 +59,7 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 		idInfo.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT)).append(": ");
 
 		String gameID = getGameID(stack);
-		if (DummyGames.EMPTY_GAME_WRAPPER.gameID().equals(gameID)) {
+		if (DummyGames.isEmptyGame(gameID)) {
 			idInfo.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT_NONE));
 			tooltip.addToShiftList(idInfo.toString());
 			return;
@@ -46,7 +71,7 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 			tooltip.addToShiftList("");
 		} else if (wrapper.gameDescription() != null) {
 			// add description
-			for(String line : Localise.wrapToSize(wrapper.gameDescription(),40)) {
+			for (String line : Localise.wrapToSize(wrapper.gameDescription(), 40)) {
 				tooltip.addToShiftList("  §6" + line);
 			}
 			tooltip.addToShiftList("");
@@ -59,13 +84,15 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		String gameID = getGameID(stack);
-		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
-		if (!DummyGames.isDummyGame(wrapper.gameID())) {
-			return wrapper.gameTitle();
-		} else if (wrapper == DummyGames.UNKNOWN_GAME_WRAPPER) {
+		if (DummyGames.isUnknownGame(gameID)) {
 			return Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN);
 		}
-		return super.getItemStackDisplayName(stack);
+		if (DummyGames.isEmptyGame(gameID)) {
+			return super.getItemStackDisplayName(stack);
+		}
+
+		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
+		return wrapper.gameTitle();
 	}
 
 	@Override

@@ -6,7 +6,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.oredict.OreDictionary;
 
 
@@ -33,17 +32,8 @@ public class ModItems {
 				new ItemStack(Items.stick, 1, OreDictionary.WILDCARD_VALUE)
 		);
 
-		// TODO: remove test recipes and do proper one
+		// TODO: change test recipe to proper one
 		ItemStack cartridgeStack = new ItemStack(cartridge);
-		cartridgeStack.setTagCompound(new NBTTagCompound());
-		cartridgeStack.getTagCompound().setString(Strings.NBT_GAME, "myNickname.myExampleGameID");
-
 		crafting.addShapelessRecipe(cartridgeStack, new ItemStack(Items.comparator, 1, OreDictionary.WILDCARD_VALUE));
-
-		cartridgeStack = new ItemStack(cartridge);
-		cartridgeStack.setTagCompound(new NBTTagCompound());
-		cartridgeStack.getTagCompound().setString(Strings.NBT_GAME, "fancy3dGame");
-
-		crafting.addShapelessRecipe(cartridgeStack, new ItemStack(Items.glass_bottle, 1, 0));
 	}
 }
