@@ -22,6 +22,23 @@ public interface IArcadeMachine {
 	Size suggestedScreenSize();
 
 	/**
+	 * Returns if the key is currently pressed down.
+	 * For a list of all available key codes see {@link de.npe.api.nparcade.util.Controls}.
+	 * By calling {@link #hasKeyboard()}, a game can check if it can
+	 * use a full keyboard as input, or only the standard arcade keys.
+	 */
+	boolean isKeyDown(int keyCode);
+
+	/**
+	 * Returns if this arcade machine has a keyboard or not.
+	 * This basically tells you if the keyboard key codes
+	 * from {@link de.npe.api.nparcade.util.Controls} can be used
+	 * for the {@link #isKeyDown(int)} method, or only the basic
+	 * arcade keys are available.
+	 */
+	boolean hasKeyboard();
+
+	/**
 	 * Registers a sound for the current game and returns an IArcadeSound instance
 	 * for the game to work with.
 	 *

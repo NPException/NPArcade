@@ -4,12 +4,16 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
+import de.npe.api.nparcade.util.Controls;
 import de.npe.api.nparcade.util.IArcadeSound;
 import de.npe.api.nparcade.util.Size;
 import de.npe.mcmods.nparcade.arcade.sound.ArcadeSoundManager;
+import de.npe.mcmods.nparcade.client.ClientProxy;
 import de.npe.mcmods.nparcade.client.render.Helper;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureUtil;
+import org.lwjgl.input.Keyboard;
 
 import java.awt.image.BufferedImage;
 import java.net.URL;
@@ -51,6 +55,46 @@ public class ArcadeMachine implements IArcadeMachine {
 	@Override
 	public Size suggestedScreenSize() {
 		return suggestedScreenSize;
+	}
+
+	@Override
+	public boolean isKeyDown(int keyCode) {
+		// TODO: return FALSE if the player is not occupying the arcade
+
+		if (keyCode > 0x0100 && keyCode < 0x0109) {
+			switch (keyCode) {
+				case Controls.ARCADE_KEY_UP:
+					keyCode = Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode();
+					break;
+				case Controls.ARCADE_KEY_DOWN:
+					keyCode = Minecraft.getMinecraft().gameSettings.keyBindBack.getKeyCode();
+					break;
+				case Controls.ARCADE_KEY_LEFT:
+					keyCode = Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode();
+					break;
+				case Controls.ARCADE_KEY_RIGHT:
+					keyCode = Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode();
+					break;
+				case Controls.ARCADE_KEY_RED:
+					keyCode = ClientProxy.keyBindingArcadeRed.getKeyCode();
+					break;
+				case Controls.ARCADE_KEY_GREEN:
+					keyCode = ClientProxy.keyBindingArcadeGreen.getKeyCode();
+					break;
+				case Controls.ARCADE_KEY_BLUE:
+					keyCode = ClientProxy.keyBindingArcadeBlue.getKeyCode();
+					break;
+				case Controls.ARCADE_KEY_YELLOW:
+					keyCode = ClientProxy.keyBindingArcadeYellow.getKeyCode();
+					break;
+			}
+		}
+		return Keyboard.isKeyDown(keyCode);
+	}
+
+	@Override
+	public boolean hasKeyboard() {
+		return true;
 	}
 
 	@Override

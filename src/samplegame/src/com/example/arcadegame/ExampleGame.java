@@ -2,6 +2,7 @@ package com.example.arcadegame;
 
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
+import de.npe.api.nparcade.util.Controls;
 import de.npe.api.nparcade.util.IArcadeSound;
 import de.npe.api.nparcade.util.Size;
 
@@ -15,6 +16,8 @@ import java.util.Random;
 public class ExampleGame implements IArcadeGame {
 	private Size screenSize;
 	private boolean needsDraw;
+
+	private IArcadeMachine arcadeMachine;
 
 	private Random rand;
 	private float bgS = 0.5F, bgB = 0.6F, fgS = 0.5F, fgB = 0.8F;
@@ -30,6 +33,8 @@ public class ExampleGame implements IArcadeGame {
 		screenSize = new Size(100, 130);
 		rand = new Random(0L);
 
+		this.arcadeMachine = arcadeMachine;
+
 		x = 10F + rand.nextFloat() * 80F;
 		y = 10F + rand.nextFloat() * 110F;
 
@@ -40,11 +45,12 @@ public class ExampleGame implements IArcadeGame {
 
 		float h = rand.nextFloat();
 		background = Color.getHSBColor(h, bgS, bgB);
-		foreground = Color.getHSBColor(h + 0.5F, fgS, fgB);
+		foreground = Color.BLACK;
 	}
 
 	@Override
 	public void unload() {
+		arcadeMachine = null;
 		rand = null;
 		background = null;
 		foreground = null;
@@ -81,8 +87,25 @@ public class ExampleGame implements IArcadeGame {
 		if (change) {
 			float h = rand.nextFloat();
 			background = Color.getHSBColor(h, bgS, bgB);
-			foreground = Color.getHSBColor(h + 0.5F, fgS, fgB);
 			bounceSound.play(1F,1F,false);
+		}
+
+		int keyColor = 0;
+		if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_BLUE)) {
+			keyColor = keyColor | 0xFF0000FF;
+		}
+		if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_GREEN)) {
+			keyColor = keyColor | 0xFF00FF00;
+		}
+		if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_RED)) {
+			keyColor = keyColor | 0xFFFF0000;
+		}
+		if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_YELLOW)) {
+			keyColor = 0xFF000000;
+		}
+
+		if (keyColor != 0) {
+			foreground = new Color(keyColor);
 		}
 
 		needsDraw = true;
@@ -103,7 +126,7 @@ public class ExampleGame implements IArcadeGame {
 		needsDraw = false;
 		Graphics2D g = screen.createGraphics();
 		g.setBackground(background);
-		g.setColor(Color.BLACK);
+		g.setColor(foreground);
 
 		g.clearRect(0, 0, screen.getWidth(), screen.getHeight());
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

@@ -1,5 +1,7 @@
+nparcade=NP Arcade
+
 # Creative Tab
-itemGroup.nparcade=NPArcade
+itemGroup.nparcade=NP Arcade
 
 # Tile names
 tile.nparcade_stool.name=Arcade Stool
@@ -12,3 +14,8 @@ tooltip.item.cartridge.unknown=$c$oBroken Cartridge
 tooltip.item.cartridge.unknown.explanation=This game cannot be played. This can happen if you remove arcade games from your PC, or don't have all games that the server has (if you're in multiplayer).
 tooltip.item.cartridge.content=$7Game ID
 tooltip.item.cartridge.content.none=$8None
+
+key.nparcade.button.red=Red Arcade Button
+key.nparcade.button.green=Green Arcade Button
+key.nparcade.button.blue=Blue Arcade Button
+key.nparcade.button.yellow=Yellow Arcade Button
