@@ -146,10 +146,12 @@ public class ModelArcadeCabinet extends ModelBase {
 			IItemRenderer renderer = MinecraftForgeClient.getItemRenderer(cartridgeItem, IItemRenderer.ItemRenderType.ENTITY);
 			if (renderer != null) {
 				glPushMatrix();
-				glTranslatef(0.4375F, 0.39F, -0.37F);
-				glRotatef(180F, 0F, 0F, 1F);
-				glScalef(0.5F,0.5F,0.5F);
-				renderer.renderItem(IItemRenderer.ItemRenderType.ENTITY, cartridgeItem);
+				{
+					glTranslatef(0.4375F, 0.39F, -0.37F);
+					glRotatef(180F, 0F, 0F, 1F);
+					glScalef(0.5F, 0.5F, 0.5F);
+					renderer.renderItem(IItemRenderer.ItemRenderType.ENTITY, cartridgeItem);
+				}
 				glPopMatrix();
 			}
 		}
@@ -167,20 +169,20 @@ public class ModelArcadeCabinet extends ModelBase {
 		}
 
 		glPushMatrix();
+		{
+			// set max brightness
+			Helper.pushMaxBrightness();
 
-		// set max brightness
-		Helper.pushMaxBrightness();
+			glTranslatef(0F, 0F, screenShiftZ);
+			glRotatef(-0.5F * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
+			glTranslatef(screenShiftX, screenShiftY, 0F);
+			glScalef(0.006F, 0.006F, 0.006F);
 
-		glTranslatef(0F, 0F, screenShiftZ);
-		glRotatef(-0.5F * (180F / (float) Math.PI), 1.0F, 0.0F, 0.0F);
-		glTranslatef(screenShiftX, screenShiftY, 0F);
-		glScalef(0.006F, 0.006F, 0.006F);
+			arcade.doRenderScreen(tick);
 
-		arcade.doRenderScreen(tick);
-
-		// reset brightness
-		Helper.popMaxBrightness();
-
+			// reset brightness
+			Helper.popMaxBrightness();
+		}
 		glPopMatrix();
 	}
 
