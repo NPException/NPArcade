@@ -17,25 +17,26 @@ public class RenderTileArcadeCabinet extends TileEntitySpecialRenderer {
 
 	public void doRender(TileArcadeCabinet tile, double x, double y, double z, float tick) {
 		glPushMatrix();
-		glTranslatef((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
-		glRotatef(180F, 1F, 0F, 0F);
+		{
+			glTranslatef((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
+			glRotatef(180F, 1F, 0F, 0F);
 
-		switch (tile.facing()) {
-			case NORTH:
-				glRotatef(180F, 0F, 1F, 0F);
-				break;
-			case WEST:
-				glRotatef(90F, 0F, 1F, 0F);
-				break;
-			case EAST:
-				glRotatef(270F, 0F, 1F, 0F);
-				break;
+			switch (tile.facing()) {
+				case NORTH:
+					glRotatef(180F, 0F, 1F, 0F);
+					break;
+				case WEST:
+					glRotatef(90F, 0F, 1F, 0F);
+					break;
+				case EAST:
+					glRotatef(270F, 0F, 1F, 0F);
+					break;
+			}
+
+			bindTexture(ModelArcadeCabinet.texture);
+
+			ModelArcadeCabinet.instance.renderCabinet(tile, tick, 0.0625F);
 		}
-
-		bindTexture(ModelArcadeCabinet.texture);
-
-		ModelArcadeCabinet.instance.renderCabinet(tile, tick, 0.0625F);
-
 		glPopMatrix();
 	}
 

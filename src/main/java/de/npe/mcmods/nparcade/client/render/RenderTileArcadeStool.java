@@ -17,12 +17,14 @@ public class RenderTileArcadeStool extends TileEntitySpecialRenderer {
 
 	public void doRender(TileArcadeStool tile, double x, double y, double z, float tick) {
 		glPushMatrix();
-		glTranslatef((float) x + 0.5F, (float) y + 0.625F, (float) z + 0.5F);
-		glRotatef(180F, 1F, 0F, 0F);
-		glRotatef(tile.rotation, 0F, 1F, 0F);
-		glColor3f(1.0F, 1.0F, 1.0F);
-		bindTexture(ModelArcadeStool.texture);
-		ModelArcadeStool.instance.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+		{
+			glTranslatef((float) x + 0.5F, (float) y + 0.625F, (float) z + 0.5F);
+			glRotatef(180F, 1F, 0F, 0F);
+			glRotatef(tile.rotation, 0F, 1F, 0F);
+			glColor3f(1.0F, 1.0F, 1.0F);
+			bindTexture(ModelArcadeStool.texture);
+			ModelArcadeStool.instance.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+		}
 		glPopMatrix();
 	}
 
