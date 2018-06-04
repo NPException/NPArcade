@@ -94,6 +94,7 @@ public class RenderItemCartridge extends AbstractItemRenderer {
 			glBindTexture(GL_TEXTURE_2D, textureID);
 			// 4F & 5F -> both - 0.4 to scale down and offset from border of the label recess
 			Helper.renderRectInBounds(3.6F, 4.6F, size.width, size.height, 0, 0, 1, 1, Helper.Alignment.U);
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 		glPopMatrix();
 	}
