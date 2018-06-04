@@ -177,7 +177,7 @@ public class ArcadeMachine implements IArcadeMachine {
 	/**
 	 * Deletes the texture currently allocated for this arcade machine's screen
 	 */
-	public void deleteTexture() {
+	private void deleteTexture() {
 		if (textureID != -1) {
 			TextureUtil.deleteTexture(textureID);
 		}
@@ -207,7 +207,7 @@ public class ArcadeMachine implements IArcadeMachine {
 			int width = size.width;
 			int height = size.height;
 
-			// allocate new texture if game output size changed or scren is not yet initialized
+			// allocate new texture if game output size changed or screen is not yet initialized
 			if (textureID == -1 ||
 					screenData == null ||
 					image == null ||
