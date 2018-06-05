@@ -23,11 +23,8 @@ public interface IArcadeGame {
 	////////////////////////////////
 
 	/**
-	 * This method is called whenever the game is loaded by an arcade machine.<br>
-	 * It's suggested to keep <i>arcadeMachine</i> as an instance variable so you can
-	 * use it's methods during calls to {@link #unload()} and {@link #update()}
-	 *
-	 * @param arcadeMachine the machine the game will be ran on.
+	 * This method is called whenever the game is loaded by an arcade machine.
+	 * The arcade machine instance the game will run on is provided as a parameter.
 	 */
 	void load(IArcadeMachine arcadeMachine);
 
@@ -36,15 +33,15 @@ public interface IArcadeGame {
 	 * That usually happens when the arcade machine is powering down or being broken.<br>
 	 * It should be used to release all resources used by the game, and persist any data if necessary.
 	 */
-	void unload();
+	void unload(IArcadeMachine arcadeMachine);
 
 	/**
 	 * This method is called to update the game's state.<br>
 	 * How often this method is called per second can be checked by
-	 * calling {@link IArcadeMachine#ticksPerSecond()} on the arcadeMachine
-	 * you get during the call of the {@link #load(IArcadeMachine)} method.
+	 * calling {@link IArcadeMachine#ticksPerSecond()} on the arcade machine
+	 * that is provided as a parameter.
 	 */
-	void update();
+	void update(IArcadeMachine arcadeMachine);
 
 	///////////////////////////////
 	// RENDERING RELATED METHODS //

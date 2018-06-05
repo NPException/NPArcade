@@ -17,8 +17,6 @@ public class ExampleGame implements IArcadeGame {
 	private Size screenSize;
 	private boolean needsDraw;
 
-	private IArcadeMachine arcadeMachine;
-
 	private Random rand;
 	private float bgS = 0.5F, bgB = 0.6F, fgS = 0.5F, fgB = 0.8F;
 	private Color background;
@@ -32,8 +30,6 @@ public class ExampleGame implements IArcadeGame {
 	public void load(IArcadeMachine arcadeMachine) {
 		screenSize = new Size(100, 130);
 		rand = new Random(0L);
-
-		this.arcadeMachine = arcadeMachine;
 
 		x = 10F + rand.nextFloat() * 80F;
 		y = 10F + rand.nextFloat() * 110F;
@@ -49,8 +45,7 @@ public class ExampleGame implements IArcadeGame {
 	}
 
 	@Override
-	public void unload() {
-		arcadeMachine = null;
+	public void unload(IArcadeMachine arcadeMachine) {
 		rand = null;
 		background = null;
 		foreground = null;
@@ -58,7 +53,7 @@ public class ExampleGame implements IArcadeGame {
 	}
 
 	@Override
-	public void update() {
+	public void update(IArcadeMachine arcadeMachine) {
 		x += dx;
 		y += dy;
 

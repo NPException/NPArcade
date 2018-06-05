@@ -109,7 +109,7 @@ public class ArcadeMachine implements IArcadeMachine {
 
 	public void update() {
 		if (game != null) {
-			game.update();
+			game.update(this);
 		}
 	}
 
@@ -143,7 +143,7 @@ public class ArcadeMachine implements IArcadeMachine {
 
 	public void unload() {
 		if (game != null) {
-			game.unload();
+			game.unload(this);
 			game = null;
 			gameID = null;
 		}

@@ -47,11 +47,11 @@ public class EmptyGame implements IArcadeGame {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void unload() {}
+	public void unload(IArcadeMachine arcadeMachine) {}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void update() {
+	public void update(IArcadeMachine arcadeMachine) {
 		if (screenToDraw == 1) {
 			screenToDraw = 0;
 			needsDraw = true;

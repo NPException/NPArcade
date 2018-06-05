@@ -41,13 +41,13 @@ public class UnknownGame implements IArcadeGame {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void unload() {
+	public void unload(IArcadeMachine arcadeMachine) {
 		pixels = null;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void update() {
+	public void update(IArcadeMachine arcadeMachine) {
 		// nothing to do (yet)
 	}
 
