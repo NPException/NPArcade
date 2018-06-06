@@ -9,15 +9,14 @@ import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
 import de.npe.mcmods.nparcade.common.ModBlocks;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import de.npe.mcmods.nparcade.common.util.Util;
-import me.jezza.oc.common.interfaces.IBlockInteract;
-import me.jezza.oc.common.interfaces.IBlockNotifier;
-import me.jezza.oc.common.tile.TileAbstract;
-import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -28,7 +27,7 @@ import java.util.List;
 /**
  * Created by NPException (2015)
  */
-public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, IBlockNotifier {
+public class TileArcadeCabinet extends TileEntity {
 
 	private ForgeDirection facing;
 	private String gameID;
@@ -45,30 +44,14 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 		return worldObj != null && worldObj.isRemote;
 	}
 
-	private EntityPlayer removingPlayer;
-
-	public void startRemoveByPlayer(EntityPlayer player) {
-		if (removingPlayer != null) {
-			throw new IllegalStateException("startRemoveByPlayer was already invoked!");
-		}
-		removingPlayer = player;
-	}
-
-	public void endRemoveByPlayer() {
-		if (removingPlayer == null) {
-			throw new IllegalStateException("endRemoveByPlayer was already invoked!");
-		}
-		removingPlayer = null;
-	}
-
-	@Override
-	public void onBlockRemoval(World world, int x, int y, int z) {
+	public void onBlockRemoval(EntityPlayer removingPlayer) {
 		if (clientSide()) {
 			unloadGame();
 			return;
 		}
 
-		if (removingPlayer == null || !removingPlayer.capabilities.isCreativeMode) {
+		// don't spawn when removed by creative mode player
+		if (!(removingPlayer != null && removingPlayer.capabilities.isCreativeMode)) {
 			Util.spawnItemStack(new ItemStack(ModBlocks.arcadeCabinet), worldObj, xCoord + 0.5F, yCoord + 0.5F, zCoord + 0.5F, 0);
 		}
 		ItemStack cartridge = generateCurrentGameCartridge();
@@ -79,23 +62,11 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 		gameID = null;
 	}
 
-	@Override
-	public void onBlockAdded(EntityLivingBase entityLivingBase, World world, int x, int y, int z, ItemStack itemStack) {
+	public void onBlockAdded(EntityLivingBase entityLivingBase) {
 		facing = Util.getViewDirectionOfEntity(entityLivingBase).getOpposite();
 	}
 
-	@Override
-	public void onNeighbourBlockChanged(World world, int x, int y, int z, Block block) {
-		// do nothing
-	}
-
-	@Override
-	public void onNeighbourTileChanged(IBlockAccess world, int x, int y, int z, int tileX, int tileY, int tileZ) {
-		// do nothing
-	}
-
-	@Override
-	public boolean onActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitVecX, float hitVecY, float hitVecZ) {
+	public boolean onActivated(World world, EntityPlayer player) {
 		ItemStack heldStack = player.getCurrentEquippedItem();
 
 		if (heldStack == null) {
@@ -106,7 +77,7 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 					Util.spawnItemStack(generateCurrentGameCartridge(), world, player.posX, player.posY + 0.5, player.posZ, 0);
 				}
 				gameID = null;
-				markForUpdate();
+				markDirty();
 			}
 			return true;
 
@@ -122,7 +93,7 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 							Util.spawnItemStack(generateCurrentGameCartridge(), world, player.posX, player.posY + 0.5, player.posZ, 0);
 						}
 						gameID = cartridgeGameID;
-						markForUpdate();
+						markDirty();
 					}
 					return true;
 				}
@@ -133,9 +104,9 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 	}
 
 	@Override
-	public void markForUpdate() {
-		markDirty();
-		super.markForUpdate();
+	public void markDirty() {
+		super.markDirty();
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -208,6 +179,18 @@ public class TileArcadeCabinet extends TileAbstract implements IBlockInteract, I
 				unloadGame();
 			}
 		}
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		readFromNBT(pkt.func_148857_g());
+	}
+
+	@Override
+	public Packet getDescriptionPacket() {
+		NBTTagCompound tag = new NBTTagCompound();
+		writeToNBT(tag);
+		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tag);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////

@@ -14,7 +14,10 @@ import de.npe.mcmods.nparcade.common.lib.Reference;
 import me.jezza.oc.client.CreativeTabSimple;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.MOD_VERSION, dependencies = "required-after:Forge@[10.13.4.1448,);required-after:OmnisCore@[0.0.6,);")
+@Mod(modid = Reference.MOD_ID,
+		name = Reference.MOD_NAME,
+		version = Reference.MOD_VERSION,
+		dependencies = "required-after:Forge@[10.13.4.1448,)")
 public class NPArcade {
 
 	public static Logger log;
@@ -23,7 +26,7 @@ public class NPArcade {
 	public static NPArcade instance;
 
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
-	public static CommonProxy proxy;
+	private static CommonProxy proxy;
 
 	public static CreativeTabSimple creativeTab = new CreativeTabSimple(Reference.MOD_ID);
 
