@@ -169,9 +169,10 @@ public final class CoordSet {
 
 	@Override
 	public int hashCode() {
-		int hash = x;
-		hash *= 31 + y;
-		hash *= 31 + z;
+		int hash = 1;
+		hash = 31 * hash + x;
+		hash = 31 * hash + y;
+		hash = 31 * hash + z;
 		return hash;
 	}
 
