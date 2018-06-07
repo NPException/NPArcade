@@ -1,5 +1,6 @@
 package de.npe.mcmods.nparcade.common.items;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.mcmods.nparcade.NPArcade;
@@ -8,10 +9,9 @@ import de.npe.mcmods.nparcade.arcade.ArcadeGameWrapper;
 import de.npe.mcmods.nparcade.arcade.DummyGames;
 import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
+import de.npe.mcmods.nparcade.common.util.Localize;
 import de.npe.mcmods.nparcade.common.util.Util;
-import me.jezza.oc.common.interfaces.IItemTooltip;
-import me.jezza.oc.common.items.ItemAbstract;
-import me.jezza.oc.common.utils.Localise;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,13 +24,18 @@ import java.util.List;
 /**
  * Created by NPException (2015)
  */
-public class ItemCartridge extends ItemAbstract implements IGameCartridge {
+public class ItemCartridge extends Item implements IGameCartridge {
 
 	public ItemCartridge(String name) {
-		super(name);
-		setTextureless();
-
+		setUnlocalizedName(name);
+		GameRegistry.registerItem(this, name);
 		setCreativeTab(NPArcade.creativeTab);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister iconRegister) {
+		// no standard icon
 	}
 
 	@Override
@@ -54,22 +59,29 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	protected void addInformation(ItemStack stack, EntityPlayer player, IItemTooltip tooltip) {
-		tooltip.defaultInfoList();
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+		ItemTooltip tooltip = new ItemTooltip();
+		addInformation(stack, tooltip);
+		tooltip.populateList(list);
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void addInformation(ItemStack stack, ItemTooltip tooltip) {
+		tooltip.addDefaultShiftInfo();
 
 		StringBuilder idInfo = new StringBuilder();
-		idInfo.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT)).append(": ");
+		idInfo.append(Localize.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT)).append(": ");
 
 		String gameID = getGameID(stack);
 
 		if (ArcadeGameRegistry.isEmptyGame(gameID)) {
-			idInfo.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT_NONE));
+			idInfo.append(Localize.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT_NONE));
 			tooltip.addToShiftList(idInfo.toString());
 			return;
 		}
 
 		if (ArcadeGameRegistry.isUnknownGame(gameID)) {
-			tooltip.addAllToShiftList(Localise.wrapToSize(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN_EXPLANATION), 42));
+			tooltip.addAllToShiftList(Localize.wrapToSize(Localize.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN_EXPLANATION), 42));
 			tooltip.addToShiftList("");
 			idInfo.append("§3").append(gameID);
 			tooltip.addToShiftList(idInfo.toString());
@@ -79,7 +91,7 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
 		if (wrapper.gameDescription() != null) {
 			// add description
-			for (String line : Localise.wrapToSize(wrapper.gameDescription(), 40)) {
+			for (String line : Localize.wrapToSize(wrapper.gameDescription(), 40)) {
 				tooltip.addToShiftList("  §6" + line);
 			}
 			tooltip.addToShiftList("");
@@ -93,7 +105,7 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 	public String getItemStackDisplayName(ItemStack stack) {
 		String gameID = getGameID(stack);
 		if (ArcadeGameRegistry.isUnknownGame(gameID)) {
-			return Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN);
+			return Localize.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN);
 		}
 		if (ArcadeGameRegistry.isEmptyGame(gameID)) {
 			return super.getItemStackDisplayName(stack);

@@ -3,7 +3,6 @@ package de.npe.mcmods.nparcade.common.blocks;
 import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 import me.jezza.oc.common.blocks.BlockAbstractModel;
-import me.jezza.oc.common.interfaces.IBlockNotifier;
 import me.jezza.oc.common.interfaces.ITileProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;

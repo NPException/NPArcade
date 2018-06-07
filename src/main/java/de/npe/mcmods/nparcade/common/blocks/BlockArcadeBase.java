@@ -1,10 +1,11 @@
 package de.npe.mcmods.nparcade.common.blocks;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.common.lib.Reference;
-import me.jezza.oc.common.blocks.BlockAbstract;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,13 +18,16 @@ import net.minecraftforge.common.util.ForgeDirection;
 /**
  * Created by NPException (2015)
  */
-public class BlockArcadeBase extends BlockAbstract {
+public class BlockArcadeBase extends Block {
 
 	@SideOnly(Side.CLIENT)
 	private IIcon[] icons;
 
 	public BlockArcadeBase(Material material, String name) {
-		super(material, name);
+		super(material);
+		setBlockName(name);
+		setBlockTextureName(name);
+		GameRegistry.registerBlock(this, name);
 
 		setHardness(1.0F);
 		setResistance(5.0F);

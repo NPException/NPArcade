@@ -1,8 +1,8 @@
 package de.npe.mcmods.nparcade.common.entities;
 
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeStool;
+import de.npe.mcmods.nparcade.common.util.CoordSet;
 import de.npe.mcmods.nparcade.common.util.Util;
-import me.jezza.oc.common.utils.CoordSet;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -15,12 +15,8 @@ public class EntityArcadeStool extends Entity {
 	private int validityCheckTicks = 10;
 	private CoordSet tileCoords;
 
-	public EntityArcadeStool(World world) {
-		super(world);
-	}
-
 	public EntityArcadeStool(World world, TileArcadeStool stoolTE) {
-		this(world);
+		super(world);
 
 		tileCoords = stoolTE.getCoordSet();
 
