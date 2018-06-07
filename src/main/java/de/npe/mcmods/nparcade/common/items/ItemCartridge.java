@@ -2,6 +2,7 @@ package de.npe.mcmods.nparcade.common.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.arcade.ArcadeGameWrapper;
 import de.npe.mcmods.nparcade.arcade.DummyGames;
@@ -11,13 +12,14 @@ import de.npe.mcmods.nparcade.common.util.Util;
 import me.jezza.oc.common.interfaces.IItemTooltip;
 import me.jezza.oc.common.items.ItemAbstract;
 import me.jezza.oc.common.utils.Localise;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by NPException (2015)
@@ -27,6 +29,8 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 	public ItemCartridge(String name) {
 		super(name);
 		setTextureless();
+
+		setCreativeTab(NPArcade.creativeTab);
 	}
 
 	@Override
@@ -36,13 +40,11 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 			return stack;
 		}
 
-		if (Util.rand.nextFloat() <= 0.05F && DummyGames.isEmptyGame(getGameID(stack))) {
-			Set<String> gameIDs = ArcadeGameRegistry.gameIDs();
-			String[] gameIDArray = ArcadeGameRegistry.gameIDs().toArray(new String[gameIDs.size()]);
+		if (Util.rand.nextFloat() <= 0.05F && ArcadeGameRegistry.isEmptyGame(getGameID(stack))) {
+			String[] gameIDArray = ArcadeGameRegistry.gameIDs().toArray(new String[0]);
 			String chosenID = gameIDArray[Util.rand.nextInt(gameIDArray.length)];
 
-			ItemStack newStack = new ItemStack(this);
-			setGameID(newStack, chosenID);
+			ItemStack newStack = createItemStack(chosenID, 1);
 			if (player.inventory.addItemStackToInventory(newStack)) {
 				stack.stackSize--;
 			}
@@ -59,17 +61,23 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 		idInfo.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT)).append(": ");
 
 		String gameID = getGameID(stack);
-		if (DummyGames.isEmptyGame(gameID)) {
+
+		if (ArcadeGameRegistry.isEmptyGame(gameID)) {
 			idInfo.append(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT_NONE));
 			tooltip.addToShiftList(idInfo.toString());
 			return;
 		}
 
-		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
-		if (wrapper == DummyGames.UNKNOWN_GAME_WRAPPER) {
+		if (ArcadeGameRegistry.isUnknownGame(gameID)) {
 			tooltip.addAllToShiftList(Localise.wrapToSize(Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN_EXPLANATION), 42));
 			tooltip.addToShiftList("");
-		} else if (wrapper.gameDescription() != null) {
+			idInfo.append("§3").append(gameID);
+			tooltip.addToShiftList(idInfo.toString());
+			return;
+		}
+
+		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
+		if (wrapper.gameDescription() != null) {
 			// add description
 			for (String line : Localise.wrapToSize(wrapper.gameDescription(), 40)) {
 				tooltip.addToShiftList("  §6" + line);
@@ -84,15 +92,14 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		String gameID = getGameID(stack);
-		if (DummyGames.isUnknownGame(gameID)) {
+		if (ArcadeGameRegistry.isUnknownGame(gameID)) {
 			return Localise.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN);
 		}
-		if (DummyGames.isEmptyGame(gameID)) {
+		if (ArcadeGameRegistry.isEmptyGame(gameID)) {
 			return super.getItemStackDisplayName(stack);
 		}
 
-		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(gameID);
-		return wrapper.gameTitle();
+		return ArcadeGameRegistry.gameForID(gameID).gameTitle();
 	}
 
 	@Override
@@ -103,7 +110,9 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 	@Override
 	public String getGameID(ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
-		return tag != null && tag.hasKey(Strings.NBT_GAME) ? tag.getString(Strings.NBT_GAME) : DummyGames.EMPTY_GAME_WRAPPER.gameID();
+		return tag != null && tag.hasKey(Strings.NBT_GAME)
+				? tag.getString(Strings.NBT_GAME)
+				: DummyGames.EMPTY_GAME_WRAPPER.gameID();
 	}
 
 	@Override
@@ -119,5 +128,12 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 			stack.setTagCompound(tag);
 		}
 		tag.setString(Strings.NBT_GAME, gameID);
+	}
+
+	public ItemStack createItemStack(String gameId, int num) {
+		num = num < 1 ? 1 : num > 64 ? 64 : num;
+		ItemStack stack = new ItemStack(this, num);
+		setGameID(stack, gameId);
+		return stack;
 	}
 }

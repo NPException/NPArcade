@@ -208,11 +208,19 @@ public class ArcadeGameRegistry {
 	 * This method will therefor never return null.
 	 */
 	public static ArcadeGameWrapper gameForID(String id) {
-		if (DummyGames.EMPTY_GAME_WRAPPER.gameID().equals(id)) {
+		if (isEmptyGame(id)) {
 			return DummyGames.EMPTY_GAME_WRAPPER;
 		}
 		ArcadeGameWrapper wrapper = games.get(id);
 		return wrapper != null ? wrapper : DummyGames.UNKNOWN_GAME_WRAPPER;
+	}
+
+	public static boolean isEmptyGame(String gameId) {
+		return DummyGames.EMPTY_GAME_WRAPPER.gameID().equals(gameId);
+	}
+
+	public static boolean isUnknownGame(String gameId) {
+		return DummyGames.UNKNOWN_GAME_WRAPPER == gameForID(gameId);
 	}
 
 	/**
@@ -226,14 +234,11 @@ public class ArcadeGameRegistry {
 	/**
 	 * Returns the registered {@link IGameCartridge} for the given Item.
 	 * May return null if no cartridge was registerd for the given item.
-	 * @return
 	 */
 	public static IGameCartridge cartridgeForItem(Item item) {
-		if (item == ModItems.cartridge)
-			return ModItems.cartridge;
-
-		IGameCartridge cartridge = customCartridges.get(item);
-		return cartridge;
+		return item == ModItems.cartridge
+			? ModItems.cartridge
+			: customCartridges.get(item);
 	}
 
 	/**
