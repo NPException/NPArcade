@@ -1,10 +1,15 @@
 package de.npe.mcmods.nparcade.common.blocks;
 
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.mcmods.nparcade.NPArcade;
+import de.npe.mcmods.nparcade.common.lib.Reference;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeStool;
-import me.jezza.oc.common.blocks.BlockAbstractModel;
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -14,10 +19,13 @@ import net.minecraftforge.common.util.ForgeDirection;
 /**
  * Created by NPException (2015)
  */
-public class BlockArcadeStool extends BlockAbstractModel implements ITileEntityProvider {
+public class BlockArcadeStool extends Block implements ITileEntityProvider {
 
 	public BlockArcadeStool(Material material, String name) {
-		super(material, name);
+		super(material);
+		setBlockName(name);
+		setBlockTextureName("nparcade_blockParticles"); // only here for proper break- and run- particles
+		GameRegistry.registerBlock(this, name);
 
 		setHardness(1.0F);
 		setResistance(5.0F);
@@ -26,10 +34,6 @@ public class BlockArcadeStool extends BlockAbstractModel implements ITileEntityP
 		setBlockBounds(0.2f, 0f, 0.2f, 0.8f, 0.625f, 0.8f);
 
 		setCreativeTab(NPArcade.creativeTab);
-
-		// these 2 lines are here for proper break- and run- particles
-		textureReg = true;
-		setBlockTextureName("nparcade_blockParticles");
 	}
 
 	@Override
@@ -49,5 +53,26 @@ public class BlockArcadeStool extends BlockAbstractModel implements ITileEntityP
 			return ((TileArcadeStool) te).onActivated(world, player);
 		}
 		return false;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerBlockIcons(IIconRegister iconRegister) {
+		blockIcon = iconRegister.registerIcon(Reference.MOD_IDENTIFIER + getTextureName());
+	}
+
+	@Override
+	public boolean renderAsNormalBlock() {
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube() {
+		return false;
+	}
+
+	@Override
+	public int getRenderType() {
+		return -1;
 	}
 }
