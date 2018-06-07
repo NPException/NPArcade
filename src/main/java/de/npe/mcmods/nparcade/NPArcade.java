@@ -11,7 +11,8 @@ import de.npe.mcmods.nparcade.common.CommonProxy;
 import de.npe.mcmods.nparcade.common.ModBlocks;
 import de.npe.mcmods.nparcade.common.ModItems;
 import de.npe.mcmods.nparcade.common.lib.Reference;
-import me.jezza.oc.client.CreativeTabSimple;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = Reference.MOD_ID,
@@ -28,7 +29,12 @@ public class NPArcade {
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
 	private static CommonProxy proxy;
 
-	public static CreativeTabSimple creativeTab = new CreativeTabSimple(Reference.MOD_ID);
+	public static CreativeTabs creativeTab = new CreativeTabs(Reference.MOD_ID) {
+		@Override
+		public Item getTabIconItem() {
+			return Item.getItemFromBlock(ModBlocks.arcadeCabinet);
+		}
+	};
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -41,8 +47,6 @@ public class NPArcade {
 
 		ModBlocks.init();
 		ModItems.init();
-
-		creativeTab.setIcon(ModBlocks.stool);
 
 		ModItems.initRecipes();
 	}

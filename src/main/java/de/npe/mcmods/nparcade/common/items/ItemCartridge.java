@@ -130,6 +130,21 @@ public class ItemCartridge extends ItemAbstract implements IGameCartridge {
 		tag.setString(Strings.NBT_GAME, gameID);
 	}
 
+	@SuppressWarnings("unchecked")
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(Item thisItem, CreativeTabs tab, List subItems) {
+		// empty cartridge
+		subItems.add(createItemStack(null, 1));
+
+		// unknown game // TODO: remove before release
+		subItems.add(createItemStack("this.game.id.does.not.exist...probably", 1));
+
+		// all available games
+		for (String gameId : ArcadeGameRegistry.gameIDs()) {
+			subItems.add(createItemStack(gameId, 1));
+		}
+	}
+
 	public ItemStack createItemStack(String gameId, int num) {
 		num = num < 1 ? 1 : num > 64 ? 64 : num;
 		ItemStack stack = new ItemStack(this, num);
