@@ -15,6 +15,12 @@ public class EntityArcadeStool extends Entity {
 	private int validityCheckTicks = 10;
 	private CoordSet tileCoords;
 
+	// Accessed via Reflection by FML
+	@SuppressWarnings("unused")
+	public EntityArcadeStool(World world) {
+		super(world);
+	}
+
 	public EntityArcadeStool(World world, TileArcadeStool stoolTE) {
 		super(world);
 
