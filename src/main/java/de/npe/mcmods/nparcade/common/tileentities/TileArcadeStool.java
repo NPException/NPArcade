@@ -2,13 +2,8 @@ package de.npe.mcmods.nparcade.common.tileentities;
 
 import de.npe.mcmods.nparcade.common.entities.EntityArcadeStool;
 import de.npe.mcmods.nparcade.common.util.CoordSet;
-import de.npe.mcmods.nparcade.common.util.Util;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
@@ -18,10 +13,20 @@ import net.minecraft.world.World;
  */
 public class TileArcadeStool extends TileEntity {
 
-	public float rotation;
+	private float rotation = -1;
 
-	public TileArcadeStool() {
-		rotation = (float) Math.round(Util.rand.nextFloat() * 360.0F);
+	public float rotationDeg() {
+		if (rotation == -1 && !(xCoord == 0 && yCoord == 0 && zCoord == 0)) {
+			int hash = 1;
+			hash = 31 * hash + xCoord;
+			hash = 31 * hash + yCoord;
+			hash = 31 * hash + zCoord;
+			int mod = hash % 360;
+			rotation = mod < 0 ? mod + 360 : mod;
+		}
+		return rotation != -1
+				? rotation
+				: 0;
 	}
 
 	public CoordSet getCoordSet() {
@@ -56,27 +61,15 @@ public class TileArcadeStool extends TileEntity {
 		return true;
 	}
 
-	@Override
-	public void writeToNBT(NBTTagCompound tag) {
-		super.writeToNBT(tag);
-		Util.getModNBTTag(tag, true).setShort("stoolRotation", (short) Math.round(rotation));
-	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound tag) {
-		super.readFromNBT(tag);
-		rotation = (float) Util.getModNBTTag(tag, false).getShort("stoolRotation");
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		readFromNBT(pkt.func_148857_g());
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound tag = new NBTTagCompound();
-		writeToNBT(tag);
-		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tag);
-	}
+	//	@Override
+	//	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+	//		readFromNBT(pkt.func_148857_g());
+	//	}
+	//
+	//	@Override
+	//	public Packet getDescriptionPacket() {
+	//		NBTTagCompound tag = new NBTTagCompound();
+	//		writeToNBT(tag);
+	//		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tag);
+	//	}
 }
