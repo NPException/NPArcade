@@ -66,7 +66,7 @@ public class Localize {
 
 	public static String format(String key, Object... params) {
 		String result = translate(key);
-		if (params != null && params.length >= 0) {
+		if (params != null && params.length > 0) {
 			for (Object param : params) {
 				result = result.replaceFirst("\\{\\}", String.valueOf(param));
 			}

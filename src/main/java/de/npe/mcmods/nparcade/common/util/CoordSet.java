@@ -131,9 +131,9 @@ public final class CoordSet {
 		}
 		String[] coords = loc.split(":");
 
-		int x = 0;
-		int y = 0;
-		int z = 0;
+		int x;
+		int y;
+		int z;
 		try {
 			x = Integer.parseInt(coords[0]);
 			y = Integer.parseInt(coords[1]);

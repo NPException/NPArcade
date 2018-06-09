@@ -86,11 +86,13 @@ public class ArcadeGameRegistry {
 					return file.getName().endsWith(".zip") || file.getName().endsWith(".jar") || file.isDirectory();
 				}
 			});
-			for (File f : content) {
-				if (f.isDirectory()) {
-					directories.addLast(f);
-				} else {
-					candidates.addLast(f);
+			if (content != null) {
+				for (File f : content) {
+					if (f.isDirectory()) {
+						directories.addLast(f);
+					} else {
+						candidates.addLast(f);
+					}
 				}
 			}
 		}

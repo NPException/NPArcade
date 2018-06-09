@@ -1,7 +1,8 @@
 package de.npe.mcmods.nparcade.common.items;
 
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
@@ -11,9 +12,6 @@ import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import de.npe.mcmods.nparcade.common.util.Localize;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +19,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by NPException (2015)
@@ -63,6 +64,7 @@ public class ItemCartridge extends Item implements IGameCartridge {
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
 		ItemTooltip tooltip = new ItemTooltip();
 		addInformation(stack, tooltip);
+		//noinspection unchecked
 		tooltip.populateList(list);
 	}
 

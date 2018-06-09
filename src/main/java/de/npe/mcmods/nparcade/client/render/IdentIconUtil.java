@@ -112,7 +112,7 @@ class IdentIconUtil {
 		private static Color backgroundColor = Color.WHITE;
 
 		static {
-			setPatchSize(DEFAULT_PATCH_SIZE);
+			setPatchSize();
 		}
 
 		/**
@@ -120,12 +120,9 @@ class IdentIconUtil {
 		 * are scaled down to requested identicon size. Default size is 20 pixels
 		 * which means, for 9-block identicon, a 60x60 image will be rendered and
 		 * scaled down.
-		 *
-		 * @param size
-		 * 		patch size in pixels
 		 */
-		private static void setPatchSize(float size) {
-			patchSize = size;
+		private static void setPatchSize() {
+			patchSize = DEFAULT_PATCH_SIZE;
 			float patchOffset = patchSize / 2.0f;
 			float patchScale = patchSize / 4.0f;
 			// origin.
