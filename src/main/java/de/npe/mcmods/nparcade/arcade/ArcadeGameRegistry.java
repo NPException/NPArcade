@@ -176,7 +176,12 @@ public class ArcadeGameRegistry {
 	}
 
 	private static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String title, String description, BufferedImage label, String colorString, IGameCartridge customCartridge) throws IllegalArgumentException {
-		String gameToString = " Game -> ID:" + id + ", Title:" + title + ", Class:" + gameClass.getCanonicalName() + ", Label:" + (label != null) + ", Color:" + colorString + ", Custom_Cartridge:" + customCartridge;
+		String gameToString = " Game -> ID:" + id
+				+ ", Title:" + title
+				+ ", Class:" + gameClass.getCanonicalName()
+				+ ", Label:" + (label != null)
+				+ ", Color:" + colorString
+				+ ", Custom_Cartridge:" + customCartridge;
 
 		if (id == null) {
 			throw new IllegalArgumentException("ID must not be null!" + gameToString);
@@ -214,7 +219,9 @@ public class ArcadeGameRegistry {
 		}
 
 		boolean isClient = (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT);
-		ArcadeGameWrapper wrapper = isClient ? new ArcadeGameWrapper(id, title, description, label, color, gameClass, wrapperCartridge) : new ArcadeGameWrapper(id, title, null, null, -1, null, wrapperCartridge);
+		ArcadeGameWrapper wrapper = isClient
+				? new ArcadeGameWrapper(id, title, description, label, color, gameClass, wrapperCartridge)
+				: new ArcadeGameWrapper(id, title, null, null, -1, null, wrapperCartridge);
 		games.put(id, wrapper);
 		if (wrapperCartridge != null) {
 			customCartridges.put(wrapperCartridge.getCartridgeItem(), wrapperCartridge);
