@@ -11,14 +11,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import java.io.InputStream;
-import java.util.Random;
 
 /**
  * Created by NPException (2015)
  */
 public class Util {
-
-	public static final Random rand = new Random();
 
 	public static InputStream getResourceStreamAbsolutePath(Class clazz, String resourcePath) {
 		try {

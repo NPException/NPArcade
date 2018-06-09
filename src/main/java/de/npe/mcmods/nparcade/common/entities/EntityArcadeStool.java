@@ -12,7 +12,7 @@ import net.minecraft.world.World;
  */
 public class EntityArcadeStool extends Entity {
 
-	private int validityCheckTicks = 10;
+	private int validityCheckTicks = 20;
 	private CoordSet tileCoords;
 
 	// Accessed via Reflection by FML
@@ -40,7 +40,7 @@ public class EntityArcadeStool extends Entity {
 		if (!worldObj.isRemote) {
 			validityCheckTicks--;
 			if (validityCheckTicks <= 0) {
-				validityCheckTicks = 10;
+				validityCheckTicks = 20;
 
 				// check if stool tile is there. Set dead if not.
 				if (riddenByEntity == null || tileCoords == null || !(tileCoords.getTileEntity(worldObj) instanceof TileArcadeStool)) {

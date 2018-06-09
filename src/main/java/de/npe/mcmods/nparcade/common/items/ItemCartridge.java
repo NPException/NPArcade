@@ -10,7 +10,6 @@ import de.npe.mcmods.nparcade.arcade.DummyGames;
 import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import de.npe.mcmods.nparcade.common.util.Localize;
-import de.npe.mcmods.nparcade.common.util.Util;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by NPException (2015)
@@ -45,9 +45,9 @@ public class ItemCartridge extends Item implements IGameCartridge {
 			return stack;
 		}
 
-		if (Util.rand.nextFloat() <= 0.05F && ArcadeGameRegistry.isEmptyGame(getGameID(stack))) {
+		if (ThreadLocalRandom.current().nextFloat() <= 0.05F && ArcadeGameRegistry.isEmptyGame(getGameID(stack))) {
 			String[] gameIDArray = ArcadeGameRegistry.gameIDs().toArray(new String[0]);
-			String chosenID = gameIDArray[Util.rand.nextInt(gameIDArray.length)];
+			String chosenID = gameIDArray[ThreadLocalRandom.current().nextInt(gameIDArray.length)];
 
 			ItemStack newStack = createItemStack(chosenID, 1);
 			if (player.inventory.addItemStackToInventory(newStack)) {
