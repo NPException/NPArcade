@@ -1,13 +1,19 @@
 package de.npe.mcmods.nparcade.arcade;
 
-import de.npe.api.nparcade.IArcadeGame;
+import static de.npe.mcmods.nparcade.common.lib.Strings.JSON_GAME_INFO_CARTRIDGE_COLOR;
+import static de.npe.mcmods.nparcade.common.lib.Strings.JSON_GAME_INFO_CLASS;
+import static de.npe.mcmods.nparcade.common.lib.Strings.JSON_GAME_INFO_DESCRIPTION;
+import static de.npe.mcmods.nparcade.common.lib.Strings.JSON_GAME_INFO_ID;
+import static de.npe.mcmods.nparcade.common.lib.Strings.JSON_GAME_INFO_LABEL;
+import static de.npe.mcmods.nparcade.common.lib.Strings.JSON_GAME_INFO_TITLE;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.Map;
 
-import static de.npe.mcmods.nparcade.common.lib.Strings.*;
+import javax.imageio.ImageIO;
+
+import de.npe.api.nparcade.IArcadeGame;
 
 /**
  * Created by NPException (2015)
@@ -25,43 +31,51 @@ class GameInfo {
 	 * During the constructor call, the data map gets evaluated and an {@link IllegalArgumentException} is
 	 * thrown, should the provided data be incomplete or not usable.
 	 *
-	 * @param data        the data to load the game. It was read from the game.info JSON file.
-	 * @param classLoader the ClassLoader that should be used to load the game class
-	 * @throws IllegalArgumentException
+	 * @param data
+	 * 		the data to load the game. It was read from the game.info JSON file.
+	 * @param classLoader
+	 * 		the ClassLoader that should be used to load the game class
+	 * @throws IllegalStateException
+	 * 		if the game could not be loaded properly
 	 */
-	GameInfo(Map<String, String> data, ClassLoader classLoader) throws Exception {
+	GameInfo(Map<String, String> data, ClassLoader classLoader) throws IllegalStateException {
 		// VALIDATE GAME ID
 		id = data.get(JSON_GAME_INFO_ID);
-		if (id == null)
-			throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_ID + "' is missing!");
+       if (id == null) {
+           throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_ID + "' is missing!");
+       }
 
 		// VALIDATE GAME TITLE
 		title = data.get(JSON_GAME_INFO_TITLE);
-		if (title == null)
-			throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_TITLE + "' is missing!");
+       if (title == null) {
+           throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_TITLE + "' is missing!");
+       }
 
 		String tmpDescription = data.get(JSON_GAME_INFO_DESCRIPTION);
 		description = tmpDescription == null || tmpDescription.trim().isEmpty() ? null : tmpDescription.trim();
 
 		// VALIDATE GAME CLASS
 		String className = data.get(JSON_GAME_INFO_CLASS);
-		if (className == null)
-			throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' is missing!");
+       if (className == null) {
+           throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' is missing!");
+       }
 
+		Class<?> classCandidate;
 		try {
-			gameClass = (Class<? extends IArcadeGame>) classLoader.loadClass(className);
+			classCandidate = classLoader.loadClass(className);
 		} catch (ClassNotFoundException cnfe) {
-			throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' -> Class not found: " + className);
+			throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' -> Class not found: " + className);
 		} catch (Exception ex) {
-			throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' -> Class could not be loaded: " + className);
+			throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' -> Class could not be loaded: " + className);
 		}
 
-		boolean isArcadeGame = false;
-		for (Class<?> iface : gameClass.getInterfaces()) {
-			isArcadeGame |= iface == IArcadeGame.class;
+		if (!IArcadeGame.class.isAssignableFrom(classCandidate)) {
+			throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' -> Class not found!");
 		}
-		if (!isArcadeGame)
-			throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' -> Class not found!");
+
+		// generics are fine now.
+		//noinspection unchecked
+		gameClass = (Class<? extends IArcadeGame>) classCandidate;
 
 		// VALIDATE GAME LABEL
 		String labelResourcePath = data.get(JSON_GAME_INFO_LABEL);
@@ -72,10 +86,11 @@ class GameInfo {
 				InputStream in = gameClass.getResourceAsStream(labelResourcePath.trim());
 				label = in != null ? ImageIO.read(in) : null;
 			} catch (Exception ex) {
-				throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_LABEL + "' -> could not load label image!" + labelResourcePath);
+				throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_LABEL + "' -> could not load label image!" + labelResourcePath);
 			}
-			if (label == null)
-				throw new IllegalArgumentException("game.info attribute '" + JSON_GAME_INFO_LABEL + "' -> could not find label image: " + labelResourcePath);
+          if (label == null) {
+              throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_LABEL + "' -> could not find label image: " + labelResourcePath);
+          }
 		}
 
 		// VALIDATE CARTIDGE COLOR

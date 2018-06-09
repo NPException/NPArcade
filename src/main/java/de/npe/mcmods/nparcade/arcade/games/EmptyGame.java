@@ -1,17 +1,20 @@
 package de.npe.mcmods.nparcade.arcade.games;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.util.concurrent.ThreadLocalRandom;
+
+import javax.imageio.ImageIO;
+
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Size;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import de.npe.mcmods.nparcade.common.util.Util;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.concurrent.ThreadLocalRandom;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Created by NPException (2015)
@@ -22,8 +25,9 @@ public class EmptyGame implements IArcadeGame {
 	private static BufferedImage[] screens;
 
 	public static void init() {
-		if (initialized)
+		if (initialized) {
 			return;
+		}
 		initialized = true;
 
 		screens = new BufferedImage[2];
@@ -48,7 +52,8 @@ public class EmptyGame implements IArcadeGame {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void unload(IArcadeMachine arcadeMachine) {}
+	public void unload(IArcadeMachine arcadeMachine) {
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -81,9 +86,9 @@ public class EmptyGame implements IArcadeGame {
 		if (screens == null) {
 			Graphics2D g = screen.createGraphics();
 			g.setColor(Color.BLACK);
-			g.drawRect(0,0,screenSize.width, screenSize.height);
+			g.drawRect(0, 0, screenSize.width, screenSize.height);
 		} else {
-			screen.createGraphics().drawImage(screens[screenToDraw],0,0,null);
+			screen.createGraphics().drawImage(screens[screenToDraw], 0, 0, null);
 		}
 	}
 }

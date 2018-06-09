@@ -1,14 +1,16 @@
 package de.npe.mcmods.nparcade.common.items;
 
-import com.google.common.collect.Lists;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import de.npe.mcmods.nparcade.common.util.ClientUtil;
-import de.npe.mcmods.nparcade.common.util.Localize;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import com.google.common.collect.Lists;
+
+import de.npe.mcmods.nparcade.common.util.ClientUtil;
+import de.npe.mcmods.nparcade.common.util.Localize;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Credit goes to Jezza. I ripped this shamelessly out of OmnisCore.
@@ -16,14 +18,15 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class ItemTooltip {
 
-	private ArrayList<String> infoList = new ArrayList<String>();
-	private ArrayList<String> shiftList = new ArrayList<String>();
+	private ArrayList<String> infoList = new ArrayList<>();
+	private ArrayList<String> shiftList = new ArrayList<>();
 
 	public void populateList(List<String> list) {
-		if (!shiftList.isEmpty() && ClientUtil.hasPressedShift())
+		if (!shiftList.isEmpty() && ClientUtil.hasPressedShift()) {
 			list.addAll(shiftList);
-		else
+		} else {
 			list.addAll(infoList);
+		}
 	}
 
 	public void addDefaultShiftInfo() {

@@ -1,17 +1,5 @@
 package de.npe.mcmods.nparcade.arcade;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import de.npe.api.nparcade.IArcadeGame;
-import de.npe.mcmods.nparcade.NPArcade;
-import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
-import de.npe.mcmods.nparcade.common.ModItems;
-import de.npe.mcmods.nparcade.common.lib.Strings;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileFilter;
@@ -20,9 +8,29 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import de.npe.api.nparcade.IArcadeGame;
+import de.npe.mcmods.nparcade.NPArcade;
+import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
+import de.npe.mcmods.nparcade.common.ModItems;
+import de.npe.mcmods.nparcade.common.lib.Strings;
+
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
  * This class is used to register arcade games, so that there is an easy way to access
@@ -46,8 +54,9 @@ public class ArcadeGameRegistry {
 	 * Initializes the ArcadeGameRegistry
 	 */
 	public static synchronized void init() {
-		if (isInitialized)
+		if (isInitialized) {
 			return;
+		}
 		isInitialized = true;
 
 		// create arcade games subfolder if not already existing
@@ -128,13 +137,18 @@ public class ArcadeGameRegistry {
 	/**
 	 * Registers a new game.
 	 *
-	 * @param gameClass       the Class of the game. (Must have a public no-args constructor)
-	 * @param id              the ID of the game. (Must NOT be null)
-	 * @param title           the human readable title for the game. (Must NOT be null)
-	 * @param customCartridge a custom cartridge that the game should use. If null, the default cartridge will be used.
-	 *                        If set, this must be an instance of {@link Item}.
-	 * @throws IllegalArgumentException if one of the parameters does not meet the requirements,
-	 *                                  or a game with the same ID was already registered.
+	 * @param gameClass
+	 * 		the Class of the game. (Must have a public no-args constructor)
+	 * @param id
+	 * 		the ID of the game. (Must NOT be null)
+	 * @param title
+	 * 		the human readable title for the game. (Must NOT be null)
+	 * @param customCartridge
+	 * 		a custom cartridge that the game should use. If null, the default cartridge will be used.
+	 * 		If set, this must be an instance of {@link Item}.
+	 * @throws IllegalArgumentException
+	 * 		if one of the parameters does not meet the requirements,
+	 * 		or a game with the same ID was already registered.
 	 */
 	public static void register(Class<? extends IArcadeGame> gameClass, String id, String title, IGameCartridge customCartridge) throws IllegalArgumentException {
 		register(gameClass, id, title, null, null, null, customCartridge);
@@ -143,13 +157,19 @@ public class ArcadeGameRegistry {
 	/**
 	 * Registers a new game.
 	 *
-	 * @param gameClass   the Class of the game. (Must have a public no-args constructor)
-	 * @param id          the ID of the game. (Must NOT be null)
-	 * @param title       the human readable title for the game. (Must NOT be null)
-	 * @param label       a label for the game cartridge. (Can be null)
-	 * @param colorString the custom color of the cartridge as a 3 byte hexadecimal String. (Can be null)
-	 * @throws IllegalArgumentException if one of the parameters does not meet the requirements,
-	 *                                  or a game with the same ID was already registered.
+	 * @param gameClass
+	 * 		the Class of the game. (Must have a public no-args constructor)
+	 * @param id
+	 * 		the ID of the game. (Must NOT be null)
+	 * @param title
+	 * 		the human readable title for the game. (Must NOT be null)
+	 * @param label
+	 * 		a label for the game cartridge. (Can be null)
+	 * @param colorString
+	 * 		the custom color of the cartridge as a 3 byte hexadecimal String. (Can be null)
+	 * @throws IllegalArgumentException
+	 * 		if one of the parameters does not meet the requirements,
+	 * 		or a game with the same ID was already registered.
 	 */
 	public static void register(Class<? extends IArcadeGame> gameClass, String id, String title, String description, BufferedImage label, String colorString) throws IllegalArgumentException {
 		register(gameClass, id, title, description, label, colorString, null);
@@ -157,6 +177,7 @@ public class ArcadeGameRegistry {
 
 	private static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String title, String description, BufferedImage label, String colorString, IGameCartridge customCartridge) throws IllegalArgumentException {
 		String gameToString = " Game -> ID:" + id + ", Title:" + title + ", Class:" + gameClass.getCanonicalName() + ", Label:" + (label != null) + ", Color:" + colorString + ", Custom_Cartridge:" + customCartridge;
+
 		if (id == null) {
 			throw new IllegalArgumentException("ID must not be null!" + gameToString);
 		}
@@ -236,9 +257,7 @@ public class ArcadeGameRegistry {
 	 * May return null if no cartridge was registerd for the given item.
 	 */
 	public static IGameCartridge cartridgeForItem(Item item) {
-		return item == ModItems.cartridge
-			? ModItems.cartridge
-			: customCartridges.get(item);
+		return item == ModItems.cartridge ? ModItems.cartridge : customCartridges.get(item);
 	}
 
 	/**

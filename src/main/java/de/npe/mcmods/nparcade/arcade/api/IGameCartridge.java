@@ -15,7 +15,7 @@ import net.minecraft.item.ItemStack;
  *       return this;
  *    }
  * </pre>
- *
+ * <p>
  * Created by NPException (2015)
  */
 public interface IGameCartridge {
@@ -34,7 +34,8 @@ public interface IGameCartridge {
 	 * The ItemStack will hold the Item that was determined by a call to {@link #getCartridgeItem()}
 	 * upon registration of the game.
 	 *
-	 * @param stack the ItemStack that the gameID should be read from.
+	 * @param stack
+	 * 		the ItemStack that the gameID should be read from.
 	 */
 	String getGameID(ItemStack stack);
 
@@ -44,9 +45,11 @@ public interface IGameCartridge {
 	 * The ItemStack will hold the Item that was determined by a call to {@link #getCartridgeItem()}
 	 * upon registration of the game.
 	 *
-	 * @param stack  the ItemStack that the gameID should be set to.
-	 * @param gameID the gameID that should be set. If this is NULL,
-	 *               a possibly existing gameID should be removed from the ItemStack.
+	 * @param stack
+	 * 		the ItemStack that the gameID should be set to.
+	 * @param gameID
+	 * 		the gameID that should be set. If this is NULL,
+	 * 		a possibly existing gameID should be removed from the ItemStack.
 	 */
 	void setGameID(ItemStack stack, String gameID);
 }

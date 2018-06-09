@@ -1,8 +1,8 @@
 package de.npe.api.nparcade;
 
-import de.npe.api.nparcade.util.Size;
-
 import java.awt.image.BufferedImage;
+
+import de.npe.api.nparcade.util.Size;
 
 /**
  * <p>This interface has to be implemented by every game that should work with NPArcade.</p>
@@ -73,8 +73,9 @@ public interface IArcadeGame {
 	 * The BufferedImage is of type {@link BufferedImage#TYPE_INT_ARGB} and guaranteed to have the size
 	 * that was returned by the last call to {@link #screenSize()}.
 	 *
-	 * @param partialTick the partial time that has passed since the last game tick.
-	 *                    Usually between 0 and 1, but can grow larger than 1 if the game tick is lagging behind.
+	 * @param partialTick
+	 * 		the partial time that has passed since the last game tick.
+	 * 		Usually between 0 and 1, but can grow larger than 1 if the game tick is lagging behind.
 	 */
 	void draw(BufferedImage screen, float partialTick);
 }
