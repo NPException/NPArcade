@@ -1,12 +1,13 @@
 package de.npe.mcmods.nparcade.common;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
 import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.common.entities.EntityArcadeStool;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeStool;
+
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 /**
  * Created by NPException (2015)

@@ -1,10 +1,10 @@
 package de.npe.mcmods.nparcade.common.util;
 
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 
 /**
  * Credit goes to Jezza. I ripped this shamelessly out of OmnisCore.
@@ -52,9 +52,11 @@ public class Localize {
 
 	public static String translate(String key, boolean formatting) {
 		String result = StatCollector.translateToLocal(key);
-		if (formatting)
-			for (EnumChatFormatting format : EnumChatFormatting.values())
+		if (formatting) {
+			for (EnumChatFormatting format : EnumChatFormatting.values()) {
 				result = result.replace("" + FORMATTING_CHAR + format.getFormattingCode(), format.toString());
+			}
+		}
 		return result;
 	}
 
@@ -64,9 +66,11 @@ public class Localize {
 
 	public static String format(String key, Object... params) {
 		String result = translate(key);
-		if (params != null && params.length >= 0)
-			for (Object param : params)
+		if (params != null && params.length >= 0) {
+			for (Object param : params) {
 				result = result.replaceFirst("\\{\\}", String.valueOf(param));
+			}
+		}
 		return result;
 	}
 

@@ -1,10 +1,15 @@
 package de.npe.mcmods.nparcade.client.render;
 
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glNormal3f;
+import static org.lwjgl.opengl.GL11.glTexCoord2f;
+import static org.lwjgl.opengl.GL11.glVertex2f;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.OpenGlHelper;
-
-import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Created by NPException (2015)
@@ -26,9 +31,15 @@ public final class Helper {
 	}
 
 	public enum Alignment {
-		UL, U, UR,
-		L, M, R,
-		DL, D, DR;
+		UL,
+		U,
+		UR,
+		L,
+		M,
+		R,
+		DL,
+		D,
+		DR;
 
 		private static Alignment[] horizontal = {L, M, R, L, M, R, L, M, R};
 		private static Alignment[] vertical = {U, U, U, M, M, M, D, D, D};
@@ -70,7 +81,7 @@ public final class Helper {
 
 		glBegin(GL_TRIANGLES);
 
-		glNormal3f(0,0,-1);
+		glNormal3f(0, 0, -1);
 		glTexCoord2f(u2, v1); // top right
 		glVertex2f(x + boundsWidth, y);
 		glTexCoord2f(u1, v1); // top left

@@ -1,8 +1,11 @@
 package de.npe.mcmods.nparcade.common.tileentities;
 
+import java.util.concurrent.ThreadLocalRandom;
+
 import de.npe.mcmods.nparcade.common.entities.EntityArcadeStool;
 import de.npe.mcmods.nparcade.common.util.CoordSet;
 import de.npe.mcmods.nparcade.common.util.Util;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,8 +15,6 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by NPException (2015)

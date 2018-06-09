@@ -1,13 +1,17 @@
 package de.npe.mcmods.nparcade.client.render;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glRotatef;
+import static org.lwjgl.opengl.GL11.glTranslatef;
+
 import de.npe.mcmods.nparcade.client.render.models.ModelArcadeCabinet;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-
-import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Created by NPException (2015)

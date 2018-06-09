@@ -1,19 +1,21 @@
 package de.npe.mcmods.nparcade;
 
+import org.apache.logging.log4j.Logger;
+
+import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
+import de.npe.mcmods.nparcade.common.CommonProxy;
+import de.npe.mcmods.nparcade.common.ModBlocks;
+import de.npe.mcmods.nparcade.common.ModItems;
+import de.npe.mcmods.nparcade.common.lib.Reference;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
-import de.npe.mcmods.nparcade.common.CommonProxy;
-import de.npe.mcmods.nparcade.common.ModBlocks;
-import de.npe.mcmods.nparcade.common.ModItems;
-import de.npe.mcmods.nparcade.common.lib.Reference;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import org.apache.logging.log4j.Logger;
 
 @Mod(modid = Reference.MOD_ID,
 		name = Reference.MOD_NAME,

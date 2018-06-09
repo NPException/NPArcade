@@ -1,17 +1,19 @@
 package de.npe.mcmods.nparcade.arcade;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.awt.image.BufferedImage;
+import java.lang.reflect.Constructor;
+
+import org.lwjgl.opengl.GL11;
+
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.util.Size;
 import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
 import de.npe.mcmods.nparcade.common.ModItems;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.item.Item;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.image.BufferedImage;
-import java.lang.reflect.Constructor;
 
 /**
  * This class holds information about the game, and (if on the client side)

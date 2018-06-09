@@ -2,6 +2,7 @@ package de.npe.mcmods.nparcade.common;
 
 import de.npe.mcmods.nparcade.common.items.ItemCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;

@@ -1,8 +1,12 @@
 package de.npe.mcmods.nparcade.arcade.sound;
 
+import java.lang.reflect.Field;
+import java.net.URL;
+
+import de.npe.mcmods.nparcade.NPArcade;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import de.npe.mcmods.nparcade.NPArcade;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.SoundCategory;
@@ -10,9 +14,6 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.util.MathHelper;
 import paulscode.sound.SoundSystem;
-
-import java.lang.reflect.Field;
-import java.net.URL;
 
 /**
  * Created by NPException (2015)

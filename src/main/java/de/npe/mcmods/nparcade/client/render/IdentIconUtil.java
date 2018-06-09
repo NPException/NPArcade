@@ -1,11 +1,9 @@
 package de.npe.mcmods.nparcade.client.render;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import org.lwjgl.opengl.GL11;
-
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
@@ -13,11 +11,17 @@ import java.awt.image.BufferedImage;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.TextureUtil;
+
 
 @SideOnly(Side.CLIENT)
 class IdentIconUtil {
 	// holds an int[] for each seed string: 0 = texture ID, 1 = size of texture
-	private static final Map<String, int[]> identIconTextureIDs= new HashMap<>(64);
+	private static final Map<String, int[]> identIconTextureIDs = new HashMap<>(64);
 
 	/**
 	 * Generates a texture and returns the texture ID for an identicon based on the given seed.
@@ -26,7 +30,7 @@ class IdentIconUtil {
 		int[] texAndSize = identIconTextureIDs.get(seed);
 
 		if (texAndSize == null) {
-			texAndSize = new int[] {-1, -1};
+			texAndSize = new int[]{-1, -1};
 			identIconTextureIDs.put(seed, texAndSize);
 		}
 
@@ -55,7 +59,7 @@ class IdentIconUtil {
 
 	/**
 	 * This is implementaion for an Identicon renderer based on PauloMigAlmeida's IdenticonRenderer
-	 *
+	 * <p>
 	 * 9-block Identicon renderer.
 	 *
 	 * <p>
@@ -64,11 +68,11 @@ class IdentIconUtil {
 	 */
 	private static class IdentIconRenderer {
 
-	/*
-	 * Each patch is a polygon created from a list of vertices on a 5 by 5 grid.
-	 * Vertices are numbered from 0 to 24, starting from top-left corner of the
-	 * grid, moving left to right and top to bottom.
-	 */
+		/*
+		 * Each patch is a polygon created from a list of vertices on a 5 by 5 grid.
+		 * Vertices are numbered from 0 to 24, starting from top-left corner of the
+		 * grid, moving left to right and top to bottom.
+		 */
 
 		private static final int PATCH_GRIDS = 5;
 		private static final float DEFAULT_PATCH_SIZE = 20.0f;
@@ -117,7 +121,8 @@ class IdentIconUtil {
 		 * which means, for 9-block identicon, a 60x60 image will be rendered and
 		 * scaled down.
 		 *
-		 * @param size patch size in pixels
+		 * @param size
+		 * 		patch size in pixels
 		 */
 		private static void setPatchSize(float size) {
 			patchSize = size;
@@ -131,8 +136,9 @@ class IdentIconUtil {
 				byte[] patchVertices = patchTypes[i];
 				for (byte patchVertice : patchVertices) {
 					int v = (int) patchVertice;
-					if (v == PATCH_MOVETO)
+					if (v == PATCH_MOVETO) {
 						moveTo = true;
+					}
 					float vx = ((v % PATCH_GRIDS) * patchScale) - patchOffset;
 					float vy = ((float) Math.floor(((float) v) / PATCH_GRIDS))
 							* patchScale - patchOffset;
@@ -157,8 +163,10 @@ class IdentIconUtil {
 		 * width and height will be 3 times the patch size.
 		 * </p>
 		 *
-		 * @param code identicon code
-		 * @param size image size
+		 * @param code
+		 * 		identicon code
+		 * @param size
+		 * 		image size
 		 * @return identicon image
 		 */
 		public static BufferedImage render(int code, int size) {
@@ -198,8 +206,9 @@ class IdentIconUtil {
 			// shape color and background color are too similar (measured by color
 			// distance).
 			Color strokeColor = null;
-			if (getColorDistance(fillColor, backgroundColor) < 32.0f)
+			if (getColorDistance(fillColor, backgroundColor) < 32.0f) {
 				strokeColor = getComplementaryColor(fillColor);
+			}
 
 			// -------------------------------------------------
 			// RENDER
@@ -248,14 +257,15 @@ class IdentIconUtil {
 		}
 
 		private static void drawPatch(Graphics2D g, float x, float y, float size,
-									  int patch, int turn, boolean invert, Color fillColor,
-									  Color strokeColor) {
+												int patch, int turn, boolean invert, Color fillColor,
+												Color strokeColor) {
 			assert patch >= 0;
 			assert turn >= 0;
 			patch %= patchTypes.length;
 			turn %= 4;
-			if ((patchFlags[patch] & PATCH_INVERTED) != 0)
+			if ((patchFlags[patch] & PATCH_INVERTED) != 0) {
 				invert = !invert;
+			}
 
 			Shape shape = patchShapes[patch];
 			double scale = ((double) size) / ((double) patchSize);

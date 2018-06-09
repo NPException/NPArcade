@@ -1,11 +1,14 @@
 package de.npe.mcmods.nparcade.common.blocks;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+
 import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.common.lib.Reference;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -18,8 +21,6 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.ArrayList;
 
 /**
  * Created by NPException (2015)
@@ -41,8 +42,9 @@ public class BlockArcadeCabinet extends Block implements ITileEntityProvider {
 
 	@Override
 	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side) {
-		if (side == ForgeDirection.DOWN)
+		if (side == ForgeDirection.DOWN) {
 			return true;
+		}
 		TileEntity te = world.getTileEntity(x, y, z);
 		return (te instanceof TileArcadeCabinet) && side == ((TileArcadeCabinet) te).facing().getOpposite();
 	}

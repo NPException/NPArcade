@@ -1,7 +1,13 @@
 package de.npe.mcmods.nparcade.arcade;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBindTexture;
+
+import java.awt.image.BufferedImage;
+import java.net.URL;
+
+import org.lwjgl.input.Keyboard;
+
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Controls;
@@ -11,14 +17,11 @@ import de.npe.mcmods.nparcade.arcade.sound.ArcadeSoundManager;
 import de.npe.mcmods.nparcade.client.ClientProxy;
 import de.npe.mcmods.nparcade.client.render.Helper;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import org.lwjgl.input.Keyboard;
-
-import java.awt.image.BufferedImage;
-import java.net.URL;
-
-import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Created by NPException (2015)
@@ -199,7 +202,8 @@ public class ArcadeMachine implements IArcadeMachine {
 	 * The games output is then drawn to the internal BufferedImage,
 	 * and it's pixel data uploaded to the graphics card.
 	 *
-	 * @param tick the partial tick since the last update
+	 * @param tick
+	 * 		the partial tick since the last update
 	 */
 	private void prepareRender(float tick) {
 		if (needsScreenRefresh()) {

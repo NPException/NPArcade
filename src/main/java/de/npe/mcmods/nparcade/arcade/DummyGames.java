@@ -1,13 +1,14 @@
 package de.npe.mcmods.nparcade.arcade;
 
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
+
+import javax.imageio.ImageIO;
+
 import de.npe.mcmods.nparcade.arcade.games.EmptyGame;
 import de.npe.mcmods.nparcade.arcade.games.UnknownGame;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import de.npe.mcmods.nparcade.common.util.Util;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.InputStream;
 
 /**
  * Created by NPException (2015)

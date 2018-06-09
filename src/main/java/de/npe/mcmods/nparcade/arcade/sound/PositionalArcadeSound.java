@@ -1,8 +1,8 @@
 package de.npe.mcmods.nparcade.arcade.sound;
 
-import de.npe.api.nparcade.util.IArcadeSound;
-
 import java.util.UUID;
+
+import de.npe.api.nparcade.util.IArcadeSound;
 
 /**
  * Created by NPException (2015)
@@ -25,8 +25,9 @@ public class PositionalArcadeSound implements IArcadeSound {
 
 	@Override
 	public void play(float volume, float pitch, boolean loop) {
-		if (!invalid)
+		if (!invalid) {
 			sndResource.playAt(id, x, y, z, volume, pitch, loop);
+		}
 	}
 
 	@Override
@@ -36,20 +37,23 @@ public class PositionalArcadeSound implements IArcadeSound {
 
 	@Override
 	public void stop() {
-		if (!invalid)
+		if (!invalid) {
 			sndResource.stop(id);
+		}
 	}
 
 	@Override
 	public void pause() {
-		if (!invalid)
+		if (!invalid) {
 			sndResource.pause(id);
+		}
 	}
 
 	@Override
 	public void resume() {
-		if (!invalid)
+		if (!invalid) {
 			sndResource.resume(id);
+		}
 	}
 
 	public void remove() {

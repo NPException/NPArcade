@@ -41,24 +41,24 @@ class GameInfo {
 	GameInfo(Map<String, String> data, ClassLoader classLoader) throws IllegalStateException {
 		// VALIDATE GAME ID
 		id = data.get(JSON_GAME_INFO_ID);
-       if (id == null) {
-           throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_ID + "' is missing!");
-       }
+		if (id == null) {
+			throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_ID + "' is missing!");
+		}
 
 		// VALIDATE GAME TITLE
 		title = data.get(JSON_GAME_INFO_TITLE);
-       if (title == null) {
-           throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_TITLE + "' is missing!");
-       }
+		if (title == null) {
+			throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_TITLE + "' is missing!");
+		}
 
 		String tmpDescription = data.get(JSON_GAME_INFO_DESCRIPTION);
 		description = tmpDescription == null || tmpDescription.trim().isEmpty() ? null : tmpDescription.trim();
 
 		// VALIDATE GAME CLASS
 		String className = data.get(JSON_GAME_INFO_CLASS);
-       if (className == null) {
-           throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' is missing!");
-       }
+		if (className == null) {
+			throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_CLASS + "' is missing!");
+		}
 
 		Class<?> classCandidate;
 		try {
@@ -88,9 +88,9 @@ class GameInfo {
 			} catch (Exception ex) {
 				throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_LABEL + "' -> could not load label image!" + labelResourcePath);
 			}
-          if (label == null) {
-              throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_LABEL + "' -> could not find label image: " + labelResourcePath);
-          }
+			if (label == null) {
+				throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_LABEL + "' -> could not find label image: " + labelResourcePath);
+			}
 		}
 
 		// VALIDATE CARTIDGE COLOR

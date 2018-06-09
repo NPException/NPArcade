@@ -1,7 +1,10 @@
 package de.npe.mcmods.nparcade.common.util;
 
+import java.io.InputStream;
+
 import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.common.lib.Reference;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -9,8 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.io.InputStream;
 
 /**
  * Created by NPException (2015)

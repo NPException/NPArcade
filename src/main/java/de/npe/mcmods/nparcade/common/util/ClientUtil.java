@@ -1,9 +1,10 @@
 package de.npe.mcmods.nparcade.common.util;
 
+import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Keyboard;
 
 /**
  * Credit goes to Jezza. I ripped this shamelessly out of OmnisCore.

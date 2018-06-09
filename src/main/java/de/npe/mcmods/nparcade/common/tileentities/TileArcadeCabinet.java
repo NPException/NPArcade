@@ -1,7 +1,9 @@
 package de.npe.mcmods.nparcade.common.tileentities;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.arcade.ArcadeMachine;
 import de.npe.mcmods.nparcade.arcade.DummyGames;
@@ -9,6 +11,9 @@ import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
 import de.npe.mcmods.nparcade.common.ModBlocks;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import de.npe.mcmods.nparcade.common.util.Util;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,10 +24,6 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by NPException (2015)
@@ -132,8 +133,9 @@ public class TileArcadeCabinet extends TileEntity {
 	}
 
 	public ItemStack generateCurrentGameCartridge() {
-		if (gameID == null)
+		if (gameID == null) {
 			return null;
+		}
 
 		IGameCartridge cartridge = ArcadeGameRegistry.gameForID(gameID).cartridge();
 		ItemStack cartridgeItem = new ItemStack(cartridge.getCartridgeItem());

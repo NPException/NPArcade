@@ -1,14 +1,17 @@
 package com.example.arcadegame;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.util.Random;
+
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Controls;
 import de.npe.api.nparcade.util.IArcadeSound;
 import de.npe.api.nparcade.util.Size;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.Random;
 
 /**
  * Created by NPException (2015)
@@ -82,7 +85,7 @@ public class ExampleGame implements IArcadeGame {
 		if (change) {
 			float h = rand.nextFloat();
 			background = Color.getHSBColor(h, bgS, bgB);
-			bounceSound.play(1F,1F,false);
+			bounceSound.play(1F, 1F, false);
 		}
 
 		int keyColor = 0;
@@ -127,6 +130,6 @@ public class ExampleGame implements IArcadeGame {
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 		g.setStroke(new BasicStroke(2));
-		g.fillOval((int) (x+dx*partialTick) - 10, (int) (y+dy*partialTick) - 10, 21, 21);
+		g.fillOval((int) (x + dx * partialTick) - 10, (int) (y + dy * partialTick) - 10, 21, 21);
 	}
 }
