@@ -5,9 +5,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Size;
-import de.npe.mcmods.nparcade.common.util.Util;
 
 import java.awt.image.BufferedImage;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by NPException (2015)
@@ -25,13 +25,15 @@ public class UnknownGame implements IArcadeGame {
 		Size amSize = arcadeMachine.suggestedScreenSize();
 		screenSize = new Size(amSize.width/10, amSize.height/10);
 
+		// generate 10 frames of static noise
+		ThreadLocalRandom random = ThreadLocalRandom.current();
 		pixels = new int[10][];
 		for (int pixelsIndex = 0; pixelsIndex< pixels.length; pixelsIndex++) {
 			int[] pixelArray = pixels[pixelsIndex] = new int[screenSize.height*screenSize.width];
 			int p = 0;
 			for (int y = 0; y < screenSize.height; y++) {
 				for (int x = 0; x < screenSize.width; x++) {
-					int brightness = Util.rand.nextInt(256);
+					int brightness = random.nextInt(256);
 					int rgb = 255 << 24 | brightness << 16 | brightness << 8 | brightness;
 					pixelArray[p++] = rgb;
 				}

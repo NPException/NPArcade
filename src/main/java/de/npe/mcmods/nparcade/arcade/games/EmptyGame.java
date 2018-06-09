@@ -11,6 +11,7 @@ import de.npe.mcmods.nparcade.common.util.Util;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by NPException (2015)
@@ -55,7 +56,7 @@ public class EmptyGame implements IArcadeGame {
 		if (screenToDraw == 1) {
 			screenToDraw = 0;
 			needsDraw = true;
-		} else if (Util.rand.nextFloat() < 0.05F) {
+		} else if (ThreadLocalRandom.current().nextFloat() < 0.05F) {
 			screenToDraw = 1;
 			needsDraw = true;
 		}
