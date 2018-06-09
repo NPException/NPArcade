@@ -1,5 +1,7 @@
 nparcade=NP Arcade
 
+info.tooltip.default.shift=$8Press $7Shift $8for more info.
+
 # Creative Tab
 itemGroup.nparcade=NP Arcade
 
