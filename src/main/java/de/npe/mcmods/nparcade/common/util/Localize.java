@@ -90,49 +90,35 @@ public class Localize {
 
 	public static List<String> wrapToSize(String text, int size, boolean ignoreNewlines) {
 		List<String> lines = new ArrayList<>();
-		StringBuilder sb;
-		String[] words;
-		String space;
-
 		if (ignoreNewlines) {
 			text = text.replaceAll(System.lineSeparator(), " ");
 			text = text.replaceAll("\\\\n", " ");
-
-			words = text.split(" ");
-			sb = new StringBuilder();
-			space = "";
-			for (String word : words) {
-				if (sb.length() + space.length() + word.length() > size) {
-					lines.add(sb.toString());
-					sb = new StringBuilder();
-					space = "";
-				}
-				sb.append(space).append(word);
-				space = " ";
-			}
-			lines.add(sb.toString());
+			splitUp(text, size, lines);
 		} else {
 			for (String part : text.split("\\\\n")) {
 				if (part.length() <= size) {
 					lines.add(part);
 				} else {
-					words = part.split(" ");
-					sb = new StringBuilder();
-					space = "";
-					for (String word : words) {
-						if (sb.length() + space.length() + word.length() > size) {
-							lines.add(sb.toString());
-							sb = new StringBuilder();
-							space = "";
-						}
-						sb.append(space).append(word);
-						space = " ";
-					}
-					lines.add(sb.toString());
+					splitUp(part, size, lines);
 				}
 			}
 		}
 		return lines;
 	}
 
+	private static void splitUp(String text, int size, List<String> lines) {
+		StringBuilder sb = new StringBuilder();
+		String[] words = text.split(" ");
+		String space = "";
+		for (String word : words) {
+			if (sb.length() + space.length() + word.length() > size) {
+				lines.add(sb.toString());
+				sb.setLength(0);
+				space = "";
+			}
+			sb.append(space).append(word);
+			space = " ";
+		}
+		lines.add(sb.toString());
+	}
 }
