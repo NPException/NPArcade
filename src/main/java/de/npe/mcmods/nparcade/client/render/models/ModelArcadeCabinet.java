@@ -31,119 +31,106 @@ public class ModelArcadeCabinet extends ModelBase {
 	public static final ModelArcadeCabinet instance = new ModelArcadeCabinet();
 	public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_IDENTIFIER + "textures/models/nparcade_modelArcadeCabinet.png");
 
-	public ModelRenderer base;
-	public ModelRenderer stick;
-	public ModelRenderer buttonRed;
-	public ModelRenderer buttonGreen;
-	public ModelRenderer buttonBlue;
-	public ModelRenderer buttonYellow;
-	public ModelRenderer wallLeft1;
-	public ModelRenderer wallRight1;
-	public ModelRenderer backWall;
-	public ModelRenderer screen;
-	public ModelRenderer wallLeft2;
-	public ModelRenderer wallLeft3;
-	public ModelRenderer wallLeft4;
-	public ModelRenderer wallRight2;
-	public ModelRenderer wallRight3;
-	public ModelRenderer wallRight4;
-	public ModelRenderer lightBar;
+	private final ModelRenderer base;
 
-	public ModelArcadeCabinet() {
-		this.textureWidth = 88;
-		this.textureHeight = 57;
+	private ModelArcadeCabinet() {
+		textureWidth = 88;
+		textureHeight = 57;
 
-		this.screen = new ModelRenderer(this, 58, 40);
-		this.screen.setRotationPoint(0.0F, 8.0F, -2.0F);
-		this.screen.addBox(-6.0F, -16.0F, 0.0F, 12, 15, 0, 0.0F);
-		this.setRotateAngle(screen, -0.5F, 0.0F, 0.0F);
+		ModelRenderer screen = new ModelRenderer(this, 58, 40);
+		screen.setRotationPoint(0.0F, 8.0F, -2.0F);
+		screen.addBox(-6.0F, -16.0F, 0.0F, 12, 15, 0, 0.0F);
 
-		this.backWall = new ModelRenderer(this, 0, 18);
-		this.backWall.setRotationPoint(0.0F, 8.0F, 8.0F);
-		this.backWall.addBox(-8.0F, -16.0F, -2.0F, 16, 15, 2, 0.0F);
+		screen.rotateAngleX = (float) -0.5;
+		screen.rotateAngleY = (float) 0.0;
+		screen.rotateAngleZ = (float) 0.0;
 
-		this.lightBar = new ModelRenderer(this, 29, 53);
-		this.lightBar.setRotationPoint(0.0F, -16.0F, -2.0F);
-		this.lightBar.addBox(-6.0F, 0.0F, -2.0F, 12, 2, 2, 0.0F);
+		ModelRenderer backWall = new ModelRenderer(this, 0, 18);
+		backWall.setRotationPoint(0.0F, 8.0F, 8.0F);
+		backWall.addBox(-8.0F, -16.0F, -2.0F, 16, 15, 2, 0.0F);
 
-		this.wallLeft1 = new ModelRenderer(this, 49, 0);
-		this.wallLeft1.setRotationPoint(8.0F, 8.0F, 6.0F);
-		this.wallLeft1.addBox(-2.0F, -4.0F, -10.0F, 2, 3, 10, 0.0F);
-		this.wallLeft2 = new ModelRenderer(this, 50, 18);
-		this.wallLeft2.setRotationPoint(0.0F, -4.0F, 0.0F);
-		this.wallLeft2.addBox(-2.0F, -4.0F, -8.0F, 2, 4, 8, 0.0F);
-		this.wallLeft3 = new ModelRenderer(this, 13, 36);
-		this.wallLeft3.setRotationPoint(0.0F, -4.0F, 0.0F);
-		this.wallLeft3.addBox(-2.0F, -4.0F, -6.0F, 2, 4, 6, 0.0F);
-		this.wallLeft4 = new ModelRenderer(this, 0, 37);
-		this.wallLeft4.setRotationPoint(0.0F, -4.0F, 0.0F);
-		this.wallLeft4.addBox(-2.0F, -4.0F, -4.0F, 2, 4, 4, 0.0F);
+		ModelRenderer lightBar = new ModelRenderer(this, 29, 53);
+		lightBar.setRotationPoint(0.0F, -16.0F, -2.0F);
+		lightBar.addBox(-6.0F, 0.0F, -2.0F, 12, 2, 2, 0.0F);
 
-		this.wallRight1 = new ModelRenderer(this, 64, 8);
-		this.wallRight1.setRotationPoint(-6.0F, 8.0F, 6.0F);
-		this.wallRight1.addBox(-2.0F, -4.0F, -10.0F, 2, 3, 10, 0.0F);
-		this.wallRight2 = new ModelRenderer(this, 37, 23);
-		this.wallRight2.setRotationPoint(0.0F, -4.0F, 0.0F);
-		this.wallRight2.addBox(-2.0F, -4.0F, -8.0F, 2, 4, 8, 0.0F);
-		this.wallRight3 = new ModelRenderer(this, 24, 41);
-		this.wallRight3.setRotationPoint(0.0F, -4.0F, 0.0F);
-		this.wallRight3.addBox(-2.0F, -4.0F, -6.0F, 2, 4, 6, 0.0F);
-		this.wallRight4 = new ModelRenderer(this, 0, 45);
-		this.wallRight4.setRotationPoint(0.0F, -4.0F, 0.0F);
-		this.wallRight4.addBox(-2.0F, -4.0F, -4.0F, 2, 4, 4, 0.0F);
+		ModelRenderer wallLeft1 = new ModelRenderer(this, 49, 0);
+		wallLeft1.setRotationPoint(8.0F, 8.0F, 6.0F);
+		wallLeft1.addBox(-2.0F, -4.0F, -10.0F, 2, 3, 10, 0.0F);
+		ModelRenderer wallLeft2 = new ModelRenderer(this, 50, 18);
+		wallLeft2.setRotationPoint(0.0F, -4.0F, 0.0F);
+		wallLeft2.addBox(-2.0F, -4.0F, -8.0F, 2, 4, 8, 0.0F);
+		ModelRenderer wallLeft3 = new ModelRenderer(this, 13, 36);
+		wallLeft3.setRotationPoint(0.0F, -4.0F, 0.0F);
+		wallLeft3.addBox(-2.0F, -4.0F, -6.0F, 2, 4, 6, 0.0F);
+		ModelRenderer wallLeft4 = new ModelRenderer(this, 0, 37);
+		wallLeft4.setRotationPoint(0.0F, -4.0F, 0.0F);
+		wallLeft4.addBox(-2.0F, -4.0F, -4.0F, 2, 4, 4, 0.0F);
 
-		this.buttonGreen = new ModelRenderer(this, 0, 0);
-		this.buttonGreen.setRotationPoint(0.5F, 7.0F, -4.5F);
-		this.buttonGreen.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
-		this.buttonRed = new ModelRenderer(this, 0, 2);
-		this.buttonRed.setRotationPoint(-0.5F, 7.0F, -5.5F);
-		this.buttonRed.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
-		this.buttonYellow = new ModelRenderer(this, 4, 0);
-		this.buttonYellow.setRotationPoint(3.5F, 7.0F, -4.5F);
-		this.buttonYellow.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
-		this.buttonBlue = new ModelRenderer(this, 4, 2);
-		this.buttonBlue.setRotationPoint(2.5F, 7.0F, -5.5F);
-		this.buttonBlue.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
+		ModelRenderer wallRight1 = new ModelRenderer(this, 64, 8);
+		wallRight1.setRotationPoint(-6.0F, 8.0F, 6.0F);
+		wallRight1.addBox(-2.0F, -4.0F, -10.0F, 2, 3, 10, 0.0F);
+		ModelRenderer wallRight2 = new ModelRenderer(this, 37, 23);
+		wallRight2.setRotationPoint(0.0F, -4.0F, 0.0F);
+		wallRight2.addBox(-2.0F, -4.0F, -8.0F, 2, 4, 8, 0.0F);
+		ModelRenderer wallRight3 = new ModelRenderer(this, 24, 41);
+		wallRight3.setRotationPoint(0.0F, -4.0F, 0.0F);
+		wallRight3.addBox(-2.0F, -4.0F, -6.0F, 2, 4, 6, 0.0F);
+		ModelRenderer wallRight4 = new ModelRenderer(this, 0, 45);
+		wallRight4.setRotationPoint(0.0F, -4.0F, 0.0F);
+		wallRight4.addBox(-2.0F, -4.0F, -4.0F, 2, 4, 4, 0.0F);
 
-		this.stick = new ModelRenderer(this, 0, 7);
-		this.stick.setRotationPoint(-4.5F, 7.0F, -5.5F);
-		this.stick.addBox(-0.5F, -1.5F, -0.5F, 1, 2, 1, 0.0F);
+		ModelRenderer buttonGreen = new ModelRenderer(this, 0, 0);
+		buttonGreen.setRotationPoint(0.5F, 7.0F, -4.5F);
+		buttonGreen.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
+		ModelRenderer buttonRed = new ModelRenderer(this, 0, 2);
+		buttonRed.setRotationPoint(-0.5F, 7.0F, -5.5F);
+		buttonRed.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
+		ModelRenderer buttonYellow = new ModelRenderer(this, 4, 0);
+		buttonYellow.setRotationPoint(3.5F, 7.0F, -4.5F);
+		buttonYellow.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
+		ModelRenderer buttonBlue = new ModelRenderer(this, 4, 2);
+		buttonBlue.setRotationPoint(2.5F, 7.0F, -5.5F);
+		buttonBlue.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
 
-		this.base = new ModelRenderer(this, 0, 0);
-		this.base.setRotationPoint(0.0F, 0.0F, 0.0F);
-		this.base.addBox(-8.0F, 7.0F, -8.0F, 16, 1, 16, 0.0F);
+		ModelRenderer stick = new ModelRenderer(this, 0, 7);
+		stick.setRotationPoint(-4.5F, 7.0F, -5.5F);
+		stick.addBox(-0.5F, -1.5F, -0.5F, 1, 2, 1, 0.0F);
 
-		this.base.addChild(this.screen);
-		this.base.addChild(this.backWall);
-		this.backWall.addChild(this.lightBar);
+		base = new ModelRenderer(this, 0, 0);
+		base.setRotationPoint(0.0F, 0.0F, 0.0F);
+		base.addBox(-8.0F, 7.0F, -8.0F, 16, 1, 16, 0.0F);
 
-		this.wallLeft3.addChild(this.wallLeft4);
-		this.wallLeft2.addChild(this.wallLeft3);
-		this.wallLeft1.addChild(this.wallLeft2);
-		this.base.addChild(this.wallLeft1);
+		base.addChild(screen);
+		base.addChild(backWall);
+		backWall.addChild(lightBar);
 
-		this.wallRight3.addChild(this.wallRight4);
-		this.wallRight2.addChild(this.wallRight3);
-		this.wallRight1.addChild(this.wallRight2);
-		this.base.addChild(this.wallRight1);
+		wallLeft3.addChild(wallLeft4);
+		wallLeft2.addChild(wallLeft3);
+		wallLeft1.addChild(wallLeft2);
+		base.addChild(wallLeft1);
 
-		this.base.addChild(this.buttonGreen);
-		this.base.addChild(this.buttonRed);
-		this.base.addChild(this.buttonYellow);
-		this.base.addChild(this.buttonBlue);
+		wallRight3.addChild(wallRight4);
+		wallRight2.addChild(wallRight3);
+		wallRight1.addChild(wallRight2);
+		base.addChild(wallRight1);
 
-		this.base.addChild(this.stick);
+		base.addChild(buttonGreen);
+		base.addChild(buttonRed);
+		base.addChild(buttonYellow);
+		base.addChild(buttonBlue);
+
+		base.addChild(stick);
 	}
 
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		this.base.render(f5);
+		base.render(f5);
 	}
 
 	public void renderCabinet(TileArcadeCabinet tile, float tick, float scale) {
 		glColor3f(1.0F, 1.0F, 1.0F);
 
-		this.base.render(scale);
+		base.render(scale);
 		renderScreen(tile, tick);
 
 		// render cartridge if available
@@ -163,10 +150,10 @@ public class ModelArcadeCabinet extends ModelBase {
 		}
 	}
 
-	private static float _16th = 1F / 16F;
-	private static float screenShiftX = -(_16th * 5F) + 0.2025F * _16th;
-	private static float screenShiftY = -(_16th * 6F) + 0.4025F * _16th;
-	private static float screenShiftZ = _16th * 2.36F;
+	private static final float _16th = 1F / 16F;
+	private static final float screenShiftX = -(_16th * 5F) + 0.2025F * _16th;
+	private static final float screenShiftY = -(_16th * 6F) + 0.4025F * _16th;
+	private static final float screenShiftZ = _16th * 2.36F;
 
 	private void renderScreen(TileArcadeCabinet tile, float tick) {
 		ArcadeMachine arcade = tile.arcadeMachine();
@@ -190,14 +177,5 @@ public class ModelArcadeCabinet extends ModelBase {
 			Helper.popMaxBrightness();
 		}
 		glPopMatrix();
-	}
-
-	/**
-	 * This is a helper function from Tabula to set the rotation of model parts
-	 */
-	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
 	}
 }

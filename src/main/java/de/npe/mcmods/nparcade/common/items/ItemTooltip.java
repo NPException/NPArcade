@@ -18,8 +18,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ItemTooltip {
 
-	private ArrayList<String> infoList = new ArrayList<>();
-	private ArrayList<String> shiftList = new ArrayList<>();
+	private final ArrayList<String> infoList = new ArrayList<>();
+	private final ArrayList<String> shiftList = new ArrayList<>();
 
 	public void populateList(List<String> list) {
 		if (!shiftList.isEmpty() && ClientUtil.hasPressedShift()) {

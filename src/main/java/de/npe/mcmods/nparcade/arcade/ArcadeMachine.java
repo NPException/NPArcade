@@ -29,9 +29,9 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 @SideOnly(Side.CLIENT)
 public class ArcadeMachine implements IArcadeMachine {
 
-	private Size suggestedScreenSize;
-	private ArcadeSoundManager soundManager;
-	private TileArcadeCabinet tile;
+	private final Size suggestedScreenSize;
+	private final ArcadeSoundManager soundManager;
+	private final TileArcadeCabinet tile;
 
 	private String gameID;
 	private IArcadeGame game;

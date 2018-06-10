@@ -21,7 +21,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  */
 public class EmptyGame implements IArcadeGame {
 	private static boolean initialized;
-	private static Size screenSize = new Size(50, 65);
+	private static final Size screenSize = new Size(50, 65);
 	private static BufferedImage[] screens;
 
 	public static void init() {

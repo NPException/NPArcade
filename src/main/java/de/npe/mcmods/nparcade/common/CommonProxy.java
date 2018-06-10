@@ -12,6 +12,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 /**
  * Created by NPException (2015)
  */
+@SuppressWarnings("EmptyMethod")
 public class CommonProxy {
 	public final void preInitServerSide() {
 		// do nothing

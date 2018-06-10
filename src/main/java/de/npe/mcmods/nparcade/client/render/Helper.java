@@ -31,18 +31,14 @@ public final class Helper {
 	}
 
 	public enum Alignment {
-		UL,
-		U,
-		UR,
-		L,
-		M,
-		R,
-		DL,
-		D,
-		DR;
+		//@formatter:off
+		UL, U, UR,
+		 L, M, R,
+		DL, D, DR;
+		//@formatter:on
 
-		private static Alignment[] horizontal = {L, M, R, L, M, R, L, M, R};
-		private static Alignment[] vertical = {U, U, U, M, M, M, D, D, D};
+		private static final Alignment[] horizontal = {L, M, R, L, M, R, L, M, R};
+		private static final Alignment[] vertical = {U, U, U, M, M, M, D, D, D};
 
 		public Alignment horizontal() {
 			return horizontal[ordinal()];

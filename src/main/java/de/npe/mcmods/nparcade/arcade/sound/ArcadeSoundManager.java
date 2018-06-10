@@ -1,10 +1,10 @@
 package de.npe.mcmods.nparcade.arcade.sound;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,9 +15,9 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ArcadeSoundManager {
 	// Map of all sounds registered ever
-	private static Map<String, ArcadeSound> globalSoundResources = new HashMap<>(512);
+	private static final Map<String, ArcadeSound> globalSoundResources = new ConcurrentHashMap<>(512);
 
-	private List<PositionalArcadeSound> localSounds = new LinkedList<>();
+	private final List<PositionalArcadeSound> localSounds = new ArrayList<>();
 
 	public PositionalArcadeSound createPositionalSound(String soundFilePath, URL soundURL, boolean streaming, float x, float y, float z) {
 		ArcadeSound sndSource = globalSoundResources.get(soundFilePath);

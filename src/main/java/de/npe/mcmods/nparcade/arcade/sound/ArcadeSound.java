@@ -19,7 +19,7 @@ import paulscode.sound.SoundSystem;
  * Created by NPException (2015)
  */
 @SideOnly(Side.CLIENT)
-public class ArcadeSound {
+final class ArcadeSound {
 
 	private static Field sndManagerField;
 	private static Field sndSystemField;
@@ -35,7 +35,7 @@ public class ArcadeSound {
 		this.streaming = streaming;
 	}
 
-	public void playAt(String id, float x, float y, float z, float volume, float pitch, boolean loop) {
+	void playAt(String id, float x, float y, float z, float volume, float pitch, boolean loop) {
 		SoundSystem system = sndSystem();
 		if (system == null || system.getMasterVolume() <= 0.0F) {
 			return;
@@ -63,36 +63,33 @@ public class ArcadeSound {
 		}
 	}
 
-	public boolean isPlaying(String id) {
+	boolean isPlaying(String id) {
 		SoundSystem system = sndSystem();
-		if (system != null) {
-			system.playing(id);
-		}
-		return false;
+		return system != null && system.playing(id);
 	}
 
-	public void stop(String id) {
+	void stop(String id) {
 		SoundSystem system = sndSystem();
 		if (system != null) {
 			system.stop(id);
 		}
 	}
 
-	public void pause(String id) {
+	void pause(String id) {
 		SoundSystem system = sndSystem();
 		if (system != null) {
 			system.pause(id);
 		}
 	}
 
-	public void resume(String id) {
+	void resume(String id) {
 		SoundSystem system = sndSystem();
 		if (system != null) {
 			system.play(id);
 		}
 	}
 
-	public void remove(String id) {
+	void remove(String id) {
 		SoundSystem system = sndSystem();
 		if (system != null) {
 			system.removeSource(id);

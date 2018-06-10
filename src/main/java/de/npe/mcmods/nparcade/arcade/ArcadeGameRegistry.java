@@ -8,6 +8,7 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashMap;
@@ -38,7 +39,7 @@ import net.minecraft.item.ItemStack;
  * <p/>
  * Created by NPException (2015)
  */
-public class ArcadeGameRegistry {
+public final class ArcadeGameRegistry {
 
 	private ArcadeGameRegistry() {
 	}
@@ -73,7 +74,7 @@ public class ArcadeGameRegistry {
 	}
 
 	private static void loadGamesFromJarFiles() throws MalformedURLException {
-		Deque<File> candidates = new LinkedList<>();
+		List<File> candidates = new ArrayList<>();
 		Deque<File> directories = new LinkedList<>();
 		directories.add(new File("mods"));
 
@@ -91,7 +92,7 @@ public class ArcadeGameRegistry {
 					if (f.isDirectory()) {
 						directories.addLast(f);
 					} else {
-						candidates.addLast(f);
+						candidates.add(f);
 					}
 				}
 			}

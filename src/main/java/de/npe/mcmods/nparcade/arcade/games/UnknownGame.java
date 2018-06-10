@@ -35,7 +35,10 @@ public class UnknownGame implements IArcadeGame {
 			for (int y = 0; y < screenSize.height; y++) {
 				for (int x = 0; x < screenSize.width; x++) {
 					int brightness = random.nextInt(256);
-					int rgb = 255 << 24 | brightness << 16 | brightness << 8 | brightness;
+					int rgb = 0xFF000000     // alpha
+							| brightness << 16 // red
+							| brightness << 8  // green
+							| brightness;      // blue
 					pixelArray[p++] = rgb;
 				}
 			}

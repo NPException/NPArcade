@@ -31,7 +31,7 @@ public class NPArcade {
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
 	private static CommonProxy proxy;
 
-	public static CreativeTabs creativeTab = new CreativeTabs(Reference.MOD_ID) {
+	public static final CreativeTabs creativeTab = new CreativeTabs(Reference.MOD_ID) {
 		@Override
 		public Item getTabIconItem() {
 			return Item.getItemFromBlock(ModBlocks.arcadeCabinet);

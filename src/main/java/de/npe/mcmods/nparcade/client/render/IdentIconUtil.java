@@ -26,7 +26,7 @@ class IdentIconUtil {
 	/**
 	 * Generates a texture and returns the texture ID for an identicon based on the given seed.
 	 */
-	public static int prepareIdentIconTexture(String seed, int size) {
+	static int prepareIdentIconTexture(String seed, int size) {
 		int[] texAndSize = identIconTextureIDs.get(seed);
 
 		if (texAndSize == null) {
@@ -104,12 +104,12 @@ class IdentIconUtil {
 				PATCH_SYMMETRIC, 0, 0, 0, PATCH_SYMMETRIC, 0, 0, 0, 0, 0, 0,
 				PATCH_SYMMETRIC + PATCH_INVERTED};
 
-		private static int centerPatchTypes[] = {0, 4, 8, 15};
+		private static final int[] centerPatchTypes = {0, 4, 8, 15};
 
 		private static float patchSize;
 		private static GeneralPath[] patchShapes;
 
-		private static Color backgroundColor = Color.WHITE;
+		private static final Color backgroundColor = Color.WHITE;
 
 		static {
 			setPatchSize();
@@ -235,7 +235,7 @@ class IdentIconUtil {
 					sideInvert, fillColor, strokeColor);
 			drawPatch(g, blockSize, blockSize2, blockSize, sideType, sideTurn++,
 					sideInvert, fillColor, strokeColor);
-			drawPatch(g, 0, blockSize, blockSize, sideType, sideTurn++, sideInvert,
+			drawPatch(g, 0, blockSize, blockSize, sideType, sideTurn, sideInvert,
 					fillColor, strokeColor);
 
 			// corner patchs, starting from top left and moving clock-wise
@@ -245,7 +245,7 @@ class IdentIconUtil {
 					cornerInvert, fillColor, strokeColor);
 			drawPatch(g, blockSize2, blockSize2, blockSize, cornerType,
 					cornerTurn++, cornerInvert, fillColor, strokeColor);
-			drawPatch(g, 0, blockSize2, blockSize, cornerType, cornerTurn++,
+			drawPatch(g, 0, blockSize2, blockSize, cornerType, cornerTurn,
 					cornerInvert, fillColor, strokeColor);
 
 			g.dispose();
