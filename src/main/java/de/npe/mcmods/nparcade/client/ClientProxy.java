@@ -2,6 +2,7 @@ package de.npe.mcmods.nparcade.client;
 
 import org.lwjgl.input.Keyboard;
 
+import de.npe.mcmods.nparcade.arcade.KeyboardThief;
 import de.npe.mcmods.nparcade.client.render.RenderItemArcadeCabinet;
 import de.npe.mcmods.nparcade.client.render.RenderItemArcadeStool;
 import de.npe.mcmods.nparcade.client.render.RenderItemCartridge;
@@ -51,10 +52,11 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.registerKeyBinding(keyBindingArcadeGreen = new KeyBinding(Strings.KEY_ARCADE_BUTTON_GREEN, Keyboard.KEY_J, Reference.MOD_ID));
 		ClientRegistry.registerKeyBinding(keyBindingArcadeBlue = new KeyBinding(Strings.KEY_ARCADE_BUTTON_BLUE, Keyboard.KEY_K, Reference.MOD_ID));
 		ClientRegistry.registerKeyBinding(keyBindingArcadeYellow = new KeyBinding(Strings.KEY_ARCADE_BUTTON_YELLOW, Keyboard.KEY_L, Reference.MOD_ID));
+
+		KeyboardThief.init();
 	}
 
 	@Override
 	public void postInitClientSide() {
-//		ClientCommandHandler.instance.registerCommand(new RenderTweakCommand());
 	}
 }

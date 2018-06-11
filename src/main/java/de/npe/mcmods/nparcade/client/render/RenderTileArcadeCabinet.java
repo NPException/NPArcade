@@ -44,6 +44,7 @@ public class RenderTileArcadeCabinet extends TileEntitySpecialRenderer {
 		glPopMatrix();
 	}
 
+
 	@Override
 	public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float tick) {
 		doRender((TileArcadeCabinet) tile, x, y, z, tick);

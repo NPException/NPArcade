@@ -5,8 +5,8 @@ import static org.lwjgl.opengl.GL11.glBindTexture;
 
 import java.awt.image.BufferedImage;
 import java.net.URL;
-
-import org.lwjgl.input.Keyboard;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
@@ -15,6 +15,7 @@ import de.npe.api.nparcade.util.IArcadeSound;
 import de.npe.api.nparcade.util.Size;
 import de.npe.mcmods.nparcade.arcade.sound.ArcadeSoundManager;
 import de.npe.mcmods.nparcade.client.ClientProxy;
+import de.npe.mcmods.nparcade.arcade.KeyboardThief.KeyState;
 import de.npe.mcmods.nparcade.client.render.Helper;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 
@@ -39,6 +40,8 @@ public class ArcadeMachine implements IArcadeMachine {
 	private int[] screenData;
 	private BufferedImage image;
 
+	private final Map<Integer, KeyState> keyStates = new HashMap<>(8);
+
 	public ArcadeMachine(int suggestedScreenWidth, int suggestedScreenHeight, TileArcadeCabinet tile) {
 		suggestedScreenSize = new Size(suggestedScreenWidth, suggestedScreenHeight);
 		soundManager = new ArcadeSoundManager();
@@ -61,38 +64,27 @@ public class ArcadeMachine implements IArcadeMachine {
 	}
 
 	@Override
-	public boolean isKeyDown(int keyCode) {
-		// TODO: return FALSE if the player is not occupying the arcade
+	public boolean isKeyPressed(int key) {
+		return keyStates.get(mapKeyCode(key)) == KeyState.PRESS;
+	}
 
-		if (keyCode > 0x0100 && keyCode < 0x0109) {
-			switch (keyCode) {
-				case Controls.ARCADE_KEY_UP:
-					keyCode = Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode();
-					break;
-				case Controls.ARCADE_KEY_DOWN:
-					keyCode = Minecraft.getMinecraft().gameSettings.keyBindBack.getKeyCode();
-					break;
-				case Controls.ARCADE_KEY_LEFT:
-					keyCode = Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode();
-					break;
-				case Controls.ARCADE_KEY_RIGHT:
-					keyCode = Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode();
-					break;
-				case Controls.ARCADE_KEY_RED:
-					keyCode = ClientProxy.keyBindingArcadeRed.getKeyCode();
-					break;
-				case Controls.ARCADE_KEY_GREEN:
-					keyCode = ClientProxy.keyBindingArcadeGreen.getKeyCode();
-					break;
-				case Controls.ARCADE_KEY_BLUE:
-					keyCode = ClientProxy.keyBindingArcadeBlue.getKeyCode();
-					break;
-				case Controls.ARCADE_KEY_YELLOW:
-					keyCode = ClientProxy.keyBindingArcadeYellow.getKeyCode();
-					break;
-			}
-		}
-		return Keyboard.isKeyDown(keyCode);
+	@Override
+	public boolean isKeyDown(int key) {
+		KeyState state = keyStates.get(mapKeyCode(key));
+		return state == KeyState.PRESS
+				|| state == KeyState.HOLD;
+	}
+
+	@Override
+	public boolean isKeyReleased(int key) {
+		return keyStates.get(mapKeyCode(key)) == KeyState.RELEASE;
+	}
+
+	@Override
+	public boolean isKeyUp(int key) {
+		KeyState state = keyStates.get(mapKeyCode(key));
+		return state == KeyState.RELEASE
+				|| state == null;
 	}
 
 	@Override
@@ -106,11 +98,66 @@ public class ArcadeMachine implements IArcadeMachine {
 		return soundManager.createPositionalSound(soundFilePath, soundURL, streaming, tile.xCoord + 0.5F, tile.yCoord + 0.5F, tile.zCoord + 0.5F);
 	}
 
+	////////////////////
+	// Keyboard stuff //
+	////////////////////
+
+	public void activate() {
+		KeyboardThief.activate(keyStates);
+	}
+
+	public void release() {
+		KeyboardThief.release(keyStates);
+	}
+
+	/**
+	 * Maps a keycode from the arcade basekey to the keyboard keycode
+	 * if necessary
+	 */
+	private static int mapKeyCode(int keyCode) {
+		if (keyCode > 0x0100 && keyCode < 0x0109) {
+			switch (keyCode) {
+				case Controls.ARCADE_KEY_UP:
+					return Minecraft.getMinecraft().gameSettings.keyBindForward.getKeyCode();
+				case Controls.ARCADE_KEY_DOWN:
+					return Minecraft.getMinecraft().gameSettings.keyBindBack.getKeyCode();
+				case Controls.ARCADE_KEY_LEFT:
+					return Minecraft.getMinecraft().gameSettings.keyBindLeft.getKeyCode();
+				case Controls.ARCADE_KEY_RIGHT:
+					return Minecraft.getMinecraft().gameSettings.keyBindRight.getKeyCode();
+				case Controls.ARCADE_KEY_RED:
+					return ClientProxy.keyBindingArcadeRed.getKeyCode();
+				case Controls.ARCADE_KEY_GREEN:
+					return ClientProxy.keyBindingArcadeGreen.getKeyCode();
+				case Controls.ARCADE_KEY_BLUE:
+					return ClientProxy.keyBindingArcadeBlue.getKeyCode();
+				case Controls.ARCADE_KEY_YELLOW:
+					return ClientProxy.keyBindingArcadeYellow.getKeyCode();
+			}
+		}
+		return keyCode;
+	}
+
+	private long lastEscapePress;
+
+	private void checkReleaseHotkeys() {
+		if (isKeyPressed(Controls.KEY_ESCAPE)) {
+			long now = System.currentTimeMillis();
+			// release control on escape double tap
+			if ((lastEscapePress + 500) > now) {
+				release();
+			} else {
+				lastEscapePress = now;
+			}
+		}
+	}
+
 	/////////////////////////////////////////////////
 	// external methods to be used by TileEntities //
 	/////////////////////////////////////////////////
 
 	public void update() {
+		checkReleaseHotkeys();
 		if (game != null) {
 			game.update(this);
 		}

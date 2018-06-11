@@ -32,7 +32,7 @@ public class ExampleGame implements IArcadeGame {
 
 	public ExampleGame(IArcadeMachine arcadeMachine) {
 		screenSize = new Size(100, 130);
-		rand = new Random(0L);
+		rand = new Random();
 
 		x = 10F + rand.nextFloat() * 80F;
 		y = 10F + rand.nextFloat() * 110F;
@@ -86,6 +86,18 @@ public class ExampleGame implements IArcadeGame {
 			float h = rand.nextFloat();
 			background = Color.getHSBColor(h, bgS, bgB);
 			bounceSound.play(1F, 1F, false);
+		}
+
+		if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_LEFT)) {
+			dx = -5F;
+		} else if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_RIGHT)) {
+			dx = 5F;
+		}
+		if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_UP)) {
+			dy = -5F;
+		}
+		if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_DOWN)) {
+			dy = 5F;
 		}
 
 		int keyColor = 0;

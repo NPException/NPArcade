@@ -30,6 +30,31 @@ public interface IArcadeMachine {
 	boolean isKeyDown(int keyCode);
 
 	/**
+	 * Returns if the key has been pressed down (transition from Up to Down) in the current update tick.
+	 * For a list of all available key codes see {@link de.npe.api.nparcade.util.Controls}.
+	 * By calling {@link #hasKeyboard()}, a game can check if it can
+	 * use a full keyboard as input, or only the standard arcade keys.
+	 */
+	boolean isKeyPressed(int keyCode);
+
+	/**
+	 * Returns if the key has currently up (not down).
+	 * For a list of all available key codes see {@link de.npe.api.nparcade.util.Controls}.
+	 * By calling {@link #hasKeyboard()}, a game can check if it can
+	 * use a full keyboard as input, or only the standard arcade keys.
+	 */
+	boolean isKeyUp(int keyCode);
+
+	/**
+	 * Returns if the key has been released (transition from Down to Up) in the current update tick.
+	 * For a list of all available key codes see {@link de.npe.api.nparcade.util.Controls}.
+	 * By calling {@link #hasKeyboard()}, a game can check if it can
+	 * use a full keyboard as input, or only the standard arcade keys.
+	 */
+	boolean isKeyReleased(int keyCode);
+
+
+	/**
 	 * Returns if this arcade machine has a keyboard or not.
 	 * This basically tells you if the keyboard key codes
 	 * from {@link de.npe.api.nparcade.util.Controls} can be used

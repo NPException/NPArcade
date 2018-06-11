@@ -47,6 +47,7 @@ public class TileArcadeCabinet extends TileEntity {
 
 	public void onBlockRemoval(EntityPlayer removingPlayer) {
 		if (clientSide()) {
+			release();
 			unloadGame();
 			return;
 		}
@@ -79,6 +80,9 @@ public class TileArcadeCabinet extends TileEntity {
 				}
 				gameID = null;
 				markDirty();
+
+			} else if (!player.isSneaking() && clientSide()) {
+				activate();
 			}
 			return true;
 
@@ -114,6 +118,7 @@ public class TileArcadeCabinet extends TileEntity {
 	public void invalidate() {
 		super.invalidate();
 		if (clientSide()) {
+			release();
 			unloadGame();
 		}
 	}
@@ -128,6 +133,7 @@ public class TileArcadeCabinet extends TileEntity {
 	@Override
 	public void onChunkUnload() {
 		if (clientSide()) {
+			release();
 			unloadGame();
 		}
 	}
@@ -174,7 +180,7 @@ public class TileArcadeCabinet extends TileEntity {
 
 		gameID = tag.hasKey(Strings.NBT_GAME) ? tag.getString(Strings.NBT_GAME) : null;
 
-		if (worldObj != null && worldObj.isRemote) {
+		if (clientSide()) {
 			if (gameID != null) {
 				loadGame(false);
 			} else {
@@ -227,5 +233,15 @@ public class TileArcadeCabinet extends TileEntity {
 	@SideOnly(Side.CLIENT)
 	private void unloadGame() {
 		arcadeMachine().unload();
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void activate() {
+		arcadeMachine().activate();
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void release() {
+		arcadeMachine().release();
 	}
 }
