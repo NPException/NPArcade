@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
  * Created using Tabula 4.1.1
  */
 @SideOnly(Side.CLIENT)
-public class ModelArcadeStool extends ModelBase {
+public final class ModelArcadeStool extends ModelBase {
 	public static final ModelArcadeStool instance = new ModelArcadeStool();
 	public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_IDENTIFIER + "textures/models/nparcade_modelStool.png");
 

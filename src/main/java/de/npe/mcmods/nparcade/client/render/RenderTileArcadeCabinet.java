@@ -19,7 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 @SideOnly(Side.CLIENT)
 public class RenderTileArcadeCabinet extends TileEntitySpecialRenderer {
 
-	public void doRender(TileArcadeCabinet tile, double x, double y, double z, float tick) {
+	private void doRender(TileArcadeCabinet tile, double x, double y, double z, float tick) {
 		glPushMatrix();
 		{
 			glTranslatef((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);

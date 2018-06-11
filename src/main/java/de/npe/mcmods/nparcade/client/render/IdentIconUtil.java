@@ -19,7 +19,7 @@ import net.minecraft.client.renderer.texture.TextureUtil;
 
 
 @SideOnly(Side.CLIENT)
-class IdentIconUtil {
+final class IdentIconUtil {
 	// holds an int[] for each seed string: 0 = texture ID, 1 = size of texture
 	private static final Map<String, int[]> identIconTextureIDs = new HashMap<>(64);
 
@@ -66,7 +66,7 @@ class IdentIconUtil {
 	 * Current implementation uses only the lower 32 bits of identicon code.
 	 * </p>
 	 */
-	private static class IdentIconRenderer {
+	private static final class IdentIconRenderer {
 
 		/*
 		 * Each patch is a polygon created from a list of vertices on a 5 by 5 grid.

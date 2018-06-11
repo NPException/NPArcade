@@ -160,7 +160,7 @@ public class ItemCartridge extends Item implements IGameCartridge {
 		}
 	}
 
-	public ItemStack createItemStack(String gameId, int num) {
+	private ItemStack createItemStack(String gameId, int num) {
 		num = num < 1 ? 1 : num > 64 ? 64 : num;
 		ItemStack stack = new ItemStack(this, num);
 		setGameID(stack, gameId);

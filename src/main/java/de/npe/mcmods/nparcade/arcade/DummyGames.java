@@ -13,7 +13,7 @@ import de.npe.mcmods.nparcade.common.util.Util;
 /**
  * Created by NPException (2015)
  */
-public class DummyGames {
+public final class DummyGames {
 	public static final ArcadeGameWrapper UNKNOWN_GAME_WRAPPER = initUnknownGameWrapper();
 	public static final ArcadeGameWrapper EMPTY_GAME_WRAPPER = initEmptyGameWrapper();
 

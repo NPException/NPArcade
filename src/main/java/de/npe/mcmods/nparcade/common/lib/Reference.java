@@ -1,6 +1,6 @@
 package de.npe.mcmods.nparcade.common.lib;
 
-public class Reference {
+public final class Reference {
 	public static final String MOD_ID = "nparcade";
 	public static final String MOD_IDENTIFIER = MOD_ID + ":";
 	public static final String MOD_VERSION = "0.1";

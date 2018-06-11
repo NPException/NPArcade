@@ -17,7 +17,7 @@ public class UnknownGame implements IArcadeGame {
 	private int[][] pixels;
 	private int pixelsToDraw = 0;
 
-	private Size screenSize;
+	private final Size screenSize;
 	private long nextDraw = 0L;
 
 	@SideOnly(Side.CLIENT)

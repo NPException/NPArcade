@@ -55,9 +55,9 @@ public final class Helper {
 		float x = 0F;
 		float y = 0F;
 
-		final float tRatio = boundsWidth / boundsHeight;
+		float tRatio = boundsWidth / boundsHeight;
 
-		final float sRatio = rectWidth / rectHeight;
+		float sRatio = rectWidth / rectHeight;
 
 		// these checks center the rectangle within the
 		// given bounds

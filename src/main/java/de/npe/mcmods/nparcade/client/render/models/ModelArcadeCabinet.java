@@ -27,7 +27,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
  * Created using Tabula 4.1.1
  */
 @SideOnly(Side.CLIENT)
-public class ModelArcadeCabinet extends ModelBase {
+public final class ModelArcadeCabinet extends ModelBase {
 	public static final ModelArcadeCabinet instance = new ModelArcadeCabinet();
 	public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_IDENTIFIER + "textures/models/nparcade_modelArcadeCabinet.png");
 

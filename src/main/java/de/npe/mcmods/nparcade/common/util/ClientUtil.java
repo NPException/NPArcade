@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
  * Credit goes to Jezza. I ripped this shamelessly out of OmnisCore.
  */
 @SideOnly(Side.CLIENT)
-public class ClientUtil {
+public final class ClientUtil {
 
 	public static boolean hasPressedShift() {
 		return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);

@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
  * Cartridge - NPException
  * Created using Tabula 4.1.1
  */
-public class ModelCartridge extends ModelBase {
+public final class ModelCartridge extends ModelBase {
 	public static final ModelCartridge instance = new ModelCartridge();
 	public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_IDENTIFIER + "textures/models/nparcade_modelCartridge_new.png");
 

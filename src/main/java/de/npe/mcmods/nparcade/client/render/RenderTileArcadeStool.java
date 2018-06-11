@@ -20,7 +20,7 @@ import net.minecraft.tileentity.TileEntity;
 @SideOnly(Side.CLIENT)
 public class RenderTileArcadeStool extends TileEntitySpecialRenderer {
 
-	public void doRender(TileArcadeStool tile, double x, double y, double z, float tick) {
+	private void doRender(TileArcadeStool tile, double x, double y, double z, float tick) {
 		glPushMatrix();
 		{
 			glTranslatef((float) x + 0.5F, (float) y + 0.625F, (float) z + 0.5F);

@@ -16,7 +16,7 @@ import cpw.mods.fml.relauncher.SideOnly;
  * Credit goes to Jezza. I ripped this shamelessly out of OmnisCore.
  */
 @SideOnly(Side.CLIENT)
-public class ItemTooltip {
+class ItemTooltip {
 
 	private final ArrayList<String> infoList = new ArrayList<>();
 	private final ArrayList<String> shiftList = new ArrayList<>();

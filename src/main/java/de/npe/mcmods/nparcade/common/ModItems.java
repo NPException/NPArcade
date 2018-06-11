@@ -10,7 +10,7 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraftforge.oredict.OreDictionary;
 
 
-public class ModItems {
+public final class ModItems {
 
 	public static ItemCartridge cartridge;
 
