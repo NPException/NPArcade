@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import de.npe.api.nparcade.IArcadeGame;
+import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
 import de.npe.mcmods.nparcade.common.ModItems;
@@ -212,9 +213,9 @@ public final class ArcadeGameRegistry {
 		}
 
 		try {
-			gameClass.getConstructor();
+			gameClass.getConstructor(IArcadeMachine.class);
 		} catch (Exception ex) {
-			throw new IllegalArgumentException("Could not grab public no-args constructor!" + gameToString, ex);
+			throw new IllegalArgumentException("Could not grab public constructor with IArcadeMachine parameter!" + gameToString, ex);
 		}
 
 		if (games.containsKey(id)) {

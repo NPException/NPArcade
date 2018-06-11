@@ -6,10 +6,10 @@ import de.npe.api.nparcade.util.Size;
 
 /**
  * <p>This interface has to be implemented by every game that should work with NPArcade.</p>
- * <p>An implementing class must have a public no-args constructor available.
- * (For example by not declaring an explicit constructor at all.)</p>
- * <p>It is highly recommended to not do anything in the constructor,
- * and do all preparations and setup operations when {@link #load(IArcadeMachine)} is called on the instance.</p>
+ * <p>An implementing class must a public constructor available, which takes an
+ * instance of {@link IArcadeMachine} as a parametr.</p>
+ * <p>When the constructor is called, the game should do all necessary intializations
+ * and setup operations required to boot the game.</p>
  * <p>For a detailed specification of how an arcade machine interacts with the game, and how {@link IArcadeGame}'s
  * methods have to be used, visit the
  * <a href="https://github.com/NPException42/NPArcade/wiki/Technical-Specification">specification page of the wiki</a>.</p>
@@ -23,13 +23,8 @@ public interface IArcadeGame {
 	////////////////////////////////
 
 	/**
-	 * This method is called whenever the game is loaded by an arcade machine.
-	 * The arcade machine instance the game will run on is provided as a parameter.
-	 */
-	void load(IArcadeMachine arcadeMachine);
-
-	/**
-	 * This method is called when the game is unloaded by an arcade machine.
+	 * This method is called when the game is unloaded and the game instance
+	 * should be garbage collected soon.
 	 * That usually happens when the arcade machine is powering down or being broken.<br>
 	 * It should be used to release all resources used by the game, and persist any data if necessary.
 	 */

@@ -17,7 +17,7 @@ import de.npe.api.nparcade.util.Size;
  * Created by NPException (2015)
  */
 public class ExampleGame implements IArcadeGame {
-	private Size screenSize;
+	private final Size screenSize;
 	private boolean needsDraw;
 
 	private Random rand;
@@ -30,8 +30,7 @@ public class ExampleGame implements IArcadeGame {
 
 	private float x, y, dx, dy;
 
-	@Override
-	public void load(IArcadeMachine arcadeMachine) {
+	public ExampleGame(IArcadeMachine arcadeMachine) {
 		screenSize = new Size(100, 130);
 		rand = new Random(0L);
 

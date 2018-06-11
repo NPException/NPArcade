@@ -43,9 +43,8 @@ public class EmptyGame implements IArcadeGame {
 	private int screenToDraw = 0;
 	private boolean needsDraw;
 
-	@Override
 	@SideOnly(Side.CLIENT)
-	public void load(IArcadeMachine arcadeMachine) {
+	public EmptyGame(IArcadeMachine arcadeMachine) {
 		screenToDraw = 1;
 		needsDraw = true;
 	}

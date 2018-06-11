@@ -20,9 +20,8 @@ public class UnknownGame implements IArcadeGame {
 	private Size screenSize;
 	private long nextDraw = 0L;
 
-	@Override
 	@SideOnly(Side.CLIENT)
-	public void load(IArcadeMachine arcadeMachine) {
+	public UnknownGame(IArcadeMachine arcadeMachine) {
 		Size amSize = arcadeMachine.suggestedScreenSize();
 		screenSize = new Size(amSize.width / 10, amSize.height / 10);
 

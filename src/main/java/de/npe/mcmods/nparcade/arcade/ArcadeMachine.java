@@ -140,8 +140,7 @@ public class ArcadeMachine implements IArcadeMachine {
 		this.gameID = gameID;
 		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(this.gameID);
 
-		game = wrapper.createGameInstance();
-		game.load(this);
+		game = wrapper.createGameInstance(this);
 	}
 
 	public void unload() {

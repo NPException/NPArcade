@@ -16,7 +16,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 /**
  * Created by NPException (2015)
  */
-public class Util {
+public final class Util {
 
 	public static InputStream getResourceStreamAbsolutePath(Class clazz, String resourcePath) {
 		try {

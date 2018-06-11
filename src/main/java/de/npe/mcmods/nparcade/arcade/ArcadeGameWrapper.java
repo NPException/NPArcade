@@ -6,6 +6,7 @@ import java.lang.reflect.Constructor;
 import org.lwjgl.opengl.GL11;
 
 import de.npe.api.nparcade.IArcadeGame;
+import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Size;
 import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
 import de.npe.mcmods.nparcade.common.ModItems;
@@ -51,9 +52,11 @@ public final class ArcadeGameWrapper {
 
 		this.gameClass = gameClass;
 		try {
-			constructor = gameClass != null ? gameClass.getConstructor() : null;
+			constructor = gameClass != null
+					? gameClass.getConstructor(IArcadeMachine.class)
+					: null;
 		} catch (Exception ex) {
-			throw new IllegalArgumentException("Class " + gameClass.getCanonicalName() + " is missing public no-args constructor!", ex);
+			throw new IllegalArgumentException("Class " + gameClass.getCanonicalName() + " is missing a public constructor which takes an IArcadeMachine!", ex);
 		}
 
 		if (customCartridge != null && !(customCartridge instanceof Item)) {
@@ -146,9 +149,9 @@ public final class ArcadeGameWrapper {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public IArcadeGame createGameInstance() {
+	public IArcadeGame createGameInstance(IArcadeMachine arcadeMachine) {
 		try {
-			return constructor.newInstance();
+			return constructor.newInstance(arcadeMachine);
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}

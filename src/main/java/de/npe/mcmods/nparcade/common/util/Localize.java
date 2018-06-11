@@ -9,7 +9,7 @@ import net.minecraft.util.StatCollector;
 /**
  * Credit goes to Jezza. I ripped this shamelessly out of OmnisCore.
  */
-public class Localize {
+public final class Localize {
 
 	public static final char FORMATTING_CHAR = '$';
 
