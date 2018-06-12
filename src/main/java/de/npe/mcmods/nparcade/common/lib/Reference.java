@@ -8,6 +8,4 @@ public final class Reference {
 
 	public static final String CLIENT_PROXY_CLASS = "de.npe.mcmods.nparcade.client.ClientProxy";
 	public static final String SERVER_PROXY_CLASS = "de.npe.mcmods.nparcade.common.CommonProxy";
-
-	public static final String EMPTY_GAME_ID = "__nparcade_empty";
 }

@@ -6,7 +6,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.client.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.client.arcade.ArcadeGameWrapper;
-import de.npe.mcmods.nparcade.common.lib.Reference;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import de.npe.mcmods.nparcade.common.util.Localize;
 import de.npe.mcmods.nparcade.common.util.Util;
@@ -114,12 +113,12 @@ public class ItemCartridge extends Item {
 		NBTTagCompound tag = stack.getTagCompound();
 		return tag != null && tag.hasKey(Strings.NBT_GAME)
 				? tag.getString(Strings.NBT_GAME)
-				: Reference.EMPTY_GAME_ID;
+				: Strings.EMPTY_GAME_ID;
 	}
 
 	public static void setGameID(ItemStack stack, String gameID) {
 		NBTTagCompound tag = stack.getTagCompound();
-		if (gameID == null) {
+		if (gameID == null || Util.isEmptyGame(gameID)) {
 			if (tag != null) {
 				tag.removeTag(Strings.NBT_GAME);
 				if (tag.hasNoTags()) {

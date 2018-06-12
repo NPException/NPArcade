@@ -17,7 +17,6 @@ import static org.lwjgl.opengl.GL11.glTranslatef;
 import de.npe.api.nparcade.util.Size;
 import de.npe.mcmods.nparcade.client.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.client.arcade.ArcadeGameWrapper;
-import de.npe.mcmods.nparcade.client.arcade.DummyGames;
 import de.npe.mcmods.nparcade.client.render.models.ModelCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 
@@ -96,7 +95,7 @@ public class RenderItemCartridge extends AbstractItemRenderer {
 			Size size;
 			int textureID;
 
-			if (wrapper != DummyGames.UNKNOWN_GAME_WRAPPER && wrapper.hasLabel()) {
+			if (wrapper.hasLabel()) {
 				size = wrapper.labelSize();
 				textureID = wrapper.prepareLabelTexture();
 			} else {

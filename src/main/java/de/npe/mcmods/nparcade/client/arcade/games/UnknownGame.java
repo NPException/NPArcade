@@ -1,57 +1,71 @@
 package de.npe.mcmods.nparcade.client.arcade.games;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.ThreadLocalRandom;
+
+import javax.imageio.ImageIO;
 
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Size;
+import de.npe.mcmods.nparcade.common.lib.Strings;
+import de.npe.mcmods.nparcade.common.util.Util;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 /**
+ * Game implementation for cartridges where the game is not
+ * available on the client.
+ * Displays a glitchy test screen.
+ *
  * Created by NPException (2015)
  */
 @SideOnly(Side.CLIENT)
 public class UnknownGame implements IArcadeGame {
-	private int[][] pixels;
-	private int pixelsToDraw = 0;
+	private static boolean initialized;
+	private static final Size screenSize = new Size(50, 65);
+	private static BufferedImage[] screens;
 
-	private final Size screenSize;
-	private long nextDraw = 0L;
+	public static void init() {
+		if (initialized) {
+			return;
+		}
+		initialized = true;
+
+		screens = new BufferedImage[2];
+		try {
+			screens[0] = ImageIO.read(Util.getResourceStream(Strings.TEXTURE_EMPTY_GAME_SCREEN));
+			screens[1] = ImageIO.read(Util.getResourceStream(Strings.TEXTURE_EMPTY_GAME_SCREEN_GLITCH));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			screens = null;
+		}
+	}
+
+	private int screenToDraw;
+	private boolean needsDraw;
 
 	public UnknownGame(IArcadeMachine arcadeMachine) {
-		Size amSize = arcadeMachine.suggestedScreenSize();
-		screenSize = new Size(amSize.width / 10, amSize.height / 10);
-
-		// generate 10 frames of static noise
-		ThreadLocalRandom random = ThreadLocalRandom.current();
-		pixels = new int[10][];
-		for (int pixelsIndex = 0; pixelsIndex < pixels.length; pixelsIndex++) {
-			int[] pixelArray = pixels[pixelsIndex] = new int[screenSize.height * screenSize.width];
-			int p = 0;
-			for (int y = 0; y < screenSize.height; y++) {
-				for (int x = 0; x < screenSize.width; x++) {
-					int brightness = random.nextInt(256);
-					int rgb = 0xFF000000     // alpha
-							| brightness << 16 // red
-							| brightness << 8  // green
-							| brightness;      // blue
-					pixelArray[p++] = rgb;
-				}
-			}
-		}
+		screenToDraw = 0;
+		needsDraw = true;
 	}
 
 	@Override
 	public void unload(IArcadeMachine arcadeMachine) {
-		pixels = null;
 	}
 
 	@Override
 	public void update(IArcadeMachine arcadeMachine) {
-		// nothing to do (yet)
+		if (screenToDraw == 1) {
+			screenToDraw = 0;
+			needsDraw = true;
+		} else if (ThreadLocalRandom.current().nextFloat() < 0.05F) {
+			screenToDraw = 1;
+			needsDraw = true;
+		}
 	}
 
 	@Override
@@ -61,18 +75,18 @@ public class UnknownGame implements IArcadeGame {
 
 	@Override
 	public boolean needsDraw() {
-		long now = System.nanoTime();
-		if (now > nextDraw) {
-			long fps = 20L;
-			nextDraw = now + 1000000000L / fps;
-			return true;
-		}
-		return false;
+		return needsDraw;
 	}
 
 	@Override
 	public void draw(BufferedImage screen, float partialTick) {
-		pixelsToDraw = (pixelsToDraw + 1) % pixels.length;
-		screen.setRGB(0, 0, screenSize.width, screenSize.height, pixels[pixelsToDraw], 0, screenSize.width);
+		needsDraw = false;
+		if (screens == null) {
+			Graphics2D g = screen.createGraphics();
+			g.setColor(Color.BLACK);
+			g.drawRect(0, 0, screenSize.width, screenSize.height);
+		} else {
+			screen.createGraphics().drawImage(screens[screenToDraw], 0, 0, null);
+		}
 	}
 }

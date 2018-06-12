@@ -5,6 +5,7 @@ import java.io.InputStream;
 import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.client.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.common.lib.Reference;
+import de.npe.mcmods.nparcade.common.lib.Strings;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -81,10 +82,10 @@ public final class Util {
 	}
 
 	public static boolean isEmptyGame(String gameId) {
-		return Reference.EMPTY_GAME_ID.equals(gameId);
+		return Strings.EMPTY_GAME_ID.equals(gameId);
 	}
 
 	public static boolean isUnknownGame(String gameId) {
-		return !Reference.EMPTY_GAME_ID.equals(gameId) && !ArcadeGameRegistry.gameIDs().contains(gameId);
+		return !Strings.EMPTY_GAME_ID.equals(gameId) && !ArcadeGameRegistry.gameIDs().contains(gameId);
 	}
 }

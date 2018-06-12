@@ -38,7 +38,6 @@ public final class ArcadeGameWrapper {
 		this.title = title;
 		this.description = description;
 
-		// this.label = (label == null) ? null : label.getRGB(0,0, label.getWidth(), label.getHeight(), null, 0, label.getHeight());
 		this.label = (label == null) ? null : new BufferedImage(label.getWidth(), label.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		labelSize = (label == null) ? null : new Size(label.getWidth(), label.getHeight());
 		if (label != null) {
