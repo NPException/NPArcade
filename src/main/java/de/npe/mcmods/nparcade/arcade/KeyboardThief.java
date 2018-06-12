@@ -94,10 +94,6 @@ public final class KeyboardThief {
 			Iterator<Map<Integer, KeyState>> setIt = oldKeysSet.keySet().iterator();
 			while (setIt.hasNext()) {
 				Map<Integer, KeyState> oldKeys = setIt.next();
-				if (oldKeys.isEmpty()) {
-					setIt.remove();
-					continue;
-				}
 				// two step deactivation process, to give the oportunity for keys to be properly released
 				Iterator<Entry<Integer, KeyState>> it = oldKeys.entrySet().iterator();
 				while (it.hasNext()) {
@@ -109,6 +105,9 @@ public final class KeyboardThief {
 						// setp 2, remove key
 						it.remove();
 					}
+				}
+				if (oldKeys.isEmpty()) {
+					setIt.remove();
 				}
 			}
 		}
