@@ -19,4 +19,18 @@ public final class Size {
 		this.width = width;
 		this.height = height;
 	}
+
+	public Size scale(float factor) {
+		return new Size((int) (width * factor), (int) (height * factor));
+	}
+
+	public Size scaleToWidth(int w) {
+		float factor = (float) w / width;
+		return new Size(w, (int) (height * factor));
+	}
+
+	public Size scaleToHeight(int h) {
+		float factor = (float) h / height;
+		return new Size((int) (width * factor), h);
+	}
 }
