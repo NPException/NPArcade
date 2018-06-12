@@ -28,17 +28,20 @@ public class ExampleGame implements IArcadeGame {
 
 	private IArcadeSound bounceSound;
 
+	private final float speed;
 	private float x, y, dx, dy;
 
 	public ExampleGame(IArcadeMachine arcadeMachine) {
-		screenSize = new Size(100, 130);
+		screenSize = arcadeMachine.suggestedScreenSize().scale(2);
 		rand = new Random();
+
+		speed = screenSize.width / 20f;
 
 		x = 10F + rand.nextFloat() * 80F;
 		y = 10F + rand.nextFloat() * 110F;
 
-		dx = (1F - rand.nextFloat() * 2) * 5;
-		dy = (1F - rand.nextFloat() * 2) * 5;
+		dx = (1F - rand.nextFloat() * 2) * speed;
+		dy = (1F - rand.nextFloat() * 2) * speed;
 
 		bounceSound = arcadeMachine.registerSound("/com/example/arcadegame/assets/bounce.ogg", false);
 
@@ -62,12 +65,15 @@ public class ExampleGame implements IArcadeGame {
 
 		boolean change = false;
 
+		float edgeX = screenSize.width - 10;
+		float edgeY = screenSize.height - 10;
+
 		if (x <= 10F) {
 			x = Math.abs(x - 10F) + 10F;
 			dx = -dx;
 			change = true;
-		} else if (x >= 90F) {
-			x = -(x - 90F) + 90F;
+		} else if (x >= edgeX) {
+			x = -(x - edgeX) + edgeX;
 			dx = -dx;
 			change = true;
 		}
@@ -76,8 +82,8 @@ public class ExampleGame implements IArcadeGame {
 			y = Math.abs(y - 10F) + 10F;
 			dy = -dy;
 			change = true;
-		} else if (y >= 120F) {
-			y = -(y - 120F) + 120F;
+		} else if (y >= edgeY) {
+			y = -(y - edgeY) + edgeY;
 			dy = -dy;
 			change = true;
 		}
@@ -89,15 +95,15 @@ public class ExampleGame implements IArcadeGame {
 		}
 
 		if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_LEFT)) {
-			dx = -5F;
+			dx = -speed;
 		} else if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_RIGHT)) {
-			dx = 5F;
+			dx = speed;
 		}
 		if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_UP)) {
-			dy = -5F;
+			dy = -speed;
 		}
 		if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_DOWN)) {
-			dy = 5F;
+			dy = speed;
 		}
 
 		int keyColor = 0;
