@@ -7,7 +7,7 @@ import static org.lwjgl.opengl.GL11.glRotatef;
 import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
-import de.npe.mcmods.nparcade.arcade.ArcadeMachine;
+import de.npe.mcmods.nparcade.client.arcade.ArcadeMachine;
 import de.npe.mcmods.nparcade.client.render.Helper;
 import de.npe.mcmods.nparcade.common.lib.Reference;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
@@ -155,7 +155,7 @@ public final class ModelArcadeCabinet extends ModelBase {
 	private static final float screenShiftY = -(_16th * 6F) + 0.4025F * _16th;
 	private static final float screenShiftZ = _16th * 2.36F;
 
-	private void renderScreen(TileArcadeCabinet tile, float tick) {
+	private static void renderScreen(TileArcadeCabinet tile, float tick) {
 		ArcadeMachine arcade = tile.arcadeMachine();
 		if (arcade == null) {
 			return;

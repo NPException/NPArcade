@@ -1,4 +1,4 @@
-package de.npe.mcmods.nparcade.arcade.games;
+package de.npe.mcmods.nparcade.client.arcade.games;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -19,6 +19,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * Created by NPException (2015)
  */
+@SideOnly(Side.CLIENT)
 public class EmptyGame implements IArcadeGame {
 	private static boolean initialized;
 	private static final Size screenSize = new Size(50, 65);
@@ -40,22 +41,19 @@ public class EmptyGame implements IArcadeGame {
 		}
 	}
 
-	private int screenToDraw = 0;
+	private int screenToDraw;
 	private boolean needsDraw;
 
-	@SideOnly(Side.CLIENT)
 	public EmptyGame(IArcadeMachine arcadeMachine) {
-		screenToDraw = 1;
+		screenToDraw = 0;
 		needsDraw = true;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void unload(IArcadeMachine arcadeMachine) {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void update(IArcadeMachine arcadeMachine) {
 		if (screenToDraw == 1) {
 			screenToDraw = 0;
@@ -67,19 +65,16 @@ public class EmptyGame implements IArcadeGame {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public Size screenSize() {
 		return screenSize;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public boolean needsDraw() {
 		return needsDraw;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void draw(BufferedImage screen, float partialTick) {
 		needsDraw = false;
 		if (screens == null) {

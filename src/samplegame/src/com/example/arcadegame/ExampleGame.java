@@ -21,8 +21,8 @@ public class ExampleGame implements IArcadeGame {
 	private boolean needsDraw;
 
 	private Random rand;
-	private final float bgS = 0.5F;
-	private final float bgB = 0.6F;
+	private static final float bgS = 0.5F;
+	private static final float bgB = 0.6F;
 	private Color background;
 	private Color foreground;
 

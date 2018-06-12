@@ -1,4 +1,4 @@
-package de.npe.mcmods.nparcade.arcade;
+package de.npe.mcmods.nparcade.client.arcade;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.Map.Entry;
 import org.lwjgl.input.Keyboard;
 
 import de.npe.mcmods.nparcade.NPArcade;
-import de.npe.mcmods.nparcade.arcade.KeyStatesMap.KeyState;
+import de.npe.mcmods.nparcade.client.arcade.KeyStatesMap.KeyState;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;

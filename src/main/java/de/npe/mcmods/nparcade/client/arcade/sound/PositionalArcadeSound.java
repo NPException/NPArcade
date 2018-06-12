@@ -1,12 +1,16 @@
-package de.npe.mcmods.nparcade.arcade.sound;
+package de.npe.mcmods.nparcade.client.arcade.sound;
 
 import java.util.UUID;
 
 import de.npe.api.nparcade.util.IArcadeSound;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * Created by NPException (2015)
  */
+@SideOnly(Side.CLIENT)
 public class PositionalArcadeSound implements IArcadeSound {
 
 	private final ArcadeSound sndResource;

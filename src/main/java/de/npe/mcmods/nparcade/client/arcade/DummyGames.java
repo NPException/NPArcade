@@ -1,18 +1,22 @@
-package de.npe.mcmods.nparcade.arcade;
+package de.npe.mcmods.nparcade.client.arcade;
 
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import de.npe.mcmods.nparcade.arcade.games.EmptyGame;
-import de.npe.mcmods.nparcade.arcade.games.UnknownGame;
+import de.npe.mcmods.nparcade.client.arcade.games.EmptyGame;
+import de.npe.mcmods.nparcade.client.arcade.games.UnknownGame;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import de.npe.mcmods.nparcade.common.util.Util;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Created by NPException (2015)
  */
+@SideOnly(Side.CLIENT)
 public final class DummyGames {
 	public static final ArcadeGameWrapper UNKNOWN_GAME_WRAPPER = initUnknownGameWrapper();
 	public static final ArcadeGameWrapper EMPTY_GAME_WRAPPER = initEmptyGameWrapper();
@@ -29,7 +33,7 @@ public final class DummyGames {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return new ArcadeGameWrapper("__nparcade_unknown", "???", null, label, 0x686851, UnknownGame.class, null);
+		return new ArcadeGameWrapper("???", null, label, 0x686851, UnknownGame.class);
 	}
 
 	/**
@@ -37,6 +41,6 @@ public final class DummyGames {
 	 */
 	private static ArcadeGameWrapper initEmptyGameWrapper() {
 		EmptyGame.init();
-		return new ArcadeGameWrapper("__nparcade_empty", "___", null, null, -1, EmptyGame.class, null);
+		return new ArcadeGameWrapper("___", null, null, -1, EmptyGame.class);
 	}
 }

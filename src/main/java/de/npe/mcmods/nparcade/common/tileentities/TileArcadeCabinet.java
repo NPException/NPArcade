@@ -1,14 +1,11 @@
 package de.npe.mcmods.nparcade.common.tileentities;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
-import de.npe.mcmods.nparcade.arcade.ArcadeMachine;
-import de.npe.mcmods.nparcade.arcade.DummyGames;
-import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
+import de.npe.mcmods.nparcade.client.arcade.ArcadeMachine;
 import de.npe.mcmods.nparcade.common.ModBlocks;
+import de.npe.mcmods.nparcade.common.ModItems;
+import de.npe.mcmods.nparcade.common.items.ItemCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 import de.npe.mcmods.nparcade.common.util.Util;
 
@@ -87,21 +84,17 @@ public class TileArcadeCabinet extends TileEntity {
 			return true;
 
 		} else {
-			IGameCartridge cartridge = ArcadeGameRegistry.cartridgeForItem(heldStack.getItem());
-			if (cartridge != null) {
-				// change game with different cartridge
-				String cartridgeGameID = cartridge.getGameID(heldStack);
-				if (cartridgeGameID != null) {
-					if (!clientSide()) {
-						heldStack.stackSize--;
-						if (gameID != null) {
-							Util.spawnItemStack(generateCurrentGameCartridge(), world, player.posX, player.posY + 0.5, player.posZ, 0);
-						}
-						gameID = cartridgeGameID;
-						markDirty();
-					}
-					return true;
+			// TODO let the player place ANY item
+
+			// player is holding a cartrige: change the played game
+			if (!clientSide() && heldStack.getItem() == ModItems.cartridge) {
+				heldStack.stackSize--;
+				if (gameID != null) {
+					Util.spawnItemStack(generateCurrentGameCartridge(), world, player.posX, player.posY + 0.5, player.posZ, 0);
 				}
+				gameID = ItemCartridge.getGameID(heldStack);
+				markDirty();
+				return true;
 			}
 		}
 
@@ -142,21 +135,18 @@ public class TileArcadeCabinet extends TileEntity {
 		if (gameID == null) {
 			return null;
 		}
-
-		IGameCartridge cartridge = ArcadeGameRegistry.gameForID(gameID).cartridge();
-		ItemStack cartridgeItem = new ItemStack(cartridge.getCartridgeItem());
-		if (!DummyGames.EMPTY_GAME_WRAPPER.gameID().equals(gameID)) {
-			cartridge.setGameID(cartridgeItem, gameID);
-		}
-		return cartridgeItem;
+		ItemStack itemStack = new ItemStack(ModItems.cartridge);
+		String cartrigeGameId = Util.isEmptyGame(gameID) ? null : gameID;
+		ItemCartridge.setGameID(itemStack, cartrigeGameId);
+		return itemStack;
 	}
 
-	public List<ItemStack> generateItemStacksOnRemoval() {
+	public void generateItemStacksOnRemoval(List<ItemStack> items) {
+		items.add(new ItemStack(ModBlocks.arcadeCabinet));
 		ItemStack cartridgeItem = generateCurrentGameCartridge();
-
-		ItemStack cabinetItem = new ItemStack(ModBlocks.arcadeCabinet);
-
-		return cartridgeItem == null ? Collections.singletonList(cabinetItem) : Arrays.asList(cabinetItem, cartridgeItem);
+		if (cartridgeItem != null) {
+			items.add(cartridgeItem);
+		}
 	}
 
 	@Override

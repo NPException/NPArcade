@@ -1,4 +1,4 @@
-package de.npe.mcmods.nparcade.arcade;
+package de.npe.mcmods.nparcade.client.arcade;
 
 import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
@@ -11,8 +11,8 @@ import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Controls;
 import de.npe.api.nparcade.util.IArcadeSound;
 import de.npe.api.nparcade.util.Size;
-import de.npe.mcmods.nparcade.arcade.KeyStatesMap.KeyState;
-import de.npe.mcmods.nparcade.arcade.sound.ArcadeSoundManager;
+import de.npe.mcmods.nparcade.client.arcade.KeyStatesMap.KeyState;
+import de.npe.mcmods.nparcade.client.arcade.sound.ArcadeSoundManager;
 import de.npe.mcmods.nparcade.client.ClientProxy;
 import de.npe.mcmods.nparcade.client.render.Helper;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;

@@ -39,12 +39,12 @@ public class CommonProxy {
 		// do nothing
 	}
 
-	private void registerTileEntities() {
+	private static void registerTileEntities() {
 		GameRegistry.registerTileEntity(TileArcadeStool.class, Strings.BLOCK_STOOL);
 		GameRegistry.registerTileEntity(TileArcadeCabinet.class, Strings.BLOCK_ARCADE_CABINET);
 	}
 
-	private void registerEntities() {
+	private static void registerEntities() {
 		EntityRegistry.registerModEntity(EntityArcadeStool.class, Strings.ENTITY_STOOL, 0, NPArcade.instance, 80, 20, false);
 	}
 }

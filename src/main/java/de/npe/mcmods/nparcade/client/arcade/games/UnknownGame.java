@@ -1,4 +1,4 @@
-package de.npe.mcmods.nparcade.arcade.games;
+package de.npe.mcmods.nparcade.client.arcade.games;
 
 import java.awt.image.BufferedImage;
 import java.util.concurrent.ThreadLocalRandom;
@@ -13,6 +13,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 /**
  * Created by NPException (2015)
  */
+@SideOnly(Side.CLIENT)
 public class UnknownGame implements IArcadeGame {
 	private int[][] pixels;
 	private int pixelsToDraw = 0;
@@ -20,7 +21,6 @@ public class UnknownGame implements IArcadeGame {
 	private final Size screenSize;
 	private long nextDraw = 0L;
 
-	@SideOnly(Side.CLIENT)
 	public UnknownGame(IArcadeMachine arcadeMachine) {
 		Size amSize = arcadeMachine.suggestedScreenSize();
 		screenSize = new Size(amSize.width / 10, amSize.height / 10);
@@ -45,25 +45,21 @@ public class UnknownGame implements IArcadeGame {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void unload(IArcadeMachine arcadeMachine) {
 		pixels = null;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void update(IArcadeMachine arcadeMachine) {
 		// nothing to do (yet)
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public Size screenSize() {
 		return screenSize;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public boolean needsDraw() {
 		long now = System.nanoTime();
 		if (now > nextDraw) {
@@ -75,7 +71,6 @@ public class UnknownGame implements IArcadeGame {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void draw(BufferedImage screen, float partialTick) {
 		pixelsToDraw = (pixelsToDraw + 1) % pixels.length;
 		screen.setRGB(0, 0, screenSize.width, screenSize.height, pixels[pixelsToDraw], 0, screenSize.width);

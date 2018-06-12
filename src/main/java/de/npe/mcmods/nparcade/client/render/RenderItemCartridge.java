@@ -15,9 +15,9 @@ import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import de.npe.api.nparcade.util.Size;
-import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
-import de.npe.mcmods.nparcade.arcade.ArcadeGameWrapper;
-import de.npe.mcmods.nparcade.arcade.DummyGames;
+import de.npe.mcmods.nparcade.client.arcade.ArcadeGameRegistry;
+import de.npe.mcmods.nparcade.client.arcade.ArcadeGameWrapper;
+import de.npe.mcmods.nparcade.client.arcade.DummyGames;
 import de.npe.mcmods.nparcade.client.render.models.ModelCartridge;
 import de.npe.mcmods.nparcade.common.lib.Strings;
 
@@ -82,7 +82,7 @@ public class RenderItemCartridge extends AbstractItemRenderer {
 	 * I need to pass in the gameID, because in case of the UNKNOWN_GAME_WRAPPER
 	 * I want the itemstack's gameID and not the one of the wrapper.
 	 */
-	private void renderSticker(ArcadeGameWrapper wrapper, String gameID) {
+	private static void renderSticker(ArcadeGameWrapper wrapper, String gameID) {
 		glPushMatrix();
 		{
 			glScalef(0.0625F, 0.0625F, 0.0625F);

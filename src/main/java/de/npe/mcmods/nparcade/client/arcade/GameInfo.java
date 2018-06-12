@@ -1,4 +1,4 @@
-package de.npe.mcmods.nparcade.arcade;
+package de.npe.mcmods.nparcade.client.arcade;
 
 import static de.npe.mcmods.nparcade.common.lib.Strings.JSON_GAME_INFO_CARTRIDGE_COLOR;
 import static de.npe.mcmods.nparcade.common.lib.Strings.JSON_GAME_INFO_CLASS;
@@ -15,9 +15,13 @@ import javax.imageio.ImageIO;
 
 import de.npe.api.nparcade.IArcadeGame;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * Created by NPException (2015)
  */
+@SideOnly(Side.CLIENT)
 class GameInfo {
 	public final String id;
 	public final String title;

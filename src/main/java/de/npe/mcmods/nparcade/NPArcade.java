@@ -2,7 +2,6 @@ package de.npe.mcmods.nparcade;
 
 import org.apache.logging.log4j.Logger;
 
-import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.common.CommonProxy;
 import de.npe.mcmods.nparcade.common.ModBlocks;
 import de.npe.mcmods.nparcade.common.ModItems;
@@ -41,8 +40,6 @@ public class NPArcade {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		log = event.getModLog();
-
-		ArcadeGameRegistry.init();
 
 		proxy.preInitServerSide();
 		proxy.preInitClientSide();

@@ -2,7 +2,8 @@ package de.npe.mcmods.nparcade.client;
 
 import org.lwjgl.input.Keyboard;
 
-import de.npe.mcmods.nparcade.arcade.KeyboardThief;
+import de.npe.mcmods.nparcade.client.arcade.ArcadeGameRegistry;
+import de.npe.mcmods.nparcade.client.arcade.KeyboardThief;
 import de.npe.mcmods.nparcade.client.render.RenderItemArcadeCabinet;
 import de.npe.mcmods.nparcade.client.render.RenderItemArcadeStool;
 import de.npe.mcmods.nparcade.client.render.RenderItemCartridge;
@@ -36,7 +37,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void preInitClientSide() {
-		// do nothing
+		ArcadeGameRegistry.init();
 	}
 
 	@Override

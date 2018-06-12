@@ -1,4 +1,4 @@
-package de.npe.mcmods.nparcade.arcade;
+package de.npe.mcmods.nparcade.client.arcade;
 
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Constructor;
@@ -8,20 +8,17 @@ import org.lwjgl.opengl.GL11;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Size;
-import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
-import de.npe.mcmods.nparcade.common.ModItems;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.item.Item;
 
 /**
  * This class holds information about the game, and (if on the client side)
  * offers a method to create a new instance of that game.
  */
+@SideOnly(Side.CLIENT)
 public final class ArcadeGameWrapper {
-	private final String id;
 	private final String title;
 	private final String description;
 
@@ -36,10 +33,8 @@ public final class ArcadeGameWrapper {
 
 	private final Class<? extends IArcadeGame> gameClass;
 	private final Constructor<? extends IArcadeGame> constructor;
-	private final IGameCartridge customCartridge;
 
-	ArcadeGameWrapper(String id, String title, String description, BufferedImage label, int color, Class<? extends IArcadeGame> gameClass, IGameCartridge customCartridge) {
-		this.id = id;
+	ArcadeGameWrapper(String title, String description, BufferedImage label, int color, Class<? extends IArcadeGame> gameClass) {
 		this.title = title;
 		this.description = description;
 
@@ -59,14 +54,6 @@ public final class ArcadeGameWrapper {
 			throw new IllegalArgumentException("Class " + gameClass.getCanonicalName() + " is missing a public constructor which takes an IArcadeMachine!", ex);
 		}
 
-		if (customCartridge != null && !(customCartridge instanceof Item)) {
-			throw new IllegalArgumentException(
-					"customCartridge is not an instance of " + Item.class.getCanonicalName()
-							+ ". Class of customCartridge: " + customCartridge.getClass());
-		}
-
-		this.customCartridge = customCartridge;
-
 		if (color != -1) {
 			hasColor = true;
 			int r = ((color >> 16) & 0xFF);
@@ -78,42 +65,26 @@ public final class ArcadeGameWrapper {
 		}
 	}
 
-	public String gameID() {
-		return id;
-	}
-
 	public String gameTitle() {
 		return title;
 	}
 
-	public IGameCartridge cartridge() {
-		return customCartridge != null ? customCartridge : ModItems.cartridge;
-	}
-
-	public Class<? extends IArcadeGame> gameClass() {
+	Class<? extends IArcadeGame> gameClass() {
 		return gameClass;
 	}
 
-	/////////////////////////
-	// CLIENT ONLY METHODS //
-	/////////////////////////
-
-	@SideOnly(Side.CLIENT)
 	public String gameDescription() {
 		return description;
 	}
 
-	@SideOnly(Side.CLIENT)
 	public boolean hasLabel() {
 		return label != null;
 	}
 
-	@SideOnly(Side.CLIENT)
 	public Size labelSize() {
 		return labelSize;
 	}
 
-	@SideOnly(Side.CLIENT)
 	public int prepareLabelTexture() {
 		// allocate new texture if not yet initialized
 		if (textureID == -1) {
@@ -128,28 +99,23 @@ public final class ArcadeGameWrapper {
 		return textureID;
 	}
 
-	@SideOnly(Side.CLIENT)
 	public boolean hasColor() {
 		return hasColor;
 	}
 
-	@SideOnly(Side.CLIENT)
 	public float colorRed() {
 		return colorRed;
 	}
 
-	@SideOnly(Side.CLIENT)
 	public float colorGreen() {
 		return colorGreen;
 	}
 
-	@SideOnly(Side.CLIENT)
 	public float colorBlue() {
 		return colorBlue;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public IArcadeGame createGameInstance(IArcadeMachine arcadeMachine) {
+	IArcadeGame createGameInstance(IArcadeMachine arcadeMachine) {
 		try {
 			return constructor.newInstance(arcadeMachine);
 		} catch (Exception ex) {

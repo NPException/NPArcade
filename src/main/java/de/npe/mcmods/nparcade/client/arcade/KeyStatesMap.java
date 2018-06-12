@@ -1,8 +1,8 @@
-package de.npe.mcmods.nparcade.arcade;
+package de.npe.mcmods.nparcade.client.arcade;
 
 import java.util.HashMap;
 
-import de.npe.mcmods.nparcade.arcade.KeyStatesMap.KeyState;
+import de.npe.mcmods.nparcade.client.arcade.KeyStatesMap.KeyState;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;

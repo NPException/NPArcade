@@ -3,8 +3,11 @@ package de.npe.mcmods.nparcade.common.util;
 import java.io.InputStream;
 
 import de.npe.mcmods.nparcade.NPArcade;
+import de.npe.mcmods.nparcade.client.arcade.ArcadeGameRegistry;
 import de.npe.mcmods.nparcade.common.lib.Reference;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -17,6 +20,10 @@ import net.minecraftforge.common.util.ForgeDirection;
  * Created by NPException (2015)
  */
 public final class Util {
+
+	public static boolean isClientSide() {
+		return FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT;
+	}
 
 	public static InputStream getResourceStreamAbsolutePath(Class clazz, String resourcePath) {
 		try {
@@ -71,5 +78,13 @@ public final class Util {
 		entityItem.delayBeforeCanPickup = delayBeforePickup;
 
 		world.spawnEntityInWorld(entityItem);
+	}
+
+	public static boolean isEmptyGame(String gameId) {
+		return Reference.EMPTY_GAME_ID.equals(gameId);
+	}
+
+	public static boolean isUnknownGame(String gameId) {
+		return !Reference.EMPTY_GAME_ID.equals(gameId) && !ArcadeGameRegistry.gameIDs().contains(gameId);
 	}
 }

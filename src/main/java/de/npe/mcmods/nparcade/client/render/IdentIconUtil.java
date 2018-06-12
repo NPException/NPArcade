@@ -166,7 +166,7 @@ final class IdentIconUtil {
 		 * 		image size
 		 * @return identicon image
 		 */
-		public static BufferedImage render(int code, int size) {
+		static BufferedImage render(int code, int size) {
 			// -------------------------------------------------
 			// PREPARE
 			//

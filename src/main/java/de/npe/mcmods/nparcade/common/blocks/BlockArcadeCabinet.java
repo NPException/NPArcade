@@ -55,7 +55,7 @@ public class BlockArcadeCabinet extends Block implements ITileEntityProvider {
 			ArrayList<ItemStack> items = new ArrayList<>(2);
 			TileEntity te = world.getTileEntity(x, y, z);
 			if (te instanceof TileArcadeCabinet) {
-				items.addAll(((TileArcadeCabinet) te).generateItemStacksOnRemoval());
+				((TileArcadeCabinet) te).generateItemStacksOnRemoval(items);
 			}
 			return items;
 		}

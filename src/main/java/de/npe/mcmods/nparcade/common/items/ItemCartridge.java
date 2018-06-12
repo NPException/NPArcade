@@ -1,17 +1,19 @@
 package de.npe.mcmods.nparcade.common.items;
 
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+
+import de.npe.mcmods.nparcade.NPArcade;
+import de.npe.mcmods.nparcade.client.arcade.ArcadeGameRegistry;
+import de.npe.mcmods.nparcade.client.arcade.ArcadeGameWrapper;
+import de.npe.mcmods.nparcade.common.lib.Reference;
+import de.npe.mcmods.nparcade.common.lib.Strings;
+import de.npe.mcmods.nparcade.common.util.Localize;
+import de.npe.mcmods.nparcade.common.util.Util;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-
-import de.npe.mcmods.nparcade.NPArcade;
-import de.npe.mcmods.nparcade.arcade.ArcadeGameRegistry;
-import de.npe.mcmods.nparcade.arcade.ArcadeGameWrapper;
-import de.npe.mcmods.nparcade.arcade.DummyGames;
-import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
-import de.npe.mcmods.nparcade.common.lib.Strings;
-import de.npe.mcmods.nparcade.common.util.Localize;
-
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,13 +22,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
 /**
  * Created by NPException (2015)
  */
-public class ItemCartridge extends Item implements IGameCartridge {
+public class ItemCartridge extends Item {
 
 	public ItemCartridge(String name) {
 		setUnlocalizedName(name);
@@ -44,16 +43,10 @@ public class ItemCartridge extends Item implements IGameCartridge {
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		if (world.isRemote) {
 			player.swingItem();
-			return stack;
-		}
-
-		if (ThreadLocalRandom.current().nextFloat() <= 0.05F && ArcadeGameRegistry.isEmptyGame(getGameID(stack))) {
-			String[] gameIDArray = ArcadeGameRegistry.gameIDs().toArray(new String[0]);
-			String chosenID = gameIDArray[ThreadLocalRandom.current().nextInt(gameIDArray.length)];
-
-			ItemStack newStack = createItemStack(chosenID, 1);
-			if (player.inventory.addItemStackToInventory(newStack)) {
-				stack.stackSize--;
+			if (ThreadLocalRandom.current().nextFloat() <= 0.05F && Util.isEmptyGame(getGameID(stack))) {
+				String[] gameIdArray = ArcadeGameRegistry.gameIDs().toArray(new String[0]);
+				String chosenId = gameIdArray[ThreadLocalRandom.current().nextInt(gameIdArray.length)];
+				// TODO: send chosenId to server, put the game cartridge into the players inventory, and decrement the stacksize of the item he held
 			}
 		}
 		return stack;
@@ -69,7 +62,7 @@ public class ItemCartridge extends Item implements IGameCartridge {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private void addInformation(ItemStack stack, ItemTooltip tooltip) {
+	private static void addInformation(ItemStack stack, ItemTooltip tooltip) {
 		tooltip.addDefaultShiftInfo();
 
 		StringBuilder idInfo = new StringBuilder();
@@ -77,13 +70,13 @@ public class ItemCartridge extends Item implements IGameCartridge {
 
 		String gameID = getGameID(stack);
 
-		if (ArcadeGameRegistry.isEmptyGame(gameID)) {
+		if (Util.isEmptyGame(gameID)) {
 			idInfo.append(Localize.translate(Strings.LANG_TOOLTIP_CARTRIDGE_CONTENT_NONE));
 			tooltip.addToShiftList(idInfo.toString());
 			return;
 		}
 
-		if (ArcadeGameRegistry.isUnknownGame(gameID)) {
+		if (Util.isUnknownGame(gameID)) {
 			tooltip.addAllToShiftList(Localize.wrapToSize(Localize.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN_EXPLANATION), 42));
 			tooltip.addToShiftList("");
 			idInfo.append("§3").append(gameID);
@@ -107,37 +100,34 @@ public class ItemCartridge extends Item implements IGameCartridge {
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		String gameID = getGameID(stack);
-		if (ArcadeGameRegistry.isUnknownGame(gameID)) {
+		if (Util.isUnknownGame(gameID)) {
 			return Localize.translate(Strings.LANG_TOOLTIP_CARTRIDGE_UNKNOWN);
 		}
-		if (ArcadeGameRegistry.isEmptyGame(gameID)) {
+		if (Util.isEmptyGame(gameID)) {
 			return super.getItemStackDisplayName(stack);
 		}
 
 		return ArcadeGameRegistry.gameForID(gameID).gameTitle();
 	}
 
-	@Override
-	public Item getCartridgeItem() {
-		return this;
-	}
-
-	@Override
-	public String getGameID(ItemStack stack) {
+	public static String getGameID(ItemStack stack) {
 		NBTTagCompound tag = stack.getTagCompound();
 		return tag != null && tag.hasKey(Strings.NBT_GAME)
 				? tag.getString(Strings.NBT_GAME)
-				: DummyGames.EMPTY_GAME_WRAPPER.gameID();
+				: Reference.EMPTY_GAME_ID;
 	}
 
-	@Override
-	public void setGameID(ItemStack stack, String gameID) {
+	public static void setGameID(ItemStack stack, String gameID) {
+		NBTTagCompound tag = stack.getTagCompound();
 		if (gameID == null) {
-			stack.setTagCompound(null);
+			if (tag != null) {
+				tag.removeTag(Strings.NBT_GAME);
+				if (tag.hasNoTags()) {
+					stack.setTagCompound(null);
+				}
+			}
 			return;
 		}
-
-		NBTTagCompound tag = stack.getTagCompound();
 		if (tag == null) {
 			tag = new NBTTagCompound();
 			stack.setTagCompound(tag);
@@ -152,7 +142,7 @@ public class ItemCartridge extends Item implements IGameCartridge {
 		subItems.add(createItemStack(null, 1));
 
 		// unknown game // TODO: remove before release
-		subItems.add(createItemStack("this.game.id.does.not.exist...probably", 1));
+		subItems.add(createItemStack("this.is.a.broken.game", 1));
 
 		// all available games
 		for (String gameId : ArcadeGameRegistry.gameIDs()) {

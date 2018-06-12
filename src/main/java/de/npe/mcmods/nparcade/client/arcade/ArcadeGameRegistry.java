@@ -1,4 +1,4 @@
-package de.npe.mcmods.nparcade.arcade;
+package de.npe.mcmods.nparcade.client.arcade;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,14 +25,11 @@ import com.google.gson.reflect.TypeToken;
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.mcmods.nparcade.NPArcade;
-import de.npe.mcmods.nparcade.arcade.api.IGameCartridge;
-import de.npe.mcmods.nparcade.common.ModItems;
 import de.npe.mcmods.nparcade.common.lib.Strings;
+import de.npe.mcmods.nparcade.common.util.Util;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * This class is used to register arcade games, so that there is an easy way to access
@@ -40,6 +37,7 @@ import net.minecraft.item.ItemStack;
  * <p/>
  * Created by NPException (2015)
  */
+@SideOnly(Side.CLIENT)
 public final class ArcadeGameRegistry {
 
 	private ArcadeGameRegistry() {
@@ -50,12 +48,14 @@ public final class ArcadeGameRegistry {
 	private static final Map<String, ArcadeGameWrapper> games = new HashMap<>(512);
 	private static final Set<String> gamesKeySetView = Collections.unmodifiableSet(games.keySet());
 
-	private static final Map<Item, IGameCartridge> customCartridges = new HashMap<>(64);
-
 	/**
 	 * Initializes the ArcadeGameRegistry
 	 */
 	public static synchronized void init() {
+		if (!Util.isClientSide()) {
+			throw new IllegalStateException("ArcadeGameRegistry may only be used on the client side!");
+		}
+
 		if (isInitialized) {
 			return;
 		}
@@ -147,26 +147,6 @@ public final class ArcadeGameRegistry {
 	 * 		the ID of the game. (Must NOT be null)
 	 * @param title
 	 * 		the human readable title for the game. (Must NOT be null)
-	 * @param customCartridge
-	 * 		a custom cartridge that the game should use. If null, the default cartridge will be used.
-	 * 		If set, this must be an instance of {@link Item}.
-	 * @throws IllegalArgumentException
-	 * 		if one of the parameters does not meet the requirements,
-	 * 		or a game with the same ID was already registered.
-	 */
-	public static void register(Class<? extends IArcadeGame> gameClass, String id, String title, IGameCartridge customCartridge) throws IllegalArgumentException {
-		register(gameClass, id, title, null, null, null, customCartridge);
-	}
-
-	/**
-	 * Registers a new game.
-	 *
-	 * @param gameClass
-	 * 		the Class of the game. (Must have a public no-args constructor)
-	 * @param id
-	 * 		the ID of the game. (Must NOT be null)
-	 * @param title
-	 * 		the human readable title for the game. (Must NOT be null)
 	 * @param label
 	 * 		a label for the game cartridge. (Can be null)
 	 * @param colorString
@@ -176,31 +156,17 @@ public final class ArcadeGameRegistry {
 	 * 		or a game with the same ID was already registered.
 	 */
 	public static void register(Class<? extends IArcadeGame> gameClass, String id, String title, String description, BufferedImage label, String colorString) throws IllegalArgumentException {
-		register(gameClass, id, title, description, label, colorString, null);
-	}
-
-	private static synchronized void register(Class<? extends IArcadeGame> gameClass, String id, String title, String description, BufferedImage label, String colorString, IGameCartridge customCartridge) throws IllegalArgumentException {
 		String gameToString = " Game -> ID:" + id
 				+ ", Title:" + title
 				+ ", Class:" + gameClass.getCanonicalName()
 				+ ", Label:" + (label != null)
-				+ ", Color:" + colorString
-				+ ", Custom_Cartridge:" + customCartridge;
+				+ ", Color:" + colorString;
 
 		if (id == null) {
 			throw new IllegalArgumentException("ID must not be null!" + gameToString);
 		}
 		if (title == null) {
 			throw new IllegalArgumentException("Title must not be null!" + gameToString);
-		}
-
-		IGameCartridge wrapperCartridge = null;
-		if (customCartridge != null) {
-			Item cartridgeItem = customCartridge.getCartridgeItem();
-			if (cartridgeItem == null) {
-				throw new IllegalArgumentException("Custom cartridge must not return null for getCartridgeItem()!" + gameToString);
-			}
-			wrapperCartridge = new WrapperCartridge(cartridgeItem, customCartridge);
 		}
 
 		int color = -1;
@@ -222,14 +188,8 @@ public final class ArcadeGameRegistry {
 			throw new IllegalArgumentException("Game with ID already registered: " + id + gameToString);
 		}
 
-		boolean isClient = (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT);
-		ArcadeGameWrapper wrapper = isClient
-				? new ArcadeGameWrapper(id, title, description, label, color, gameClass, wrapperCartridge)
-				: new ArcadeGameWrapper(id, title, null, null, -1, null, wrapperCartridge);
+		ArcadeGameWrapper wrapper = new ArcadeGameWrapper(title, description, label, color, gameClass);
 		games.put(id, wrapper);
-		if (wrapperCartridge != null) {
-			customCartridges.put(wrapperCartridge.getCartridgeItem(), wrapperCartridge);
-		}
 		NPArcade.log.info("Registered game with ID: " + id + ", title: " + title);
 	}
 
@@ -240,19 +200,13 @@ public final class ArcadeGameRegistry {
 	 * This method will therefor never return null.
 	 */
 	public static ArcadeGameWrapper gameForID(String id) {
-		if (isEmptyGame(id)) {
+		if (Util.isEmptyGame(id)) {
 			return DummyGames.EMPTY_GAME_WRAPPER;
 		}
 		ArcadeGameWrapper wrapper = games.get(id);
-		return wrapper != null ? wrapper : DummyGames.UNKNOWN_GAME_WRAPPER;
-	}
-
-	public static boolean isEmptyGame(String gameId) {
-		return DummyGames.EMPTY_GAME_WRAPPER.gameID().equals(gameId);
-	}
-
-	public static boolean isUnknownGame(String gameId) {
-		return DummyGames.UNKNOWN_GAME_WRAPPER == gameForID(gameId);
+		return wrapper != null
+				? wrapper
+				: DummyGames.UNKNOWN_GAME_WRAPPER;
 	}
 
 	/**
@@ -261,41 +215,5 @@ public final class ArcadeGameRegistry {
 	 */
 	public static Set<String> gameIDs() {
 		return gamesKeySetView;
-	}
-
-	/**
-	 * Returns the registered {@link IGameCartridge} for the given Item.
-	 * May return null if no cartridge was registerd for the given item.
-	 */
-	public static IGameCartridge cartridgeForItem(Item item) {
-		return item == ModItems.cartridge ? ModItems.cartridge : customCartridges.get(item);
-	}
-
-	/**
-	 * A wrapper class to prevent calling {@link IGameCartridge#getCartridgeItem()} more than once.
-	 */
-	private static class WrapperCartridge implements IGameCartridge {
-		private final Item cartridgeItem;
-		private final IGameCartridge delegate;
-
-		WrapperCartridge(Item cartridgeItem, IGameCartridge delegate) {
-			this.cartridgeItem = cartridgeItem;
-			this.delegate = delegate;
-		}
-
-		@Override
-		public Item getCartridgeItem() {
-			return cartridgeItem;
-		}
-
-		@Override
-		public String getGameID(ItemStack stack) {
-			return delegate.getGameID(stack);
-		}
-
-		@Override
-		public void setGameID(ItemStack stack, String gameID) {
-			delegate.setGameID(stack, gameID);
-		}
 	}
 }

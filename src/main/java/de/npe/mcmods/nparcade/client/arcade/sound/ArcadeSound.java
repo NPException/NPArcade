@@ -1,4 +1,4 @@
-package de.npe.mcmods.nparcade.arcade.sound;
+package de.npe.mcmods.nparcade.client.arcade.sound;
 
 import java.lang.reflect.Field;
 import java.net.URL;

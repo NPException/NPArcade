@@ -13,7 +13,7 @@ public final class Strings {
 	public static final String ENTITY_STOOL = BLOCK_STOOL + "Entity";
 
 
-	public static final String KEY_PREFIX = "key." + Reference.MOD_ID;
+	private static final String KEY_PREFIX = "key." + Reference.MOD_ID;
 	public static final String KEY_ARCADE_BUTTON_RED = KEY_PREFIX + ".button.red";
 	public static final String KEY_ARCADE_BUTTON_GREEN = KEY_PREFIX + ".button.green";
 	public static final String KEY_ARCADE_BUTTON_BLUE = KEY_PREFIX + ".button.blue";
