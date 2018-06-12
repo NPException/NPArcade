@@ -1,14 +1,16 @@
 package de.npe.mcmods.nparcade.arcade;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.WeakHashMap;
 
 import org.lwjgl.input.Keyboard;
 
 import de.npe.mcmods.nparcade.NPArcade;
+import de.npe.mcmods.nparcade.arcade.KeyStatesMap.KeyState;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
@@ -38,62 +40,58 @@ public final class KeyboardThief {
 		FMLCommonHandler.instance().bus().register(INSTANCE);
 	}
 
-	enum KeyState {
-		// key has been pressed in this tick
-		PRESS,
-		// key is still down
-		HOLD,
-		// key has been released in this tick
-		RELEASE
-	}
-
 	private KeyboardThief() {
 	}
 
 	// holds the currently updated key state map
-	private static WeakReference<Map<Integer, KeyState>> activeKeys;
+	private static WeakReference<KeyStatesMap> activeKeys;
 
-	// holds previously active key state maps, which may need to be properly released first
-	private static final WeakHashMap<Map<Integer, KeyState>, Object> oldKeysSet = new WeakHashMap<>();
+	// holds previously active key states maps, which may need to be properly released first
+	private static final List<KeyStatesMap> oldKeysList = new ArrayList<>(2);
 
-	private static Map<Integer, KeyState> current() {
+	private static KeyStatesMap current() {
 		return activeKeys != null
 				? activeKeys.get()
 				: null;
 	}
 
-	static void activate(Map<Integer, KeyState> keys) {
+	static void activate(KeyStatesMap keys) {
 		NPArcade.log.info("activated KeyboardThief control");
 		KeyBinding.unPressAllKeys();
 
-		Map<Integer, KeyState> current = current();
-		if (current != null && current != keys) {
-			oldKeysSet.put(current, null);
+		KeyStatesMap current = current();
+		if (current != null && current != keys && !oldKeysList.contains(current)) {
+			oldKeysList.add(current);
 		}
-		oldKeysSet.remove(keys); // in case they were in the old keys before
+		oldKeysList.remove(keys); // in case they were in the old keys before
 		activeKeys = new WeakReference<>(keys);
 		MC.gameSettings.hideGUI = true;
 	}
 
-	static void release(Map<Integer, KeyState> keys) {
+	static void release(KeyStatesMap keys) {
 		NPArcade.log.info("released KeyboardThief control");
 		// safety check
 		if (current() == keys) {
 			activeKeys = null;
 			MC.gameSettings.hideGUI = false;
 		}
-		oldKeysSet.put(keys, null);
+		if (oldKeysList.contains(keys)) {
+			// should not happen, but you never know...
+			NPArcade.log.error("release() was called with already released keys! If you see this, please tell the mod developer.", new Throwable());
+		} else {
+			oldKeysList.add(keys);
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void tick(ClientTickEvent event) {
-		if (event.phase != Phase.START) {
+		if (event.phase != Phase.START || MC.isGamePaused()) {
 			return;
 		}
-		if (!oldKeysSet.isEmpty()) {
-			Iterator<Map<Integer, KeyState>> setIt = oldKeysSet.keySet().iterator();
+		if (!oldKeysList.isEmpty()) {
+			Iterator<KeyStatesMap> setIt = oldKeysList.iterator();
 			while (setIt.hasNext()) {
-				Map<Integer, KeyState> oldKeys = setIt.next();
+				KeyStatesMap oldKeys = setIt.next();
 				// two step deactivation process, to give the oportunity for keys to be properly released
 				Iterator<Entry<Integer, KeyState>> it = oldKeys.entrySet().iterator();
 				while (it.hasNext()) {

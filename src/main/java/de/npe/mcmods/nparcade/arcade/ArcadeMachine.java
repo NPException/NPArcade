@@ -5,17 +5,15 @@ import static org.lwjgl.opengl.GL11.glBindTexture;
 
 import java.awt.image.BufferedImage;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Controls;
 import de.npe.api.nparcade.util.IArcadeSound;
 import de.npe.api.nparcade.util.Size;
+import de.npe.mcmods.nparcade.arcade.KeyStatesMap.KeyState;
 import de.npe.mcmods.nparcade.arcade.sound.ArcadeSoundManager;
 import de.npe.mcmods.nparcade.client.ClientProxy;
-import de.npe.mcmods.nparcade.arcade.KeyboardThief.KeyState;
 import de.npe.mcmods.nparcade.client.render.Helper;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 
@@ -40,7 +38,7 @@ public class ArcadeMachine implements IArcadeMachine {
 	private int[] screenData;
 	private BufferedImage image;
 
-	private final Map<Integer, KeyState> keyStates = new HashMap<>(8);
+	private final KeyStatesMap keyStates = new KeyStatesMap();
 
 	public ArcadeMachine(int suggestedScreenWidth, int suggestedScreenHeight, TileArcadeCabinet tile) {
 		suggestedScreenSize = new Size(suggestedScreenWidth, suggestedScreenHeight);
