@@ -11,9 +11,9 @@ import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Controls;
 import de.npe.api.nparcade.util.IArcadeSound;
 import de.npe.api.nparcade.util.Size;
+import de.npe.mcmods.nparcade.client.ClientProxy;
 import de.npe.mcmods.nparcade.client.arcade.KeyStatesMap.KeyState;
 import de.npe.mcmods.nparcade.client.arcade.sound.ArcadeSoundManager;
-import de.npe.mcmods.nparcade.client.ClientProxy;
 import de.npe.mcmods.nparcade.client.render.Helper;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 
@@ -37,6 +37,9 @@ public class ArcadeMachine implements IArcadeMachine {
 	private int textureID = -1;
 	private int[] screenData;
 	private BufferedImage image;
+
+	public float stickOffsetX, stickOffsetY;
+	public float buttonRedOffset, buttonGreenOffset, buttonBlueOffset, buttonYellowOffset;
 
 	private final KeyStatesMap keyStates = new KeyStatesMap();
 
@@ -142,7 +145,7 @@ public class ArcadeMachine implements IArcadeMachine {
 		if (isKeyPressed(Controls.KEY_ESCAPE)) {
 			long now = System.currentTimeMillis();
 			// release control on escape double tap
-			if ((lastEscapePress + 500) > now) {
+			if (lastEscapePress + 500 > now) {
 				release();
 			} else {
 				lastEscapePress = now;
@@ -156,8 +159,44 @@ public class ArcadeMachine implements IArcadeMachine {
 
 	public void update() {
 		checkReleaseHotkeys();
+		updateControlRenderOffsets();
 		if (game != null) {
 			game.update(this);
+		}
+	}
+
+	private void updateControlRenderOffsets() {
+		stickOffsetX = stickOffsetY = buttonRedOffset = buttonGreenOffset = buttonBlueOffset = buttonYellowOffset = 0;
+		if (keyStates.isEmpty()) {
+			return;
+		}
+		stickOffsetX -= offset(Controls.ARCADE_KEY_LEFT);
+		stickOffsetX += offset(Controls.ARCADE_KEY_RIGHT);
+		stickOffsetY -= offset(Controls.ARCADE_KEY_UP);
+		stickOffsetY += offset(Controls.ARCADE_KEY_DOWN);
+
+		buttonRedOffset = offset(Controls.ARCADE_KEY_RED);
+		buttonGreenOffset = offset(Controls.ARCADE_KEY_GREEN);
+		buttonBlueOffset = offset(Controls.ARCADE_KEY_BLUE);
+		buttonYellowOffset = offset(Controls.ARCADE_KEY_YELLOW);
+	}
+
+	private float offset(int key) {
+		// manual checks to avoid multiple method calls to isKeyDown etc.
+		KeyState state = keyStates.get(mapKeyCode(key));
+		if (state == null) {
+			return 0F;
+		}
+		switch (state) {
+			case PRESS:
+				return 0.75F;
+			case HOLD:
+				return 1F;
+			case RELEASE:
+				return 0.25F;
+			default:
+				// should not happen
+				throw new IllegalStateException("Uncheck KeyState: " + state);
 		}
 	}
 

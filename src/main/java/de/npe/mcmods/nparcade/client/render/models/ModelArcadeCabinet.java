@@ -32,6 +32,11 @@ public final class ModelArcadeCabinet extends ModelBase {
 	public static final ResourceLocation texture = new ResourceLocation(Reference.MOD_IDENTIFIER + "textures/models/nparcade_modelArcadeCabinet.png");
 
 	private final ModelRenderer base;
+	private final ModelRenderer stick;
+	private final ModelRenderer buttonRed;
+	private final ModelRenderer buttonGreen;
+	private final ModelRenderer buttonBlue;
+	private final ModelRenderer buttonYellow;
 
 	private ModelArcadeCabinet() {
 		textureWidth = 88;
@@ -79,20 +84,20 @@ public final class ModelArcadeCabinet extends ModelBase {
 		wallRight4.setRotationPoint(0.0F, -4.0F, 0.0F);
 		wallRight4.addBox(-2.0F, -4.0F, -4.0F, 2, 4, 4, 0.0F);
 
-		ModelRenderer buttonGreen = new ModelRenderer(this, 0, 0);
-		buttonGreen.setRotationPoint(0.5F, 7.0F, -4.5F);
-		buttonGreen.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
-		ModelRenderer buttonRed = new ModelRenderer(this, 0, 2);
+		buttonRed = new ModelRenderer(this, 0, 2);
 		buttonRed.setRotationPoint(-0.5F, 7.0F, -5.5F);
 		buttonRed.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
-		ModelRenderer buttonYellow = new ModelRenderer(this, 4, 0);
-		buttonYellow.setRotationPoint(3.5F, 7.0F, -4.5F);
-		buttonYellow.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
-		ModelRenderer buttonBlue = new ModelRenderer(this, 4, 2);
+		buttonGreen = new ModelRenderer(this, 0, 0);
+		buttonGreen.setRotationPoint(0.5F, 7.0F, -4.5F);
+		buttonGreen.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
+		buttonBlue = new ModelRenderer(this, 4, 2);
 		buttonBlue.setRotationPoint(2.5F, 7.0F, -5.5F);
 		buttonBlue.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
+		buttonYellow = new ModelRenderer(this, 4, 0);
+		buttonYellow.setRotationPoint(3.5F, 7.0F, -4.5F);
+		buttonYellow.addBox(-0.5F, -0.5F, -0.5F, 1, 1, 1, 0.0F);
 
-		ModelRenderer stick = new ModelRenderer(this, 0, 7);
+		stick = new ModelRenderer(this, 0, 7);
 		stick.setRotationPoint(-4.5F, 7.0F, -5.5F);
 		stick.addBox(-0.5F, -1.5F, -0.5F, 1, 2, 1, 0.0F);
 
@@ -129,6 +134,16 @@ public final class ModelArcadeCabinet extends ModelBase {
 
 	public void renderCabinet(TileArcadeCabinet tile, float tick, float scale) {
 		glColor3f(1.0F, 1.0F, 1.0F);
+
+		ArcadeMachine am = tile.arcadeMachine();
+
+		stick.offsetX = am.stickOffsetX * scale * 0.7F;
+		stick.offsetZ = -am.stickOffsetY * scale * 0.7F;
+
+		buttonRed.offsetY = am.buttonRedOffset * scale * 0.3F;
+		buttonBlue.offsetY = am.buttonGreenOffset * scale * 0.3F;
+		buttonGreen.offsetY = am.buttonBlueOffset * scale * 0.3F;
+		buttonYellow.offsetY = am.buttonYellowOffset * scale * 0.3F;
 
 		base.render(scale);
 		renderScreen(tile, tick);
