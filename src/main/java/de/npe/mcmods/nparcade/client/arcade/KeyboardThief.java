@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.client.arcade.KeyStatesMap.KeyState;
@@ -23,7 +24,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 
 /**
- * Main behaviour was grabbed from OmnisCore, many thanks to Jezza!
  * This class is used to hijack the keyboard input.
  */
 @SideOnly(Side.CLIENT)
@@ -140,6 +140,10 @@ public final class KeyboardThief {
 					? KeyState.PRESS
 					: KeyState.RELEASE;
 			keys.put(key, state);
+		}
+
+		while (Mouse.next()) {
+			// eliminate mouse clicks as well
 		}
 	}
 }
