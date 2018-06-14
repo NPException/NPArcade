@@ -1,8 +1,11 @@
 package de.npe.mcmods.nparcade.client.arcade;
 
+import static de.npe.mcmods.nparcade.common.lib.Strings.JSON_GAME_INFO_FILE;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
@@ -82,10 +85,16 @@ public final class ArcadeGameRegistry {
 		// first, scan directories and subdirectories for candidate files
 		while (!directories.isEmpty()) {
 			File directory = directories.removeFirst();
+			// check if the directory itself is a candidate
+			if (new File(directory, JSON_GAME_INFO_FILE).isFile()) {
+				candidates.add(directory);
+			}
 			File[] content = directory.listFiles(new FileFilter() {
 				@Override
 				public boolean accept(File file) {
-					return file.getName().endsWith(".zip") || file.getName().endsWith(".jar") || file.isDirectory();
+					return file.getName().endsWith(".zip")
+							|| file.getName().endsWith(".jar")
+							|| file.isDirectory();
 				}
 			});
 			if (content != null) {
@@ -106,16 +115,24 @@ public final class ArcadeGameRegistry {
 		}.getType();
 
 		for (File candidate : candidates) {
-			try (ZipFile zip = new ZipFile(candidate)) {
-				ZipEntry gameInfoFile = zip.getEntry(Strings.JSON_GAME_INFO_FILE);
-				if (gameInfoFile == null) {
-					continue;
+			if (candidate.isDirectory()) {
+				try (FileReader infoReader = new FileReader(new File(candidate, JSON_GAME_INFO_FILE))) {
+					List<Map<String, String>> gameInfos = gson.fromJson(infoReader, gameInfoType);
+					gameFilesData.put(candidate, gameInfos);
+				} catch (Exception ex) {
+					NPArcade.log.warn("Something went wrong while analyzing a game candidate directory", ex);
 				}
-
-				List<Map<String, String>> gameInfos = gson.fromJson(new InputStreamReader(zip.getInputStream(gameInfoFile)), gameInfoType);
-				gameFilesData.put(candidate, gameInfos);
-			} catch (Exception ex) {
-				NPArcade.log.warn("Something went wrong while analyzing a game candidate file", ex);
+			} else {
+				try (ZipFile zip = new ZipFile(candidate)) {
+					ZipEntry gameInfoFile = zip.getEntry(JSON_GAME_INFO_FILE);
+					if (gameInfoFile == null) {
+						continue;
+					}
+					List<Map<String, String>> gameInfos = gson.fromJson(new InputStreamReader(zip.getInputStream(gameInfoFile)), gameInfoType);
+					gameFilesData.put(candidate, gameInfos);
+				} catch (Exception ex) {
+					NPArcade.log.warn("Something went wrong while analyzing a game candidate jar/zip file", ex);
+				}
 			}
 		}
 
