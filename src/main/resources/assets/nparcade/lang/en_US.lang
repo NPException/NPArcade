@@ -17,6 +17,8 @@ tooltip.item.cartridge.unknown.explanation=This game cannot be played, because a
 tooltip.item.cartridge.content=$7Game Id
 tooltip.item.cartridge.content.none=$8None
 
+tooltip.item.arcade.cabinet=Insert a cartridge by holding it in your hand, and right-clicking on the cabinet.\n\nRight-click the cabinet with an empty hand to start playing.\n\n$3To $3stop $3playing, $3double-tap $3the $3Escape $3key.
+
 key.nparcade.button.red=Red Arcade Button
 key.nparcade.button.green=Green Arcade Button
 key.nparcade.button.blue=Blue Arcade Button

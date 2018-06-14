@@ -3,6 +3,7 @@ package de.npe.mcmods.nparcade.common.blocks;
 import java.util.ArrayList;
 
 import de.npe.mcmods.nparcade.NPArcade;
+import de.npe.mcmods.nparcade.common.items.ItemArcadeCabinet;
 import de.npe.mcmods.nparcade.common.lib.Reference;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 
@@ -31,7 +32,7 @@ public class BlockArcadeCabinet extends Block implements ITileEntityProvider {
 		super(material);
 		setBlockName(name);
 		setBlockTextureName("nparcade_blockParticles"); // only here for proper break- and run- particles
-		GameRegistry.registerBlock(this, name);
+		GameRegistry.registerBlock(this, ItemArcadeCabinet.class, name);
 
 		setHardness(1.0F);
 		setResistance(5.0F);
@@ -46,7 +47,8 @@ public class BlockArcadeCabinet extends Block implements ITileEntityProvider {
 			return true;
 		}
 		TileEntity te = world.getTileEntity(x, y, z);
-		return (te instanceof TileArcadeCabinet) && side == ((TileArcadeCabinet) te).facing().getOpposite();
+		return te instanceof TileArcadeCabinet
+				&& side == ((TileArcadeCabinet) te).facing().getOpposite();
 	}
 
 	@Override

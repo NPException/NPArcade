@@ -42,4 +42,6 @@ public final class Strings {
 	public static final String LANG_TOOLTIP_CARTRIDGE_UNKNOWN_EXPLANATION = "tooltip.item.cartridge.unknown.explanation";
 	public static final String LANG_TOOLTIP_CARTRIDGE_CONTENT = "tooltip.item.cartridge.content";
 	public static final String LANG_TOOLTIP_CARTRIDGE_CONTENT_NONE = "tooltip.item.cartridge.content.none";
+
+	public static final String LANG_TOOLTIP_ARCADE_CABINET = "tooltip.item.arcade.cabinet";
 }
