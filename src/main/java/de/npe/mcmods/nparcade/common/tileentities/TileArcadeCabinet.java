@@ -172,7 +172,7 @@ public class TileArcadeCabinet extends TileEntity {
 
 		if (clientSide()) {
 			if (gameID != null) {
-				loadGame(false);
+				loadGame();
 			} else {
 				unloadGame();
 			}
@@ -216,8 +216,8 @@ public class TileArcadeCabinet extends TileEntity {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private void loadGame(boolean forceReload) {
-		arcadeMachine().load(gameID, forceReload);
+	private void loadGame() {
+		arcadeMachine().load(gameID);
 	}
 
 	@SideOnly(Side.CLIENT)

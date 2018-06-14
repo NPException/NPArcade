@@ -11,6 +11,7 @@ import de.npe.api.nparcade.IArcadeMachine;
 import de.npe.api.nparcade.util.Controls;
 import de.npe.api.nparcade.util.IArcadeSound;
 import de.npe.api.nparcade.util.Size;
+import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.client.ClientProxy;
 import de.npe.mcmods.nparcade.client.arcade.KeyStatesMap.KeyState;
 import de.npe.mcmods.nparcade.client.arcade.sound.ArcadeSoundManager;
@@ -33,7 +34,8 @@ public class ArcadeMachine implements IArcadeMachine {
 	private final TileArcadeCabinet tile;
 
 	private String gameID;
-	private IArcadeGame game;
+	private ArcadeGameWrapper gameWrapper;
+	private IArcadeGame gameInstance;
 	private int textureID = -1;
 	private int[] screenData;
 	private BufferedImage image;
@@ -95,7 +97,7 @@ public class ArcadeMachine implements IArcadeMachine {
 
 	@Override
 	public IArcadeSound registerSound(String soundFilePath, boolean streaming) {
-		URL soundURL = ArcadeGameRegistry.gameForID(gameID).gameClass().getResource(soundFilePath);
+		URL soundURL = gameWrapper.gameClass().getResource(soundFilePath);
 		return soundManager.createPositionalSound(soundFilePath, soundURL, streaming, tile.xCoord + 0.5F, tile.yCoord + 0.5F, tile.zCoord + 0.5F);
 	}
 
@@ -160,8 +162,14 @@ public class ArcadeMachine implements IArcadeMachine {
 	public void update() {
 		checkReleaseHotkeys();
 		updateControlRenderOffsets();
-		if (game != null) {
-			game.update(this);
+		if (gameInstance != null) {
+			try {
+				gameInstance.update(this);
+			} catch (Throwable t) {
+				NPArcade.log.warn("Arcade game with id '" + gameID + "' threw exception during update", t);
+				// fallback to broken/unknown game
+				load(null);
+			}
 		}
 	}
 
@@ -205,37 +213,30 @@ public class ArcadeMachine implements IArcadeMachine {
 	 * If another game is already loaded, it will be unloaded properly
 	 * before the new game is loaded.
 	 */
-	public void load(String gameID, boolean forceReload) {
-		if (gameID == null) {
-			unload();
-			// TODO: load error screen
-			return;
-		}
-
-		// dont reload the game  if it is already running
-		if (!forceReload && game != null && this.gameID != null && this.gameID.equals(gameID)) {
-			return;
-		}
-
+	public void load(String gameID) {
 		// unload previous game
 		unload();
 
 		// load new game
 		this.gameID = gameID;
-		ArcadeGameWrapper wrapper = ArcadeGameRegistry.gameForID(this.gameID);
+		gameWrapper = ArcadeGameRegistry.gameForID(this.gameID);
 
-		game = wrapper.createGameInstance(this);
+		try {
+			gameInstance = gameWrapper.createGameInstance(this);
+		} catch (Throwable t) {
+			NPArcade.log.warn("Failed to instantiate arcade game with id '" + gameID + "'", t);
+			// fallback to broken/unknown game
+			load(null);
+		}
 	}
 
 	public void unload() {
-		if (game != null) {
-			game = null;
+		if (gameInstance != null) {
 			gameID = null;
 			gameInstance = null;
 			gameWrapper = null;
 		}
 		deleteTexture();
-
 		soundManager.unloadAllSounds();
 	}
 
@@ -247,11 +248,18 @@ public class ArcadeMachine implements IArcadeMachine {
 	 * Renders the arcade machines screen via OpenGL using it's suggested screen size.
 	 */
 	public void doRenderScreen(float tick) {
-		if (game == null) {
+		if (gameInstance == null) {
 			return;
 		}
 
-		prepareRender(tick);
+		try {
+			prepareRender(tick);
+		} catch (Throwable t) {
+			NPArcade.log.warn("Arcade game with id '" + gameID + "' threw exception during rendering", t);
+			// fallback to broken/unknown game
+			load(null);
+			return;
+		}
 
 		glBindTexture(GL_TEXTURE_2D, textureID);
 
@@ -276,7 +284,7 @@ public class ArcadeMachine implements IArcadeMachine {
 	 * Checks if the game is present and wants to update it's graphics.
 	 */
 	private boolean needsScreenRefresh() {
-		return textureID == -1 || game.needsDraw();
+		return textureID == -1 || gameInstance.needsDraw();
 	}
 
 	/**
@@ -291,7 +299,7 @@ public class ArcadeMachine implements IArcadeMachine {
 	 */
 	private void prepareRender(float tick) {
 		if (needsScreenRefresh()) {
-			Size size = game.screenSize();
+			Size size = gameInstance.screenSize();
 			int width = size.width;
 			int height = size.height;
 
@@ -310,7 +318,7 @@ public class ArcadeMachine implements IArcadeMachine {
 			}
 
 			// draw game
-			game.draw(image, tick);
+			gameInstance.draw(image, tick);
 			// get pixel data
 			image.getRGB(0, 0, width, height, screenData, 0, width);
 			// upload pixels to texture

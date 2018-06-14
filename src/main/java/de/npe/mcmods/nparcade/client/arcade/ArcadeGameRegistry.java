@@ -194,8 +194,8 @@ public final class ArcadeGameRegistry {
 	}
 
 	/**
-	 * Returns the ArcadeGameWrapper object for the game with the given ID, or an empty
-	 * wrapper (with gameID being <b>null</b>) if no game with the given ID was found.<br>
+	 * Returns the ArcadeGameWrapper object for the game with the given ID, or an "unknown game"
+	 * wrapper if no game with the given ID was found.<br>
 	 * <br>
 	 * This method will therefor never return null.
 	 */

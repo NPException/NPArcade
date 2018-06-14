@@ -18,7 +18,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Game implementation for cartridges where the game is not
- * available on the client.
+ * available on the client, or crashes.
  * Displays a glitchy test screen.
  *
  * Created by NPException (2015)
