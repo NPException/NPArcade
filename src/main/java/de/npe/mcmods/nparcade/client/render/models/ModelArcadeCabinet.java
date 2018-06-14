@@ -141,8 +141,8 @@ public final class ModelArcadeCabinet extends ModelBase {
 		stick.offsetZ = -am.stickOffsetY * scale * 0.7F;
 
 		buttonRed.offsetY = am.buttonRedOffset * scale * 0.3F;
-		buttonBlue.offsetY = am.buttonGreenOffset * scale * 0.3F;
-		buttonGreen.offsetY = am.buttonBlueOffset * scale * 0.3F;
+		buttonGreen.offsetY = am.buttonGreenOffset * scale * 0.3F;
+		buttonBlue.offsetY = am.buttonBlueOffset * scale * 0.3F;
 		buttonYellow.offsetY = am.buttonYellowOffset * scale * 0.3F;
 
 		base.render(scale);
