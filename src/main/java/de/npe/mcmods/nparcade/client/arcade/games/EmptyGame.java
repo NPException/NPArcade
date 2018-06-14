@@ -48,11 +48,6 @@ public class EmptyGame implements IArcadeGame {
 	}
 
 	@Override
-	public void unload(IArcadeMachine arcadeMachine) {
-		pixels = null;
-	}
-
-	@Override
 	public void update(IArcadeMachine arcadeMachine) {
 		// nothing to do (yet)
 	}

@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import de.npe.api.nparcade.IArcadeGame;
 import de.npe.api.nparcade.IArcadeMachine;
@@ -20,20 +21,19 @@ public class ExampleGame implements IArcadeGame {
 	private final Size screenSize;
 	private boolean needsDraw;
 
-	private Random rand;
 	private static final float bgS = 0.5F;
 	private static final float bgB = 0.6F;
 	private Color background;
 	private Color foreground;
 
-	private IArcadeSound bounceSound;
+	private final IArcadeSound bounceSound;
 
 	private final float speed;
 	private float x, y, dx, dy;
 
 	public ExampleGame(IArcadeMachine arcadeMachine) {
 		screenSize = arcadeMachine.suggestedScreenSize().scale(2);
-		rand = new Random();
+		Random rand = ThreadLocalRandom.current();
 
 		speed = screenSize.width / 20f;
 
@@ -48,14 +48,6 @@ public class ExampleGame implements IArcadeGame {
 		float h = rand.nextFloat();
 		background = Color.getHSBColor(h, bgS, bgB);
 		foreground = Color.BLACK;
-	}
-
-	@Override
-	public void unload(IArcadeMachine arcadeMachine) {
-		rand = null;
-		background = null;
-		foreground = null;
-		bounceSound = null;
 	}
 
 	@Override
@@ -89,7 +81,7 @@ public class ExampleGame implements IArcadeGame {
 		}
 
 		if (change) {
-			float h = rand.nextFloat();
+			float h = ThreadLocalRandom.current().nextFloat();
 			background = Color.getHSBColor(h, bgS, bgB);
 			bounceSound.play(1F, 1F, false);
 		}

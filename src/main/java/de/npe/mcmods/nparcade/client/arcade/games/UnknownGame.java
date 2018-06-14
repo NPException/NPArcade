@@ -54,10 +54,6 @@ public class UnknownGame implements IArcadeGame {
 	}
 
 	@Override
-	public void unload(IArcadeMachine arcadeMachine) {
-	}
-
-	@Override
 	public void update(IArcadeMachine arcadeMachine) {
 		if (screenToDraw == 1) {
 			screenToDraw = 0;

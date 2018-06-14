@@ -229,9 +229,10 @@ public class ArcadeMachine implements IArcadeMachine {
 
 	public void unload() {
 		if (game != null) {
-			game.unload(this);
 			game = null;
 			gameID = null;
+			gameInstance = null;
+			gameWrapper = null;
 		}
 		deleteTexture();
 

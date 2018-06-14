@@ -10,6 +10,13 @@ import de.npe.api.nparcade.util.Size;
  * instance of {@link IArcadeMachine} as a parametr.</p>
  * <p>When the constructor is called, the game should do all necessary intializations
  * and setup operations required to boot the game.</p>
+ * <br>
+ * <p><i>If the constructor call or any call to a method of this interface throws an exception, <b>the game
+ * will be considered crashed</b>, and no further calls to the game will be made.</i></p>
+ * <br>
+ * <p>The game needs to make sure that all of is resources are able to be garbage collected when
+ * the game instance is no longer referenced.</p>
+ * <br>
  * <p>For a detailed specification of how an arcade machine interacts with the game, and how {@link IArcadeGame}'s
  * methods have to be used, visit the
  * <a href="https://github.com/NPException42/NPArcade/wiki/Technical-Specification">specification page of the wiki</a>.</p>
@@ -21,14 +28,6 @@ public interface IArcadeGame {
 	////////////////////////////////
 	// GAME STATE RELATED METHODS //
 	////////////////////////////////
-
-	/**
-	 * This method is called when the game is unloaded and the game instance
-	 * should be garbage collected soon.
-	 * That usually happens when the arcade machine is powering down or being broken.<br>
-	 * It should be used to release all resources used by the game, and persist any data if necessary.
-	 */
-	void unload(IArcadeMachine arcadeMachine);
 
 	/**
 	 * This method is called to update the game's state.<br>
