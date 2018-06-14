@@ -54,7 +54,9 @@ public class RenderItemCartridge extends AbstractItemRenderer {
 			}
 
 			NBTTagCompound tag = stack.getTagCompound();
-			String gameID = (tag == null || !tag.hasKey(Strings.NBT_GAME)) ? null : tag.getString(Strings.NBT_GAME);
+			String gameID = tag != null && tag.hasKey(Strings.NBT_GAME)
+					? tag.getString(Strings.NBT_GAME)
+					: null;
 			ArcadeGameWrapper wrapper = gameID == null ? null : ArcadeGameRegistry.gameForID(gameID);
 
 			if (wrapper != null && wrapper.hasColor()) {

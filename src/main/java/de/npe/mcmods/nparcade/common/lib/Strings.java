@@ -22,6 +22,7 @@ public final class Strings {
 	public static final String NBT_FACING = Reference.MOD_ID + "_facing";
 	public static final String NBT_GAME = Reference.MOD_ID + "_game";
 
+	public static final String TEXTURE_UNKNOWN_GAME_LABEL = "textures/misc/nparcade_label_torn.png";
 	public static final String TEXTURE_EMPTY_GAME_SCREEN = "textures/misc/nparcade_empty_game_screen1.png";
 	public static final String TEXTURE_EMPTY_GAME_SCREEN_GLITCH = "textures/misc/nparcade_empty_game_screen2.png";
 
