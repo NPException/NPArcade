@@ -25,7 +25,7 @@ public final class Strings {
 	public static final String TEXTURE_EMPTY_GAME_SCREEN = "textures/misc/nparcade_empty_game_screen1.png";
 	public static final String TEXTURE_EMPTY_GAME_SCREEN_GLITCH = "textures/misc/nparcade_empty_game_screen2.png";
 
-	public static final String JSON_GAME_INFO_FILE = "game.info";
+	public static final String JSON_GAME_INFO_FILE = "game-info.json";
 	public static final String JSON_GAME_INFO_ID = "id";
 	public static final String JSON_GAME_INFO_TITLE = "title";
 	public static final String JSON_GAME_INFO_DESCRIPTION = "description";
