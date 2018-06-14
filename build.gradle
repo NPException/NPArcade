@@ -85,5 +85,18 @@ task deobfJar(type: Jar) {
     classifier = 'deobf'
 }
 
+// package the arcade api sources
+task arcadeApiSourceJar(type: Jar) {
+    from sourceSets.main.allSource
+	include 'de/npe/api/nparcade/**/*'
+	classifier = 'nparcade-api-source'
+}
+// package the arcade api classes
+task arcadeApiJar(type: Jar, dependsOn: compileJava) {
+    from sourceSets.main.output
+	include 'de/npe/api/nparcade/**/*'
+	classifier = 'nparcade-api'
+}
+
 // make sure all of these happen when we run build
-build.dependsOn sourceJar, deobfJar
+build.dependsOn sourceJar, deobfJar, arcadeApiSourceJar, arcadeApiJar
