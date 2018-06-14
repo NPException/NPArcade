@@ -15,6 +15,7 @@ import de.npe.mcmods.nparcade.NPArcade;
 import de.npe.mcmods.nparcade.client.ClientProxy;
 import de.npe.mcmods.nparcade.client.arcade.KeyStatesMap.KeyState;
 import de.npe.mcmods.nparcade.client.arcade.sound.ArcadeSoundManager;
+import de.npe.mcmods.nparcade.client.arcade.sound.EmptySound;
 import de.npe.mcmods.nparcade.client.render.Helper;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 
@@ -97,7 +98,15 @@ public class ArcadeMachine implements IArcadeMachine {
 
 	@Override
 	public IArcadeSound registerSound(String soundFilePath, boolean streaming) {
+		if (soundFilePath == null) {
+			NPArcade.log.warn("Game with id '" + gameID + "' tried to register a sound with a null path");
+			return EmptySound.INSTANCE;
+		}
 		URL soundURL = gameWrapper.gameClass().getResource(soundFilePath);
+		if (soundURL == null) {
+			NPArcade.log.warn("Game with id '" + gameID + "' tried to register a sound, but no resource could be found for path: " + soundFilePath);
+			return EmptySound.INSTANCE;
+		}
 		return soundManager.createPositionalSound(soundFilePath, soundURL, streaming, tile.xCoord + 0.5F, tile.yCoord + 0.5F, tile.zCoord + 0.5F);
 	}
 

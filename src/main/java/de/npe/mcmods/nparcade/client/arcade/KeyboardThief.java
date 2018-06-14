@@ -24,6 +24,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 
 /**
+ * Created by NPException (2018)
+ *
  * This class is used to hijack the keyboard input.
  */
 @SideOnly(Side.CLIENT)

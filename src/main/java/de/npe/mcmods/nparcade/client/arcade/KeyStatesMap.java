@@ -7,6 +7,9 @@ import de.npe.mcmods.nparcade.client.arcade.KeyStatesMap.KeyState;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
+/**
+ * Created by NPException (2018)
+ */
 @SideOnly(Side.CLIENT)
 class KeyStatesMap extends HashMap<Integer, KeyState> {
 	@SideOnly(Side.CLIENT)

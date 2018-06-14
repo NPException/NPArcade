@@ -70,7 +70,8 @@ public interface IArcadeMachine {
 	 * @param soundFilePath
 	 * 		The path to the sound file within your game's jar file. Every subsequent call of this method with
 	 * 		the same path may return the same {@link IArcadeSound} instance that was returned
-	 * 		by the first call with that name, regardless of the <b>streaming</b> parameter.
+	 * 		by the first call with that name, regardless of the <b>streaming</b> parameter.<br>
+	 * 		Passing an invalid value will result in IArcadeSound instance that won't do anything.
 	 * @param streaming
 	 * 		If this is set to true, the sound will be streamed directly from it's source.
 	 * 		This is preferred for longer, less frequently played sounds, like music.

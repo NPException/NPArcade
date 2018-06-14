@@ -47,7 +47,8 @@ final class ArcadeSound {
 			initVolume *= volume;
 		}
 
-		float normalizedVolume = MathHelper.clamp_float(volume * Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.BLOCKS), 0.0F, 1.0F);
+		float mcBlockSoundVolume = Minecraft.getMinecraft().gameSettings.getSoundLevel(SoundCategory.BLOCKS);
+		float normalizedVolume = MathHelper.clamp_float(volume * mcBlockSoundVolume, 0.0F, 1.0F);
 
 		if (normalizedVolume > 0.0F) {
 			if (streaming) {
