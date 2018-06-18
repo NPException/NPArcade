@@ -14,6 +14,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import de.npe.api.nparcade.IArcadeGame;
+import de.npe.mcmods.nparcade.NPArcade;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -93,7 +94,7 @@ class GameInfo {
 				throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_LABEL + "' -> could not load label image!" + labelResourcePath);
 			}
 			if (label == null) {
-				throw new IllegalStateException("game.info attribute '" + JSON_GAME_INFO_LABEL + "' -> could not find label image: " + labelResourcePath);
+				NPArcade.log.warn("game.info attribute '" + JSON_GAME_INFO_LABEL + "' -> could not find label image: " + labelResourcePath);
 			}
 		}
 
