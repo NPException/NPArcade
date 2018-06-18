@@ -262,11 +262,18 @@ public class ArcadeMachine implements IArcadeMachine {
 		}
 
 		try {
-			prepareRender(tick);
+			if (gameInstance.needsDraw()) {
+				prepareRender(tick);
+			}
 		} catch (Throwable t) {
 			NPArcade.log.warn("Arcade game with id '" + gameID + "' threw exception during rendering", t);
 			// fallback to broken/unknown game
 			load(null);
+			return;
+		}
+
+		// if the game did not draw any frame yet, the textureID will be -1
+		if (textureID == -1) {
 			return;
 		}
 
@@ -284,16 +291,10 @@ public class ArcadeMachine implements IArcadeMachine {
 	private void deleteTexture() {
 		if (textureID != -1) {
 			TextureUtil.deleteTexture(textureID);
+			textureID = -1;
 		}
 		screenData = null;
 		image = null;
-	}
-
-	/**
-	 * Checks if the game is present and wants to update it's graphics.
-	 */
-	private boolean needsScreenRefresh() {
-		return textureID == -1 || gameInstance.needsDraw();
 	}
 
 	/**
@@ -307,31 +308,29 @@ public class ArcadeMachine implements IArcadeMachine {
 	 * 		the partial tick since the last update
 	 */
 	private void prepareRender(float tick) {
-		if (needsScreenRefresh()) {
-			Size size = gameInstance.screenSize();
-			int width = size.width;
-			int height = size.height;
+		Size size = gameInstance.screenSize();
+		int width = size.width;
+		int height = size.height;
 
-			// allocate new texture if game output size changed or screen is not yet initialized
-			if (textureID == -1 ||
-					screenData == null ||
-					image == null ||
-					image.getWidth() != width || image.getHeight() != height) {
+		// allocate new texture if game output size changed or screen is not yet initialized
+		if (textureID == -1 ||
+				screenData == null ||
+				image == null ||
+				image.getWidth() != width || image.getHeight() != height) {
 
-				deleteTexture();
-				screenData = new int[width * height];
-				textureID = TextureUtil.glGenTextures();
-				TextureUtil.allocateTexture(textureID, width, height);
+			deleteTexture();
+			screenData = new int[width * height];
+			textureID = TextureUtil.glGenTextures();
+			TextureUtil.allocateTexture(textureID, width, height);
 
-				image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-			}
-
-			// draw game
-			gameInstance.draw(image, tick);
-			// get pixel data
-			image.getRGB(0, 0, width, height, screenData, 0, width);
-			// upload pixels to texture
-			TextureUtil.uploadTexture(textureID, screenData, width, height);
+			image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		}
+
+		// draw game
+		gameInstance.draw(image, tick);
+		// get pixel data
+		image.getRGB(0, 0, width, height, screenData, 0, width);
+		// upload pixels to texture
+		TextureUtil.uploadTexture(textureID, screenData, width, height);
 	}
 }
