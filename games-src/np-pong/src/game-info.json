@@ -1,0 +1,10 @@
+[
+  {
+    "id":"npexception.np-pong",
+    "title":"NP Pong",
+    "description":"Like Pong! But worse!",
+    "class":"de.npe.nparcade.games.nppong.NPPong",
+    "label":"/de/npe/nparcade/games/nppong/assets/NPPong_label.png",
+    "cartridge_color":"0062a0"
+  }
+]
