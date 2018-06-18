@@ -179,8 +179,11 @@ public final class ArcadeGameRegistry {
 				+ ", Label:" + (label != null)
 				+ ", Color:" + colorString;
 
-		if (id == null) {
-			throw new IllegalArgumentException("ID must not be null!" + gameToString);
+		// trim id
+		id = id != null ? id.trim() : "";
+
+		if (id.isEmpty()) {
+			throw new IllegalArgumentException("ID must not be empty!" + gameToString);
 		}
 		if (title == null) {
 			throw new IllegalArgumentException("Title must not be null!" + gameToString);
@@ -217,6 +220,9 @@ public final class ArcadeGameRegistry {
 	 * This method will therefor never return null.
 	 */
 	public static ArcadeGameWrapper gameForID(String id) {
+		// trim id
+		id = id != null ? id.trim() : "";
+
 		if (Util.isEmptyGame(id)) {
 			return DummyGames.EMPTY_GAME_WRAPPER;
 		}
