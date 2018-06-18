@@ -140,8 +140,8 @@ public class ItemCartridge extends Item {
 		// empty cartridge
 		subItems.add(createItemStack(null, 1));
 
-		// unknown game // TODO: remove before release
-		subItems.add(createItemStack("this.is.a.broken.game", 1));
+		// broken cartridge (no game with id "" should be able to ever exist)
+		subItems.add(createItemStack("", 1));
 
 		// all available games
 		for (String gameId : ArcadeGameRegistry.gameIDs()) {
