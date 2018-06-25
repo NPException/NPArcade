@@ -19,6 +19,7 @@ import net.minecraft.item.Item;
 @Mod(modid = Reference.MOD_ID,
 		name = Reference.MOD_NAME,
 		version = Reference.MOD_VERSION,
+		guiFactory = Reference.GUI_FACTORY_CLASS,
 		dependencies = "required-after:Forge@[10.13.4.1448,)")
 public class NPArcade {
 
@@ -40,6 +41,7 @@ public class NPArcade {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		log = event.getModLog();
+		NPArcadeConfig.initConfig(event);
 
 		proxy.preInitServerSide();
 		proxy.preInitClientSide();

@@ -28,8 +28,7 @@ public class NPPong implements IArcadeGame {
 	private float x, y, dx, dy;
 
 	public NPPong(IArcadeMachine arcadeMachine) {
-		int suggestedWidth = arcadeMachine.suggestedScreenSize().width;
-		screenSize = new Size(4,3).scaleToWidth(suggestedWidth);
+		screenSize = arcadeMachine.suggestedScreenSize();
 		Random rand = ThreadLocalRandom.current();
 
 		speed = screenSize.width / 20f;
@@ -41,6 +40,8 @@ public class NPPong implements IArcadeGame {
 		dy = (1F - rand.nextFloat() * 2) * speed;
 
 		foreground = Color.WHITE;
+
+		arcadeMachine.println("I'm alive!");
 	}
 
 	@Override
@@ -54,17 +55,21 @@ public class NPPong implements IArcadeGame {
 		if (x <= 10F) {
 			x = Math.abs(x - 10F) + 10F;
 			dx = -dx;
+			arcadeMachine.println("left");
 		} else if (x >= edgeX) {
 			x = -(x - edgeX) + edgeX;
 			dx = -dx;
+			arcadeMachine.println("right");
 		}
 
 		if (y <= 10F) {
 			y = Math.abs(y - 10F) + 10F;
 			dy = -dy;
+			arcadeMachine.println("top");
 		} else if (y >= edgeY) {
 			y = -(y - edgeY) + edgeY;
 			dy = -dy;
+			arcadeMachine.println("bottom");
 		}
 
 		if (arcadeMachine.isKeyDown(Controls.ARCADE_KEY_LEFT)) {

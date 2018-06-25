@@ -9,6 +9,14 @@ import de.npe.api.nparcade.util.Size;
 public interface IArcadeMachine {
 
 	/**
+	 * (OPTIONAL)
+	 * Sends output to the arcade which should be output to a console output.
+	 * Whether or not calling this method actually results in some output
+	 * is up to the arcade machine.
+	 */
+	void println(String message);
+
+	/**
 	 * Returns how often this arcade machine will call
 	 * the {@link IArcadeGame#update(IArcadeMachine)} method per second.
 	 */

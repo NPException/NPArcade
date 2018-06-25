@@ -4,6 +4,8 @@ import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
 import static org.lwjgl.opengl.GL11.glBindTexture;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.net.URL;
 
 import de.npe.api.nparcade.IArcadeGame;
@@ -12,10 +14,12 @@ import de.npe.api.nparcade.util.Controls;
 import de.npe.api.nparcade.util.IArcadeSound;
 import de.npe.api.nparcade.util.Size;
 import de.npe.mcmods.nparcade.NPArcade;
+import de.npe.mcmods.nparcade.NPArcadeConfig;
 import de.npe.mcmods.nparcade.client.ClientProxy;
 import de.npe.mcmods.nparcade.client.arcade.KeyStatesMap.KeyState;
 import de.npe.mcmods.nparcade.client.arcade.sound.ArcadeSoundManager;
 import de.npe.mcmods.nparcade.client.arcade.sound.EmptySound;
+import de.npe.mcmods.nparcade.client.debug.DebugWindow;
 import de.npe.mcmods.nparcade.client.render.Helper;
 import de.npe.mcmods.nparcade.common.tileentities.TileArcadeCabinet;
 
@@ -29,6 +33,7 @@ import net.minecraft.client.renderer.texture.TextureUtil;
  */
 @SideOnly(Side.CLIENT)
 public class ArcadeMachine implements IArcadeMachine {
+	private DebugWindow debugWindow;
 
 	private final Size suggestedScreenSize;
 	private final ArcadeSoundManager soundManager;
@@ -56,6 +61,10 @@ public class ArcadeMachine implements IArcadeMachine {
 	// IArcadeMachine methods //
 	////////////////////////////
 
+	@Override
+	public void println(String message) {
+		debugMessage(" INFO [" + gameID + "] " + message);
+	}
 
 	@Override
 	public int ticksPerSecond() {
@@ -76,7 +85,7 @@ public class ArcadeMachine implements IArcadeMachine {
 	public boolean isKeyDown(int key) {
 		KeyState state = keyStates.get(mapKeyCode(key));
 		return state == KeyState.PRESS
-				|| state == KeyState.HOLD;
+						 || state == KeyState.HOLD;
 	}
 
 	@Override
@@ -88,7 +97,7 @@ public class ArcadeMachine implements IArcadeMachine {
 	public boolean isKeyUp(int key) {
 		KeyState state = keyStates.get(mapKeyCode(key));
 		return state == KeyState.RELEASE
-				|| state == null;
+						 || state == null;
 	}
 
 	@Override
@@ -175,7 +184,7 @@ public class ArcadeMachine implements IArcadeMachine {
 			try {
 				gameInstance.update(this);
 			} catch (Throwable t) {
-				NPArcade.log.warn("Arcade game with id '" + gameID + "' threw exception during update", t);
+				logGameError("Game with id '" + gameID + "' threw exception during update", t);
 				// fallback to broken/unknown game
 				load(null);
 			}
@@ -233,7 +242,7 @@ public class ArcadeMachine implements IArcadeMachine {
 		try {
 			gameInstance = gameWrapper.createGameInstance(this);
 		} catch (Throwable t) {
-			NPArcade.log.warn("Failed to instantiate arcade game with id '" + gameID + "'", t);
+			logGameError("Failed to instantiate game with id '" + gameID + "'", t);
 			// fallback to broken/unknown game
 			load(null);
 		}
@@ -266,7 +275,7 @@ public class ArcadeMachine implements IArcadeMachine {
 				prepareRender(tick);
 			}
 		} catch (Throwable t) {
-			NPArcade.log.warn("Arcade game with id '" + gameID + "' threw exception during rendering", t);
+			logGameError("Game with id '" + gameID + "' threw exception during rendering", t);
 			// fallback to broken/unknown game
 			load(null);
 			return;
@@ -314,9 +323,9 @@ public class ArcadeMachine implements IArcadeMachine {
 
 		// allocate new texture if game output size changed or screen is not yet initialized
 		if (textureID == -1 ||
-				screenData == null ||
-				image == null ||
-				image.getWidth() != width || image.getHeight() != height) {
+					 screenData == null ||
+					 image == null ||
+					 image.getWidth() != width || image.getHeight() != height) {
 
 			deleteTexture();
 			screenData = new int[width * height];
@@ -332,5 +341,30 @@ public class ArcadeMachine implements IArcadeMachine {
 		image.getRGB(0, 0, width, height, screenData, 0, width);
 		// upload pixels to texture
 		TextureUtil.uploadTexture(textureID, screenData, width, height);
+	}
+
+	private void logGameError(String message, Throwable t) {
+		NPArcade.log.warn(message, t);
+		StringBuilder sb = new StringBuilder();
+		sb.append("ERROR [").append(gameID).append("] ");
+		sb.append(message);
+		if (t != null) {
+			sb.append(' ');
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			t.printStackTrace(new PrintStream(baos));
+			sb.append(baos.toString());
+		}
+		debugMessage(sb.toString());
+	}
+
+	private void debugMessage(String message) {
+		if (NPArcadeConfig.showArcadeDebugWindows()) {
+			synchronized (this) {
+				if (debugWindow == null) {
+					debugWindow = new DebugWindow("ArcadeMachine at X:" + tile.xCoord + " Y:" + tile.yCoord + " Z:" + tile.zCoord);
+				}
+			}
+			debugWindow.addMessage(message);
+		}
 	}
 }
