@@ -1,6 +1,6 @@
 [
 {
-  "modid": "npe_nparcade",
+  "modid": "nparcade",
   "name": NPArcade",
   "description": "An arcade machine for Minecraft",
   "version": "${version}",
