@@ -10,9 +10,9 @@ The games are entirely client-side, so everyone can play the games they want, wi
 
 If you want to play user-created games you need to follow these few steps:
 
-0. Download a game for NPArcade from somewhere. If everything goes as planned, you should be able to find games in the NPArcade subreddit: https://www.reddit.com/r/nparcade/
-0. Put the game's .jar or .zip file somewhere into the mods folder of your Minecraft instance. (I suggest putting games into the folder "/mods/nparcade_games" which will be created when you first launch Minecraft with the NP Arcade mod installed.
-0. Launch the game! If the game is a valid NP Arcade game, its cartridge will show up in the creative mode tab of the mod.
+1. Download a game for NPArcade from somewhere. If everything goes as planned, you should be able to find games in the NPArcade subreddit: https://www.reddit.com/r/nparcade/
+2. Put the game's .jar or .zip file somewhere into the mods folder of your Minecraft instance. (I suggest putting games into the folder "/mods/nparcade_games" which will be created when you first launch Minecraft with the NP Arcade mod installed.
+3. Launch the game! If the game is a valid NP Arcade game, its cartridge will show up in the creative mode tab of the mod.
 
 Currently, game cartridges can only be acquired via command or in Creative Mode. Also, there are no official games shipped with the mod at the moment, since the mod is still in development.
 
