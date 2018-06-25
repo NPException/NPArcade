@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -93,8 +94,8 @@ public final class ArcadeGameRegistry {
 				@Override
 				public boolean accept(File file) {
 					return file.getName().endsWith(".zip")
-							|| file.getName().endsWith(".jar")
-							|| file.isDirectory();
+									 || file.getName().endsWith(".jar")
+									 || file.isDirectory();
 				}
 			});
 			if (content != null) {
@@ -143,13 +144,15 @@ public final class ArcadeGameRegistry {
 		}
 		URLClassLoader urlCl = new URLClassLoader(urls, ArcadeGameRegistry.class.getClassLoader());
 
-		for (List<Map<String, String>> gameInfoDatas : gameFilesData.values()) {
+		for (Entry<File, List<Map<String, String>>> entry : gameFilesData.entrySet()) {
+			List<Map<String, String>> gameInfoDatas = entry.getValue();
 			for (Map<String, String> gameInfoData : gameInfoDatas) {
 				try {
 					GameInfo info = new GameInfo(gameInfoData, urlCl);
 					register(info.gameClass, info.id, info.title, info.description, info.label, info.cartridgeColor);
 				} catch (Exception ex) {
-					NPArcade.log.warn("Could not load arcade game -> " + ex.getMessage());
+					String path = entry.getKey().getAbsolutePath();
+					NPArcade.log.warn("Could not load arcade game from file/folder: \"" + path + "\" -> " + ex.getMessage());
 				}
 			}
 		}
@@ -174,10 +177,10 @@ public final class ArcadeGameRegistry {
 	 */
 	public static void register(Class<? extends IArcadeGame> gameClass, String id, String title, String description, BufferedImage label, String colorString) throws IllegalArgumentException {
 		String gameToString = " Game -> ID:" + id
-				+ ", Title:" + title
-				+ ", Class:" + gameClass.getCanonicalName()
-				+ ", Label:" + (label != null)
-				+ ", Color:" + colorString;
+											 + ", Title:" + title
+											 + ", Class:" + gameClass.getCanonicalName()
+											 + ", Label:" + (label != null)
+											 + ", Color:" + colorString;
 
 		// trim id
 		id = id != null ? id.trim() : "";
@@ -228,8 +231,8 @@ public final class ArcadeGameRegistry {
 		}
 		ArcadeGameWrapper wrapper = games.get(id);
 		return wrapper != null
-				? wrapper
-				: DummyGames.UNKNOWN_GAME_WRAPPER;
+						 ? wrapper
+						 : DummyGames.UNKNOWN_GAME_WRAPPER;
 	}
 
 	/**
